@@ -13,7 +13,7 @@ import { Check, X, HelpCircle, ArrowRight } from 'lucide-react';
 import { Switch } from '@/components/ui/switch';
 
 interface Question {
-  value: number;
+  finalValue: number;
   fromUnit: string;
   toUnit: string;
   answer: number;
@@ -66,10 +66,11 @@ const DataUnitConverter = () => {
     if (/^\d*\.?\d*$/.test(value)) {
       setUserAnswer(value);
       // Format display value with commas
-      if (!value.endsWith('.')) {
+      if (!value.endsWith('.') && !value.endsWith('0')) {
         setDisplayAnswer(formatNumber(Number(value)));
       } else {
-        setDisplayAnswer(value); // Retain the trailing decimal point
+        // Bug - If the number ends in 0, there are no commas eg 1000
+        setDisplayAnswer(value); // Retain the trailing decimal point and trailing zeros
       }
     }
   };
@@ -152,39 +153,85 @@ const DataUnitConverter = () => {
     toUnit: string,
     answer: number
   ) => {
+    const fromIndex = units.indexOf(fromUnit as (typeof units)[number]);
+    const toIndex = units.indexOf(toUnit as (typeof units)[number]);
     let steps = [];
+    let nextStep = 1;
+    let workingFromIndex = fromIndex;
     let workingValue = value;
 
-    if (fromUnit === 'bits' && toUnit !== 'bits') {
-      steps.push(
-        `1. Convert ${formatNumber(value)} bits to bytes: ${formatNumber(value)} ÷ 8 = ${formatNumber(value / 8)} bytes`
-      );
-      workingValue = value / 8;
-      fromUnit = 'bytes';
+    if (workingFromIndex < toIndex) {
+      while (workingFromIndex < toIndex) {
+        let step = `Step ${nextStep}. Convert ${formatNumber(workingValue)} ${units[workingFromIndex]} to ${units[workingFromIndex + 1]} : `;
+        // Bits to bytes - divide by 8, otherwise divide by 1000
+        if (workingFromIndex === 0) {
+          step += ` ${formatNumber(workingValue)} / 8 = ${formatNumber(workingValue / 8)} ${units[workingFromIndex + 1]}`;
+          workingValue = workingValue / 8;
+        } else {
+          step += ` ${formatNumber(workingValue)} / 1000 = ${formatNumber(workingValue / 1000)} ${units[workingFromIndex + 1]}`;
+          workingValue = workingValue / 1000;
+        }
+        steps.push(step);
+        nextStep++;
+        workingFromIndex++;
+      }
+    } else {
+      while (workingFromIndex > toIndex) {
+        let step = `Step ${nextStep}. Convert ${formatNumber(workingValue)} ${units[workingFromIndex]} to ${units[workingFromIndex - 1]} : `;
+        // Bits to bytes - times by 8, otherwise divide by 1000
+        if (workingFromIndex === 1) {
+          step += ` ${formatNumber(workingValue)} * 8 = ${formatNumber(workingValue / 8)} ${units[workingFromIndex + 1]}`;
+          workingValue = workingValue * 8;
+        } else {
+          step += ` ${formatNumber(workingValue)} * 1000 = ${formatNumber(workingValue / 1000)} ${units[workingFromIndex + 1]}`;
+          workingValue = workingValue * 1000;
+        }
+        steps.push(step);
+        workingValue = workingValue * nextStep;
+        nextStep++;
+        workingFromIndex--;
+      }
     }
 
-    if (toUnit === 'bits' && fromUnit !== 'bits') {
-      const bytesValue = workingValue * getMultiplier(fromUnit);
-      steps.push(
-        `1. Convert ${formatNumber(value)} ${fromUnit} to bytes: ${formatNumber(value)} × ${formatNumber(getMultiplier(fromUnit))} = ${formatNumber(bytesValue)} bytes`
-      );
-      steps.push(
-        `2. Convert ${formatNumber(bytesValue)} bytes to bits: ${formatNumber(bytesValue)} × 8 = ${formatNumber(bytesValue * 8)} bits`
-      );
-      return steps;
-    }
+    // if (fromUnit === 'bits' && toUnit !== 'bits') {
+    //   steps.push(
+    //     `${nextStep}. Convert ${formatNumber(value)} bits to bytes: ${formatNumber(value)} ÷ 8 = ${formatNumber(value / 8)} bytes`
+    //   );
+    //   workingValue = value / 8;
+    //   let workingFromIndex = fromIndex;
+    //   fromUnit = 'bytes';
+    // }
 
-    if (fromUnit !== toUnit) {
-      const multiplier = getMultiplier(fromUnit);
-      const divider = getMultiplier(toUnit);
-      const bytesValue = workingValue * multiplier;
-      steps.push(
-        `1. Convert ${formatNumber(value)} ${fromUnit} to bytes: ${formatNumber(value)} × ${formatNumber(multiplier)} = ${formatNumber(bytesValue)} bytes`
-      );
-      steps.push(
-        `2. Convert ${formatNumber(bytesValue)} bytes to ${toUnit}: ${formatNumber(bytesValue)} ÷ ${formatNumber(divider)} = ${formatNumber(answer)} ${toUnit}`
-      );
-    }
+    // if (fromUnit === 'bits' && toUnit !== 'bits') {
+    //   steps.push(
+    //     `1. Convert ${formatNumber(value)} bits to bytes: ${formatNumber(value)} ÷ 8 = ${formatNumber(value / 8)} bytes`
+    //   );
+    //   workingValue = value / 8;
+    //   fromUnit = 'bytes';
+    // }
+
+    // if (toUnit === 'bits' && fromUnit !== 'bits') {
+    //   const bytesValue = workingValue * getMultiplier(fromUnit);
+    //   steps.push(
+    //     `1. Convert ${formatNumber(value)} ${fromUnit} to bytes: ${formatNumber(value)} × ${formatNumber(getMultiplier(fromUnit))} = ${formatNumber(bytesValue)} bytes`
+    //   );
+    //   steps.push(
+    //     `2. Convert ${formatNumber(bytesValue)} bytes to bits: ${formatNumber(bytesValue)} × 8 = ${formatNumber(bytesValue * 8)} bits`
+    //   );
+    //   return steps;
+    // }
+
+    // if (fromUnit !== toUnit) {
+    //   const multiplier = getMultiplier(fromUnit);
+    //   const divider = getMultiplier(toUnit);
+    //   const bytesValue = workingValue * multiplier;
+    //   steps.push(
+    //     `1. Convert ${formatNumber(value)} ${fromUnit} to bytes: ${formatNumber(value)} × ${formatNumber(multiplier)} = ${formatNumber(bytesValue)} bytes`
+    //   );
+    //   steps.push(
+    //     `2. Convert ${formatNumber(bytesValue)} bytes to ${toUnit}: ${formatNumber(bytesValue)} ÷ ${formatNumber(divider)} = ${formatNumber(answer)} ${toUnit}`
+    //   );
+    // }
 
     return steps;
   };
@@ -204,7 +251,7 @@ const DataUnitConverter = () => {
   const generateQuestion = (): void => {
     setDisplayAnswer('');
     let fromUnit: string, toUnit: string;
-    const maxSteps = isAdvancedMode ? 4 : 2;
+    const maxSteps = isAdvancedMode ? 3 : 1;
 
     do {
       fromUnit = units[Math.floor(Math.random() * (units.length - 1))];
@@ -216,16 +263,19 @@ const DataUnitConverter = () => {
 
     const stepCount = getStepsBetweenUnits(fromUnit, toUnit);
     const maxValue = Math.max(10, Math.floor(999 / stepCount));
-    const value = Math.floor(Math.random() * maxValue) + 1;
+    const initValue = Math.floor(Math.random() * maxValue) + 1;
+    // I want to make sure the value is a multiple of 8 if converting from bits
+    const finalValue =
+      fromUnit === 'bits' ? Math.ceil(initValue / 8) * 8 : initValue;
 
-    const answer = calculateAnswer(value, fromUnit, toUnit);
+    const answer = calculateAnswer(finalValue, fromUnit, toUnit);
 
     const question: Question = {
-      value,
+      finalValue,
       fromUnit,
       toUnit,
       answer,
-      explanation: generateExplanation(value, fromUnit, toUnit, answer),
+      explanation: generateExplanation(finalValue, fromUnit, toUnit, answer),
     };
 
     setCurrentQuestion(question);
@@ -346,7 +396,7 @@ const DataUnitConverter = () => {
           {currentQuestion ? (
             <div className="space-y-4">
               <div className="text-xl font-semibold bg-gradient-to-r from-indigo-600 to-purple-600 text-white p-4 rounded-lg shadow">
-                Convert {formatNumber(currentQuestion.value)}{' '}
+                Convert {formatNumber(currentQuestion.finalValue)}{' '}
                 {currentQuestion.fromUnit} to {currentQuestion.toUnit}
               </div>
 
