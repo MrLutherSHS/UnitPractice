@@ -12,6 +12,14 @@ import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Check, X, HelpCircle, ArrowRight } from 'lucide-react';
 import { Switch } from '@/components/ui/switch';
 
+interface Question {
+  value: number;
+  fromUnit: string;
+  toUnit: string;
+  answer: number;
+  explanation: string[];
+}
+
 const DataUnitConverter = () => {
   const units = [
     'bits',
@@ -22,28 +30,31 @@ const DataUnitConverter = () => {
     'terabytes',
     'petabytes',
   ];
-  const [currentQuestion, setCurrentQuestion] = useState(null);
-  const [userAnswer, setUserAnswer] = useState('');
-  const [displayAnswer, setDisplayAnswer] = useState('');
-  const [feedback, setFeedback] = useState(null);
-  const [score, setScore] = useState({ correct: 0, total: 0 });
-  const [showHint, setShowHint] = useState(false);
-  const [showConversionPath, setShowConversionPath] = useState(false);
-  const [isAdvancedMode, setIsAdvancedMode] = useState(false);
 
-  // Function to format number with commas
-  const formatNumber = (num) => {
+  const [currentQuestion, setCurrentQuestion] = useState<Question | null>(null);
+  const [userAnswer, setUserAnswer] = useState<string>('');
+  const [displayAnswer, setDisplayAnswer] = useState<string>('');
+  const [feedback, setFeedback] = useState<{
+    isCorrect: boolean;
+    message: string;
+    explanation: string[];
+  } | null>(null);
+  const [score, setScore] = useState({ correct: 0, total: 0 });
+  const [showHint, setShowHint] = useState<boolean>(false);
+  const [showConversionPath, setShowConversionPath] = useState<boolean>(false);
+  const [isAdvancedMode, setIsAdvancedMode] = useState<boolean>(false);
+
+  const formatNumber = (num: number): string => {
     const parts = num.toString().split('.');
     parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
     return parts.join('.');
   };
 
-  // Function to remove commas from formatted number
-  const unformatNumber = (str) => {
+  const unformatNumber = (str: string): string => {
     return str.replace(/,/g, '');
   };
 
-  const handleAnswerChange = (e) => {
+  const handleAnswerChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     const value = unformatNumber(e.target.value);
     if (value === '') {
       setUserAnswer('');
@@ -55,12 +66,16 @@ const DataUnitConverter = () => {
     if (/^\d*\.?\d*$/.test(value)) {
       setUserAnswer(value);
       // Format display value with commas
-      setDisplayAnswer(formatNumber(value));
+      if (!value.endsWith('.')) {
+        setDisplayAnswer(formatNumber(Number(value)));
+      } else {
+        setDisplayAnswer(value); // Retain the trailing decimal point
+      }
     }
   };
 
-  const getUnitColor = (unit) => {
-    const colors = {
+  const getUnitColor = (unit: string): string => {
+    const colors: Record<string, string> = {
       bits: 'bg-purple-100 text-purple-900',
       bytes: 'bg-blue-100 text-blue-900',
       kilobytes: 'bg-cyan-100 text-cyan-900',
@@ -72,15 +87,14 @@ const DataUnitConverter = () => {
     return colors[unit] || 'bg-gray-100';
   };
 
-  // New function to get conversion path
-  const getConversionPath = (fromUnit, toUnit) => {
-    const fromIndex = units.indexOf(fromUnit);
-    const toIndex = units.indexOf(toUnit);
-    const path = [];
+  const getConversionPath = (fromUnit: string, toUnit: string): string[] => {
+    const fromIndex = units.indexOf(fromUnit as (typeof units)[number]);
+    const toIndex = units.indexOf(toUnit as (typeof units)[number]);
+    const path: string[] = [];
 
     if (fromUnit === 'bits' && toUnit !== 'bits') {
       path.push('bits', 'bytes');
-      let currentIndex = 1; // index of bytes
+      let currentIndex = 1;
       while (currentIndex < toIndex) {
         path.push(units[currentIndex + 1]);
         currentIndex++;
@@ -88,7 +102,6 @@ const DataUnitConverter = () => {
     } else if (toUnit === 'bits' && fromUnit !== 'bits') {
       let currentIndex = fromIndex;
       while (currentIndex > 1) {
-        // index of bytes
         path.push(units[currentIndex]);
         currentIndex--;
       }
@@ -103,7 +116,10 @@ const DataUnitConverter = () => {
     return path;
   };
 
-  const ConversionPathVisual = ({ fromUnit, toUnit }) => {
+  const ConversionPathVisual: React.FC<{
+    fromUnit: string;
+    toUnit: string;
+  }> = ({ fromUnit, toUnit }) => {
     const path = getConversionPath(fromUnit, toUnit);
 
     return (
@@ -124,13 +140,18 @@ const DataUnitConverter = () => {
     );
   };
 
-  const getStepsBetweenUnits = (fromUnit, toUnit) => {
-    const fromIndex = units.indexOf(fromUnit);
-    const toIndex = units.indexOf(toUnit);
+  const getStepsBetweenUnits = (fromUnit: string, toUnit: string): number => {
+    const fromIndex = units.indexOf(fromUnit as (typeof units)[number]);
+    const toIndex = units.indexOf(toUnit as (typeof units)[number]);
     return Math.abs(toIndex - fromIndex);
   };
 
-  const generateExplanation = (value, fromUnit, toUnit, answer) => {
+  const generateExplanation = (
+    value: number,
+    fromUnit: string,
+    toUnit: string,
+    answer: number
+  ) => {
     let steps = [];
     let workingValue = value;
 
@@ -168,8 +189,8 @@ const DataUnitConverter = () => {
     return steps;
   };
 
-  const getMultiplier = (unit) => {
-    const multipliers = {
+  const getMultiplier = (unit: string): number => {
+    const multipliers: Record<string, number> = {
       bytes: 1,
       kilobytes: 1000,
       megabytes: 1000000,
@@ -180,9 +201,9 @@ const DataUnitConverter = () => {
     return multipliers[unit];
   };
 
-  const generateQuestion = () => {
+  const generateQuestion = (): void => {
     setDisplayAnswer('');
-    let fromUnit, toUnit;
+    let fromUnit: string, toUnit: string;
     const maxSteps = isAdvancedMode ? 4 : 2;
 
     do {
@@ -193,14 +214,13 @@ const DataUnitConverter = () => {
       getStepsBetweenUnits(fromUnit, toUnit) > maxSteps
     );
 
-    // Generate smaller numbers for larger unit differences
     const stepCount = getStepsBetweenUnits(fromUnit, toUnit);
     const maxValue = Math.max(10, Math.floor(999 / stepCount));
     const value = Math.floor(Math.random() * maxValue) + 1;
 
     const answer = calculateAnswer(value, fromUnit, toUnit);
 
-    const question = {
+    const question: Question = {
       value,
       fromUnit,
       toUnit,
@@ -213,7 +233,7 @@ const DataUnitConverter = () => {
     setFeedback(null);
   };
 
-  const calculateAnswer = (value, fromUnit, toUnit) => {
+  const calculateAnswer = (value: number, fromUnit: string, toUnit: string) => {
     let valueInBytes;
     if (fromUnit === 'bits') {
       valueInBytes = value / 8;

@@ -1,5 +1,5 @@
 import './App.css';
-import DataUnitConverter from './components/ui/UnitConvertor';
+import DataUnitConverter from './components/UnitConvertor';
 
 function App() {
   return (
