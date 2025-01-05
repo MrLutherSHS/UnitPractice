@@ -269,12 +269,12 @@ const DataUnitConverter = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-indigo-50 via-purple-50 to-pink-50 p-6">
+    <div className="bg-gradient-to-b from-indigo-50 via-purple-50 to-pink-50 p-6">
       <Card className="w-full max-w-xl mx-auto shadow-xl bg-white/80 backdrop-blur">
         <CardHeader className="bg-gradient-to-r from-indigo-500 to-purple-500 text-white rounded-t-lg">
           <CardTitle className="flex justify-between items-center">
             <span className="text-2xl font-bold">
-              Data Unit Conversion Practice
+              Data Unit Conversion Practice 🦆
             </span>
           </CardTitle>
           <CardDescription className="text-white rounded-t-lg">
