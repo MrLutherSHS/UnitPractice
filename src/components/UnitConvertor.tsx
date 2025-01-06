@@ -9,7 +9,7 @@ import {
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Check, X, HelpCircle, ArrowRight } from 'lucide-react';
+import { Check, X, ArrowRight } from 'lucide-react';
 import { Switch } from '@/components/ui/switch';
 
 interface Question {
@@ -155,7 +155,7 @@ const DataUnitConverter = () => {
   ) => {
     const fromIndex = units.indexOf(fromUnit as (typeof units)[number]);
     const toIndex = units.indexOf(toUnit as (typeof units)[number]);
-    let steps = [];
+    const steps = [];
     let nextStep = 1;
     let workingFromIndex = fromIndex;
     let workingValue = value;
@@ -168,7 +168,7 @@ const DataUnitConverter = () => {
           step += ` ${formatNumber(workingValue)} / 8 = ${formatNumber(workingValue / 8)} ${units[workingFromIndex + 1]}`;
           workingValue = workingValue / 8;
         } else {
-          step += ` ${formatNumber(workingValue)} / 1000 = ${formatNumber(workingValue / 1000)} ${units[workingFromIndex + 1]}`;
+          step += ` ${formatNumber(workingValue)} / 1,000 = ${formatNumber(workingValue / 1000)} ${units[workingFromIndex + 1]}`;
           workingValue = workingValue / 1000;
         }
         steps.push(step);
@@ -180,10 +180,10 @@ const DataUnitConverter = () => {
         let step = `Step ${nextStep}. Convert ${formatNumber(workingValue)} ${units[workingFromIndex]} to ${units[workingFromIndex - 1]} : `;
         // Bits to bytes - times by 8, otherwise divide by 1000
         if (workingFromIndex === 1) {
-          step += ` ${formatNumber(workingValue)} * 8 = ${formatNumber(workingValue / 8)} ${units[workingFromIndex + 1]}`;
+          step += ` ${formatNumber(workingValue)} * 8 = ${formatNumber(workingValue / 8)} ${units[workingFromIndex - 1]}`;
           workingValue = workingValue * 8;
         } else {
-          step += ` ${formatNumber(workingValue)} * 1000 = ${formatNumber(workingValue / 1000)} ${units[workingFromIndex + 1]}`;
+          step += ` ${formatNumber(workingValue)} * 1,000 = ${formatNumber(workingValue * 1000)} ${units[workingFromIndex - 1]}`;
           workingValue = workingValue * 1000;
         }
         steps.push(step);
@@ -320,7 +320,7 @@ const DataUnitConverter = () => {
 
   return (
     <div className="bg-gradient-to-b from-indigo-50 via-purple-50 to-pink-50 p-6">
-      <Card className="w-full max-w-xl mx-auto shadow-xl bg-white/80 backdrop-blur">
+      <Card className="max-w-4xl mx-auto shadow-xl bg-white/80 backdrop-blur">
         <CardHeader className="bg-gradient-to-r from-indigo-500 to-purple-500 text-white rounded-t-lg">
           <CardTitle className="flex justify-between items-center">
             <span className="text-2xl font-bold">
@@ -329,16 +329,6 @@ const DataUnitConverter = () => {
           </CardTitle>
           <CardDescription className="text-white rounded-t-lg">
             <div className="flex items-center gap-4">
-              <div className="flex items-center gap-2">
-                <span className="text-sm">Advanced mode</span>
-                <Switch
-                  checked={isAdvancedMode}
-                  onCheckedChange={(checked) => {
-                    setIsAdvancedMode(checked);
-                    setScore({ correct: 0, total: 0 });
-                  }}
-                />
-              </div>
               <div className="flex items-center gap-2">
                 <span className="text-sm">Show unit order</span>
                 <Switch checked={showHint} onCheckedChange={setShowHint} />
@@ -350,6 +340,16 @@ const DataUnitConverter = () => {
                   onCheckedChange={setShowConversionPath}
                 />
               </div>
+              <div className="flex items-center gap-2">
+                <span className="text-sm">Advanced mode</span>
+                <Switch
+                  checked={isAdvancedMode}
+                  onCheckedChange={(checked) => {
+                    setIsAdvancedMode(checked);
+                    setScore({ correct: 0, total: 0 });
+                  }}
+                />
+              </div>
             </div>
           </CardDescription>
         </CardHeader>
@@ -357,7 +357,6 @@ const DataUnitConverter = () => {
           {showHint && (
             <Alert className="bg-gradient-to-r from-blue-50 to-purple-50 border-none">
               <div className="flex items-center gap-2">
-                <HelpCircle className="h-5 w-5 text-indigo-500" />
                 <AlertDescription>
                   <div className="font-semibold text-indigo-900">
                     Units in order (smallest to largest):
