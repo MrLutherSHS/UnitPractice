@@ -187,7 +187,6 @@ const DataUnitConverter = () => {
           workingValue = workingValue * 1000;
         }
         steps.push(step);
-        workingValue = workingValue * nextStep;
         nextStep++;
         workingFromIndex--;
       }
