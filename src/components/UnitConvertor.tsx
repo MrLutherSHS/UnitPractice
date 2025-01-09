@@ -250,6 +250,8 @@ const DataUnitConverter = () => {
     setDisplayAnswer('');
     let fromUnit: string, toUnit: string;
     const maxSteps = isAdvancedMode ? 3 : 1;
+    // Max value for bits is 400 - more realistic numbers
+    const maxValue = fromUnit === 'bits' ? 400 : 999
 
     do {
       fromUnit = units[Math.floor(Math.random() * (units.length - 1))];
@@ -260,7 +262,7 @@ const DataUnitConverter = () => {
     );
 
     const stepCount = getStepsBetweenUnits(fromUnit, toUnit);
-    const maxValue = Math.max(10, Math.floor(999 / stepCount));
+    const maxValue = Math.max(10, Math.floor(400 / stepCount));
     const initValue = Math.floor(Math.random() * maxValue) + 1;
     // I want to make sure the value is a multiple of 8 if converting from bits
     const finalValue =
