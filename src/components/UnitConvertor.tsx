@@ -151,7 +151,6 @@ const DataUnitConverter = () => {
     value: number,
     fromUnit: string,
     toUnit: string,
-    answer: number
   ) => {
     const fromIndex = units.indexOf(fromUnit as (typeof units)[number]);
     const toIndex = units.indexOf(toUnit as (typeof units)[number]);
@@ -274,7 +273,7 @@ const DataUnitConverter = () => {
       fromUnit,
       toUnit,
       answer,
-      explanation: generateExplanation(finalValue, fromUnit, toUnit, answer),
+      explanation: generateExplanation(finalValue, fromUnit, toUnit),
     };
 
     setCurrentQuestion(question);
