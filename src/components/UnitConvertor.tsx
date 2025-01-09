@@ -179,7 +179,7 @@ const DataUnitConverter = () => {
         let step = `Step ${nextStep}. Convert ${formatNumber(workingValue)} ${units[workingFromIndex]} to ${units[workingFromIndex - 1]} : `;
         // Bits to bytes - times by 8, otherwise divide by 1000
         if (workingFromIndex === 1) {
-          step += ` ${formatNumber(workingValue)} * 8 = ${formatNumber(workingValue / 8)} ${units[workingFromIndex - 1]}`;
+          step += ` ${formatNumber(workingValue)} * 8 = ${formatNumber(workingValue * 8)} ${units[workingFromIndex - 1]}`;
           workingValue = workingValue * 8;
         } else {
           step += ` ${formatNumber(workingValue)} * 1,000 = ${formatNumber(workingValue * 1000)} ${units[workingFromIndex - 1]}`;
