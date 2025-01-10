@@ -43,6 +43,7 @@ const DataUnitConverter = () => {
   const [showHint, setShowHint] = useState<boolean>(false);
   const [showConversionPath, setShowConversionPath] = useState<boolean>(false);
   const [isAdvancedMode, setIsAdvancedMode] = useState<boolean>(false);
+  const [hasSubmitted, setHasSubmitted] = useState<boolean>(false);
 
   const formatNumber = (num: number): string => {
     const parts = num.toString().split('.');
@@ -190,47 +191,6 @@ const DataUnitConverter = () => {
         workingFromIndex--;
       }
     }
-
-    // if (fromUnit === 'bits' && toUnit !== 'bits') {
-    //   steps.push(
-    //     `${nextStep}. Convert ${formatNumber(value)} bits to bytes: ${formatNumber(value)} ÷ 8 = ${formatNumber(value / 8)} bytes`
-    //   );
-    //   workingValue = value / 8;
-    //   let workingFromIndex = fromIndex;
-    //   fromUnit = 'bytes';
-    // }
-
-    // if (fromUnit === 'bits' && toUnit !== 'bits') {
-    //   steps.push(
-    //     `1. Convert ${formatNumber(value)} bits to bytes: ${formatNumber(value)} ÷ 8 = ${formatNumber(value / 8)} bytes`
-    //   );
-    //   workingValue = value / 8;
-    //   fromUnit = 'bytes';
-    // }
-
-    // if (toUnit === 'bits' && fromUnit !== 'bits') {
-    //   const bytesValue = workingValue * getMultiplier(fromUnit);
-    //   steps.push(
-    //     `1. Convert ${formatNumber(value)} ${fromUnit} to bytes: ${formatNumber(value)} × ${formatNumber(getMultiplier(fromUnit))} = ${formatNumber(bytesValue)} bytes`
-    //   );
-    //   steps.push(
-    //     `2. Convert ${formatNumber(bytesValue)} bytes to bits: ${formatNumber(bytesValue)} × 8 = ${formatNumber(bytesValue * 8)} bits`
-    //   );
-    //   return steps;
-    // }
-
-    // if (fromUnit !== toUnit) {
-    //   const multiplier = getMultiplier(fromUnit);
-    //   const divider = getMultiplier(toUnit);
-    //   const bytesValue = workingValue * multiplier;
-    //   steps.push(
-    //     `1. Convert ${formatNumber(value)} ${fromUnit} to bytes: ${formatNumber(value)} × ${formatNumber(multiplier)} = ${formatNumber(bytesValue)} bytes`
-    //   );
-    //   steps.push(
-    //     `2. Convert ${formatNumber(bytesValue)} bytes to ${toUnit}: ${formatNumber(bytesValue)} ÷ ${formatNumber(divider)} = ${formatNumber(answer)} ${toUnit}`
-    //   );
-    // }
-
     return steps;
   };
 
@@ -247,6 +207,7 @@ const DataUnitConverter = () => {
   };
 
   const generateQuestion = (): void => {
+    setHasSubmitted(false);
     setDisplayAnswer('');
     let fromUnit: string, toUnit: string;
     const maxSteps = isAdvancedMode ? 3 : 1;
@@ -317,6 +278,13 @@ const DataUnitConverter = () => {
         : `Incorrect. The correct answer is ${formatNumber(currentQuestion.answer)}`,
       explanation: currentQuestion.explanation,
     });
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (hasSubmitted) return;
+    checkAnswer();
+    setHasSubmitted(true);
   };
 
   return (
@@ -408,22 +376,21 @@ const DataUnitConverter = () => {
                   />
                 )}
 
-                <div className="flex gap-2">
+                <form onSubmit={handleSubmit} className="flex gap-2">
                   <Input
                     type="text"
                     value={displayAnswer}
                     onChange={handleAnswerChange}
                     placeholder="Enter your answer"
                     className="flex-1 border-2 border-indigo-200 focus:border-indigo-500 rounded-lg"
-                    onSubmit={checkAnswer}
                   />
                   <Button
-                    onClick={checkAnswer}
+                    type="submit"
                     className="bg-gradient-to-r from-indigo-500 to-purple-500 hover:from-indigo-600 hover:to-purple-600 text-white font-semibold px-6"
                   >
                     Check
-                  </Button>{' '}
-                </div>
+                  </Button>
+                </form>
 
                 {feedback && (
                   <Alert
