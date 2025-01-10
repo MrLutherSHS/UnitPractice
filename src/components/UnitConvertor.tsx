@@ -320,166 +320,170 @@ const DataUnitConverter = () => {
   };
 
   return (
-    <div className="bg-gradient-to-b from-indigo-50 via-purple-50 to-pink-50 p-6">
-      <Card className="max-w-4xl mx-auto shadow-xl bg-white/80 backdrop-blur">
-        <CardHeader className="bg-gradient-to-r from-indigo-500 to-purple-500 text-white rounded-t-lg">
-          <CardTitle className="flex justify-between items-center">
-            <span className="text-2xl font-bold">
-              Data Unit Conversion Practice 🦆
-            </span>
-          </CardTitle>
-          <CardDescription className="text-white rounded-t-lg">
-            <div className="flex items-center gap-4">
-              <div className="flex items-center gap-2">
-                <span className="text-sm">Show unit order</span>
-                <Switch checked={showHint} onCheckedChange={setShowHint} />
+    <div className="scale-133 md:scale-150 lg:scale-150 transform origin-center ">
+      <div className="p-6 w-fit ">
+        <Card className="max-w-6xl mx-auto shadow-xl bg-white/80 backdrop-blur">
+          <CardHeader className="bg-gradient-to-r from-indigo-500 to-purple-500 text-white rounded-t-lg">
+            <CardTitle className="flex justify-between items-center">
+              <span className="text-2xl font-bold">
+                Data Unit Conversion Practice 🦆
+              </span>
+            </CardTitle>
+            <CardDescription className="text-white rounded-t-lg">
+              <div className="flex items-center gap-4">
+                <div className="flex items-center gap-2">
+                  <span className="text-sm">Show unit order</span>
+                  <Switch checked={showHint} onCheckedChange={setShowHint} />
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="text-sm">Show conversion path</span>
+                  <Switch
+                    checked={showConversionPath}
+                    onCheckedChange={setShowConversionPath}
+                  />
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="text-sm">Advanced mode</span>
+                  <Switch
+                    checked={isAdvancedMode}
+                    onCheckedChange={(checked) => {
+                      setIsAdvancedMode(checked);
+                      setScore({ correct: 0, total: 0 });
+                    }}
+                  />
+                </div>
               </div>
-              <div className="flex items-center gap-2">
-                <span className="text-sm">Show conversion path</span>
-                <Switch
-                  checked={showConversionPath}
-                  onCheckedChange={setShowConversionPath}
-                />
-              </div>
-              <div className="flex items-center gap-2">
-                <span className="text-sm">Advanced mode</span>
-                <Switch
-                  checked={isAdvancedMode}
-                  onCheckedChange={(checked) => {
-                    setIsAdvancedMode(checked);
-                    setScore({ correct: 0, total: 0 });
-                  }}
-                />
-              </div>
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4 p-6">
+            {showHint && (
+              <Alert className="bg-gradient-to-r from-blue-50 to-purple-50 border-none">
+                <div className="flex items-center gap-2">
+                  <AlertDescription>
+                    <div className="font-semibold text-indigo-900">
+                      Units in order (smallest to largest):
+                    </div>
+                    <div className="flex flex-wrap items-center gap-2 mt-2">
+                      {units.map((unit, index) => (
+                        <React.Fragment key={unit}>
+                          <span
+                            className={`px-2 py-1 rounded ${getUnitColor(unit)}`}
+                          >
+                            {unit}
+                          </span>
+                          {index < units.length - 1 && (
+                            <ArrowRight className="h-4 w-4 text-indigo-400" />
+                          )}
+                        </React.Fragment>
+                      ))}
+                    </div>
+                  </AlertDescription>
+                </div>
+              </Alert>
+            )}
+
+            <div className="text-lg mb-4 bg-gradient-to-r from-indigo-100 to-purple-100 p-3 rounded-lg">
+              <span className="font-semibold">Score:</span> {score.correct}/
+              {score.total}
+              <span className="text-indigo-600 ml-2">
+                (
+                {score.total > 0
+                  ? Math.round((score.correct / score.total) * 100)
+                  : 0}
+                %)
+              </span>
             </div>
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-4 p-6">
-          {showHint && (
-            <Alert className="bg-gradient-to-r from-blue-50 to-purple-50 border-none">
-              <div className="flex items-center gap-2">
-                <AlertDescription>
-                  <div className="font-semibold text-indigo-900">
-                    Units in order (smallest to largest):
-                  </div>
-                  <div className="flex flex-wrap items-center gap-2 mt-2">
-                    {units.map((unit, index) => (
-                      <React.Fragment key={unit}>
-                        <span
-                          className={`px-2 py-1 rounded ${getUnitColor(unit)}`}
-                        >
-                          {unit}
-                        </span>
-                        {index < units.length - 1 && (
-                          <ArrowRight className="h-4 w-4 text-indigo-400" />
-                        )}
-                      </React.Fragment>
-                    ))}
-                  </div>
-                </AlertDescription>
-              </div>
-            </Alert>
-          )}
 
-          <div className="text-lg mb-4 bg-gradient-to-r from-indigo-100 to-purple-100 p-3 rounded-lg">
-            <span className="font-semibold">Score:</span> {score.correct}/
-            {score.total}
-            <span className="text-indigo-600 ml-2">
-              (
-              {score.total > 0
-                ? Math.round((score.correct / score.total) * 100)
-                : 0}
-              %)
-            </span>
-          </div>
+            {currentQuestion ? (
+              <div className="space-y-4">
+                <div className="text-xl font-semibold bg-gradient-to-r from-indigo-600 to-purple-600 text-white p-4 rounded-lg shadow">
+                  Convert {formatNumber(currentQuestion.finalValue)}{' '}
+                  {currentQuestion.fromUnit} to {currentQuestion.toUnit}
+                </div>
 
-          {currentQuestion ? (
-            <div className="space-y-4">
-              <div className="text-xl font-semibold bg-gradient-to-r from-indigo-600 to-purple-600 text-white p-4 rounded-lg shadow">
-                Convert {formatNumber(currentQuestion.finalValue)}{' '}
-                {currentQuestion.fromUnit} to {currentQuestion.toUnit}
-              </div>
+                {showConversionPath && (
+                  <ConversionPathVisual
+                    fromUnit={currentQuestion.fromUnit}
+                    toUnit={currentQuestion.toUnit}
+                  />
+                )}
 
-              {showConversionPath && (
-                <ConversionPathVisual
-                  fromUnit={currentQuestion.fromUnit}
-                  toUnit={currentQuestion.toUnit}
-                />
-              )}
+                <div className="flex gap-2">
+                  <Input
+                    type="text"
+                    value={displayAnswer}
+                    onChange={handleAnswerChange}
+                    placeholder="Enter your answer"
+                    className="flex-1 border-2 border-indigo-200 focus:border-indigo-500 rounded-lg"
+                    onSubmit={checkAnswer}
+                  />
+                  <Button
+                    onClick={checkAnswer}
+                    className="bg-gradient-to-r from-indigo-500 to-purple-500 hover:from-indigo-600 hover:to-purple-600 text-white font-semibold px-6"
+                  >
+                    Check
+                  </Button>{' '}
+                </div>
 
-              <div className="flex gap-2">
-                <Input
-                  type="text"
-                  value={displayAnswer}
-                  onChange={handleAnswerChange}
-                  placeholder="Enter your answer"
-                  className="flex-1 border-2 border-indigo-200 focus:border-indigo-500 rounded-lg"
-                  onSubmit={checkAnswer}
-                />
-                <Button
-                  onClick={checkAnswer}
-                  className="bg-gradient-to-r from-indigo-500 to-purple-500 hover:from-indigo-600 hover:to-purple-600 text-white font-semibold px-6"
-                >
-                  Check
-                </Button>{' '}
-              </div>
-
-              {feedback && (
-                <Alert
-                  className={
-                    feedback.isCorrect
-                      ? 'bg-gradient-to-r from-green-50 to-emerald-50 border-green-200'
-                      : 'bg-gradient-to-r from-red-50 to-pink-50 border-red-200'
-                  }
-                >
-                  <div className="flex items-center gap-2">
-                    {feedback.isCorrect ? (
-                      <Check className="h-5 w-5 text-green-600" />
-                    ) : (
-                      <X className="h-5 w-5 text-red-600" />
-                    )}
-                    <AlertDescription>
-                      <div
-                        className={
-                          feedback.isCorrect ? 'text-green-700' : 'text-red-700'
-                        }
-                      >
-                        {feedback.message}
-                      </div>
-                      {!feedback.isCorrect && (
-                        <div className="mt-2 text-gray-700">
-                          <div className="font-semibold text-indigo-900">
-                            Here's how to solve it:
-                          </div>
-                          {feedback.explanation.map((step, index) => (
-                            <div
-                              key={index}
-                              className="ml-2 mt-1 text-indigo-700"
-                            >
-                              {step}
-                            </div>
-                          ))}
-                        </div>
+                {feedback && (
+                  <Alert
+                    className={
+                      feedback.isCorrect
+                        ? 'bg-gradient-to-r from-green-50 to-emerald-50 border-green-200'
+                        : 'bg-gradient-to-r from-red-50 to-pink-50 border-red-200'
+                    }
+                  >
+                    <div className="flex items-center gap-2">
+                      {feedback.isCorrect ? (
+                        <Check className="h-5 w-5 text-green-600" />
+                      ) : (
+                        <X className="h-5 w-5 text-red-600" />
                       )}
-                    </AlertDescription>
-                  </div>
-                </Alert>
-              )}
-            </div>
-          ) : (
-            <div className="text-center text-indigo-600">
-              Click "New Question" to begin!
-            </div>
-          )}
+                      <AlertDescription>
+                        <div
+                          className={
+                            feedback.isCorrect
+                              ? 'text-green-700'
+                              : 'text-red-700'
+                          }
+                        >
+                          {feedback.message}
+                        </div>
+                        {!feedback.isCorrect && (
+                          <div className="mt-2 text-gray-700">
+                            <div className="font-semibold text-indigo-900">
+                              Here's how to solve it:
+                            </div>
+                            {feedback.explanation.map((step, index) => (
+                              <div
+                                key={index}
+                                className="ml-2 mt-1 text-indigo-700"
+                              >
+                                {step}
+                              </div>
+                            ))}
+                          </div>
+                        )}
+                      </AlertDescription>
+                    </div>
+                  </Alert>
+                )}
+              </div>
+            ) : (
+              <div className="text-center text-indigo-600">
+                Click "New Question" to begin!
+              </div>
+            )}
 
-          <Button
-            onClick={generateQuestion}
-            className="w-full bg-gradient-to-r from-indigo-500 to-purple-500 hover:from-indigo-600 hover:to-purple-600 text-white font-semibold text-lg py-6"
-          >
-            New Question
-          </Button>
-        </CardContent>
-      </Card>
+            <Button
+              onClick={generateQuestion}
+              className="w-full bg-gradient-to-r from-indigo-500 to-purple-500 hover:from-indigo-600 hover:to-purple-600 text-white font-semibold text-lg py-6"
+            >
+              New Question
+            </Button>
+          </CardContent>
+        </Card>
+      </div>
     </div>
   );
 };
