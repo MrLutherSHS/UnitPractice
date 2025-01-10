@@ -150,7 +150,7 @@ const DataUnitConverter = () => {
   const generateExplanation = (
     value: number,
     fromUnit: string,
-    toUnit: string,
+    toUnit: string
   ) => {
     const fromIndex = units.indexOf(fromUnit as (typeof units)[number]);
     const toIndex = units.indexOf(toUnit as (typeof units)[number]);
@@ -250,8 +250,6 @@ const DataUnitConverter = () => {
     setDisplayAnswer('');
     let fromUnit: string, toUnit: string;
     const maxSteps = isAdvancedMode ? 3 : 1;
-    // Max value for bits is 400 - more realistic numbers
-    const maxValue = fromUnit === 'bits' ? 400 : 999
 
     do {
       fromUnit = units[Math.floor(Math.random() * (units.length - 1))];
@@ -261,8 +259,11 @@ const DataUnitConverter = () => {
       getStepsBetweenUnits(fromUnit, toUnit) > maxSteps
     );
 
+    // Max value for bits and bytes is 300 - simpler maths for students when */ 8
+    const ceiling = fromUnit === 'bits' || fromUnit === 'bytes' ? 300 : 999;
+
     const stepCount = getStepsBetweenUnits(fromUnit, toUnit);
-    const maxValue = Math.max(10, Math.floor(400 / stepCount));
+    const maxValue = Math.max(10, Math.floor(ceiling / stepCount));
     const initValue = Math.floor(Math.random() * maxValue) + 1;
     // I want to make sure the value is a multiple of 8 if converting from bits
     const finalValue =
@@ -413,6 +414,7 @@ const DataUnitConverter = () => {
                   onChange={handleAnswerChange}
                   placeholder="Enter your answer"
                   className="flex-1 border-2 border-indigo-200 focus:border-indigo-500 rounded-lg"
+                  onSubmit={checkAnswer}
                 />
                 <Button
                   onClick={checkAnswer}
