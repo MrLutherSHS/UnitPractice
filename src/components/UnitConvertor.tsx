@@ -288,30 +288,30 @@ const DataUnitConverter = () => {
   };
 
   return (
-    <div className="scale-133 md:scale-150 lg:scale-150 transform origin-center ">
-      <div className="p-6 w-fit ">
-        <Card className="max-w-6xl mx-auto shadow-xl bg-white/80 backdrop-blur">
-          <CardHeader className="bg-gradient-to-r from-indigo-500 to-purple-500 text-white rounded-t-lg">
+    <div className="w-full">
+      <div className="p-4">
+        <Card className="mx-auto shadow-xl bg-white/80 backdrop-blur">
+          <CardHeader className="bg-gradient-to-r from-indigo-500 to-purple-500 text-white rounded-t-lg p-8">
             <CardTitle className="flex justify-between items-center">
-              <span className="text-2xl font-bold">
+              <span className="text-4xl font-bold">
                 🦆 Data Unit Conversion Practice
               </span>
             </CardTitle>
-            <CardDescription className="text-white rounded-t-lg">
-              <div className="flex items-center gap-4">
-                <div className="flex items-center gap-2">
-                  <span className="text-sm">Show unit order</span>
+            <CardDescription className="text-white rounded-t-lg mt-4">
+              <div className="flex flex-wrap items-center gap-6">
+                <div className="flex items-center gap-3">
+                  <span className="text-lg">Show unit order</span>
                   <Switch checked={showHint} onCheckedChange={setShowHint} />
                 </div>
-                <div className="flex items-center gap-2">
-                  <span className="text-sm">Show conversion path</span>
+                <div className="flex items-center gap-3">
+                  <span className="text-lg">Show conversion path</span>
                   <Switch
                     checked={showConversionPath}
                     onCheckedChange={setShowConversionPath}
                   />
                 </div>
-                <div className="flex items-center gap-2">
-                  <span className="text-sm">Advanced mode</span>
+                <div className="flex items-center gap-3">
+                  <span className="text-lg">Advanced mode</span>
                   <Switch
                     checked={isAdvancedMode}
                     onCheckedChange={(checked) => {
@@ -323,24 +323,24 @@ const DataUnitConverter = () => {
               </div>
             </CardDescription>
           </CardHeader>
-          <CardContent className="space-y-4 p-6">
+          <CardContent className="space-y-6 p-8">
             {showHint && (
-              <Alert className="bg-gradient-to-r from-blue-50 to-purple-50 border-none">
-                <div className="flex items-center gap-2">
-                  <AlertDescription>
+              <Alert className="bg-gradient-to-r from-blue-50 to-purple-50 border-none p-6">
+                <div className="flex items-center gap-3">
+                  <AlertDescription className="text-xl">
                     <div className="font-semibold text-indigo-900">
                       Units in order (smallest to largest):
                     </div>
-                    <div className="flex flex-wrap items-center gap-2 mt-2">
+                    <div className="flex flex-wrap items-center gap-3 mt-4">
                       {units.map((unit, index) => (
                         <React.Fragment key={unit}>
                           <span
-                            className={`px-2 py-1 rounded ${getUnitColor(unit)}`}
+                            className={`px-3 py-2 rounded text-lg ${getUnitColor(unit)}`}
                           >
                             {unit}
                           </span>
                           {index < units.length - 1 && (
-                            <ArrowRight className="h-4 w-4 text-indigo-400" />
+                            <ArrowRight className="h-6 w-6 text-indigo-400" />
                           )}
                         </React.Fragment>
                       ))}
@@ -350,7 +350,7 @@ const DataUnitConverter = () => {
               </Alert>
             )}
 
-            <div className="text-lg mb-4 bg-gradient-to-r from-indigo-100 to-purple-100 p-3 rounded-lg">
+            <div className="text-2xl mb-6 bg-gradient-to-r from-indigo-100 to-purple-100 p-4 rounded-lg">
               <span className="font-semibold">Score:</span> {score.correct}/
               {score.total}
               <span className="text-indigo-600 ml-2">
@@ -363,8 +363,8 @@ const DataUnitConverter = () => {
             </div>
 
             {currentQuestion ? (
-              <div className="space-y-4">
-                <div className="text-xl font-semibold bg-gradient-to-r from-indigo-600 to-purple-600 text-white p-4 rounded-lg shadow">
+              <div className="space-y-6">
+                <div className="text-2xl font-semibold bg-gradient-to-r from-indigo-600 to-purple-600 text-white p-6 rounded-lg shadow">
                   Convert {formatNumber(currentQuestion.finalValue)}{' '}
                   {currentQuestion.fromUnit} to {currentQuestion.toUnit}
                 </div>
@@ -376,17 +376,17 @@ const DataUnitConverter = () => {
                   />
                 )}
 
-                <form onSubmit={handleSubmit} className="flex gap-2">
+                <form onSubmit={handleSubmit} className="flex gap-4">
                   <Input
                     type="text"
                     value={displayAnswer}
                     onChange={handleAnswerChange}
                     placeholder="Enter your answer"
-                    className="flex-1 border-2 border-indigo-200 focus:border-indigo-500 rounded-lg"
+                    className="flex-1 border-2 border-indigo-200 focus:border-indigo-500 rounded-lg text-xl p-6"
                   />
                   <Button
                     type="submit"
-                    className="bg-gradient-to-r from-indigo-500 to-purple-500 hover:from-indigo-600 hover:to-purple-600 text-white font-semibold px-6"
+                    className="bg-gradient-to-r from-indigo-500 to-purple-500 hover:from-indigo-600 hover:to-purple-600 text-white font-semibold px-8 text-xl"
                   >
                     Check
                   </Button>
@@ -394,19 +394,19 @@ const DataUnitConverter = () => {
 
                 {feedback && (
                   <Alert
-                    className={
+                    className={`p-6 ${
                       feedback.isCorrect
                         ? 'bg-gradient-to-r from-green-50 to-emerald-50 border-green-200'
                         : 'bg-gradient-to-r from-red-50 to-pink-50 border-red-200'
-                    }
+                    }`}
                   >
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-start gap-3">
                       {feedback.isCorrect ? (
-                        <Check className="h-5 w-5 text-green-600" />
+                        <Check className="h-6 w-6 text-green-600 mt-1" />
                       ) : (
-                        <X className="h-5 w-5 text-red-600" />
+                        <X className="h-6 w-6 text-red-600 mt-1" />
                       )}
-                      <AlertDescription>
+                      <AlertDescription className="text-xl">
                         <div
                           className={
                             feedback.isCorrect
@@ -417,14 +417,14 @@ const DataUnitConverter = () => {
                           {feedback.message}
                         </div>
                         {!feedback.isCorrect && (
-                          <div className="mt-2 text-gray-700">
-                            <div className="font-semibold text-indigo-900">
+                          <div className="mt-4 text-gray-700">
+                            <div className="font-semibold text-xl text-indigo-900">
                               Here's how to solve it:
                             </div>
                             {feedback.explanation.map((step, index) => (
                               <div
                                 key={index}
-                                className="ml-2 mt-1 text-indigo-700"
+                                className="ml-4 mt-2 text-lg text-indigo-700"
                               >
                                 {step}
                               </div>
@@ -437,14 +437,14 @@ const DataUnitConverter = () => {
                 )}
               </div>
             ) : (
-              <div className="text-center text-indigo-600">
+              <div className="text-2xl text-center text-indigo-600">
                 Click "New Question" to begin!
               </div>
             )}
 
             <Button
               onClick={generateQuestion}
-              className="w-full bg-gradient-to-r from-indigo-500 to-purple-500 hover:from-indigo-600 hover:to-purple-600 text-white font-semibold text-lg py-6"
+              className="w-full bg-gradient-to-r from-indigo-500 to-purple-500 hover:from-indigo-600 hover:to-purple-600 text-white font-semibold text-2xl py-8"
             >
               New Question
             </Button>
