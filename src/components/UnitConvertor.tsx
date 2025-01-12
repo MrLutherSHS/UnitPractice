@@ -6,13 +6,13 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { ArrowRight } from 'lucide-react';
 import { Switch } from '@/components/ui/switch';
 import ScoreBox from './ScoreBox';
 import FeedbackBox from './FeedbackBox';
 import AnswerForm from './AnswerForm';
+import NewQuestionButton from './NewQuestionButton';
 
 interface Question {
   finalValue: number;
@@ -57,6 +57,7 @@ const DataUnitConverter = () => {
     return str.replace(/,/g, '');
   };
 
+  // TODO - This no longer actually properly adds commas - why not?
   const handleAnswerChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     const value = unformatNumber(e.target.value);
     if (value === '') {
@@ -371,7 +372,7 @@ const DataUnitConverter = () => {
 
                 <AnswerForm
                   handleSubmit={handleSubmit}
-                  userAnswer={userAnswer}
+                  userAnswer={displayAnswer}
                   handleAnswerChange={handleAnswerChange}
                   type="text"
                 />
@@ -383,14 +384,8 @@ const DataUnitConverter = () => {
                 Click "New Question" to begin!
               </div>
             )}
-
-            <Button
-              onClick={generateQuestion}
-              className="w-full bg-gradient-to-r from-indigo-500 to-purple-500 hover:from-indigo-600 hover:to-purple-600 text-white font-semibold text-2xl py-8"
-            >
-              New Question
-            </Button>
             <ScoreBox score={score} />
+            <NewQuestionButton generateQuestion={generateQuestion} />
           </CardContent>
         </Card>
       </div>

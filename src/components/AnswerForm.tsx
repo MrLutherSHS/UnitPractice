@@ -13,7 +13,7 @@ const AnswerForm = ({
   type: string;
 }) => {
   return (
-    <form onSubmit={handleSubmit} className="flex gap-4">
+    <form onSubmit={handleSubmit} className="flex flex-col md:flex-row gap-4">
       <Input
         type={type}
         step="any"

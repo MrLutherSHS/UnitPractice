@@ -6,12 +6,12 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Switch } from './ui/switch';
 import ScoreBox from './ScoreBox';
 import FeedbackBox from './FeedbackBox';
 import AnswerForm from './AnswerForm';
+import NewQuestionButton from './NewQuestionButton';
 
 interface Question {
   type: 'sound' | 'image' | 'text' | 'options' | 'bitsFromOptions';
@@ -303,17 +303,12 @@ const FileSizeCalculator = () => {
                 {feedback && <FeedbackBox feedback={feedback} />}
               </div>
             ) : (
-              <div className="text-2xl text-center text-blue-600">
+              <div className="text-2xl text-center text-indigo-600">
                 Click "New Question" to begin!
               </div>
             )}
-            <Button
-              onClick={generateQuestion}
-              className="w-full bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white font-semibold text-2xl py-8"
-            >
-              New Question
-            </Button>
             <ScoreBox score={score} />
+            <NewQuestionButton generateQuestion={generateQuestion} />
           </CardContent>
         </Card>
       </div>

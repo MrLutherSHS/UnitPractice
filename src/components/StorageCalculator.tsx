@@ -6,10 +6,10 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
 import ScoreBox from './ScoreBox';
 import FeedbackBox from './FeedbackBox';
 import AnswerForm from './AnswerForm';
+import NewQuestionButton from './NewQuestionButton';
 
 interface Question {
   type: 'fileCount' | 'capacity';
@@ -257,13 +257,8 @@ const StorageCalculator = () => {
               </div>
             )}
 
-            <Button
-              onClick={generateQuestion}
-              className="w-full bg-gradient-to-r from-indigo-500 to-purple-500 hover:from-indigo-600 hover:to-purple-600 text-white font-semibold text-2xl py-8"
-            >
-              New Question
-            </Button>
             <ScoreBox score={score} />
+            <NewQuestionButton generateQuestion={generateQuestion} />
           </CardContent>
         </Card>
       </div>
