@@ -18,7 +18,7 @@ const App = () => {
         </h1>
 
         {!selectedComponent && (
-          <Card className="max-w-lg mx-auto">
+          <Card className="max-w-2xl mx-auto">
             <CardContent className="p-6 space-y-4">
               <h2 className="text-xl text-center mb-4 text-gray-700">
                 What would you like to practice?
@@ -29,18 +29,25 @@ const App = () => {
                   className="w-full p-4 text-left bg-gradient-to-r from-indigo-50 to-purple-50 rounded-lg shadow hover:shadow-md transition-shadow duration-200 text-gray-700 hover:from-indigo-100 hover:to-purple-100"
                 >
                   Moving between units
+                  <p className="italic text-gray-400">100KB to MB</p>
                 </button>
                 <button
                   onClick={() => setSelectedComponent('storageCalculator')}
                   className="w-full p-4 text-left bg-gradient-to-r from-indigo-50 to-purple-50 rounded-lg shadow hover:shadow-md transition-shadow duration-200 text-gray-700 hover:from-indigo-100 hover:to-purple-100"
                 >
                   Calculating storage capacity
+                  <p className="italic  text-gray-400">
+                    10 files of 20KB in MB
+                  </p>
                 </button>
                 <button
                   onClick={() => setSelectedComponent('fileSizeCalculator')}
                   className="w-full p-4 text-left bg-gradient-to-r from-indigo-50 to-purple-50 rounded-lg shadow hover:shadow-md transition-shadow duration-200 text-gray-700 hover:from-indigo-100 hover:to-purple-100"
                 >
                   Calculating file sizes
+                  <p className="italic  text-gray-400">
+                    300 character text file in KB
+                  </p>
                 </button>
               </div>
             </CardContent>

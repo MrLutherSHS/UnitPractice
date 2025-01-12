@@ -10,6 +10,7 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Check, X } from 'lucide-react';
+import ScoreBox from './ScoreBox';
 
 interface Question {
   type: 'fileCount' | 'capacity';
@@ -219,15 +220,15 @@ const StorageCalculator = () => {
     }
   };
 
+  const title = '💾 Storage Capacity Calculator';
+
   return (
     <div className="w-full">
       <div className="p-4">
         <Card className="mx-auto shadow-xl bg-white/80 backdrop-blur">
           <CardHeader className="bg-gradient-to-r from-indigo-500 to-purple-500 text-white rounded-t-lg p-8">
             <CardTitle className="flex justify-between items-center">
-              <span className="text-4xl font-bold">
-                💾 Storage Capacity Calculator
-              </span>
+              <span className="text-4xl font-bold">{title}</span>
             </CardTitle>
             <CardDescription className="text-white text-xl rounded-t-lg">
               <div className="flex items-center gap-4">
@@ -236,17 +237,7 @@ const StorageCalculator = () => {
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-6 p-8">
-            <div className="text-2xl mb-6 bg-gradient-to-r from-indigo-100 to-purple-100 p-4 rounded-lg">
-              <span className="font-semibold">Score:</span> {score.correct}/
-              {score.total}
-              <span className="text-indigo-600 ml-2">
-                (
-                {score.total > 0
-                  ? Math.round((score.correct / score.total) * 100)
-                  : 0}
-                %)
-              </span>
-            </div>
+            <ScoreBox score={score} />
 
             {currentQuestion ? (
               <div className="space-y-6">

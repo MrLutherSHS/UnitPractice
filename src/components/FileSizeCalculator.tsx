@@ -255,15 +255,15 @@ const FileSizeCalculator = () => {
     }
   };
 
+  const title = '📊 File Size Calculator';
+
   return (
     <div className="w-full">
       <div className="p-4">
         <Card className="mx-auto shadow-xl bg-white/80 backdrop-blur">
           <CardHeader className="bg-gradient-to-r from-blue-500 to-purple-500 text-white rounded-t-lg p-8">
             <CardTitle className="flex justify-between items-center">
-              <span className="text-4xl font-bold">
-                📊 File Size Calculator
-              </span>
+              <span className="text-4xl font-bold">{title}</span>
             </CardTitle>
             <CardDescription className="text-white text-xl">
               <div className="flex flex-wrap items-center gap-6">
@@ -271,7 +271,7 @@ const FileSizeCalculator = () => {
                   <span className="text-lg">Show calculation help</span>
                   <Switch checked={showHint} onCheckedChange={setShowHint} />
                 </div>
-              </div>{' '}
+              </div>
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-6 p-8">
@@ -286,7 +286,7 @@ const FileSizeCalculator = () => {
                   </AlertDescription>
                 </div>
               </Alert>
-            )}{' '}
+            )}
             <div className="text-2xl mb-6 bg-gradient-to-r from-blue-100 to-purple-100 p-4 rounded-lg">
               <span className="font-semibold">Score:</span> {score.correct}/
               {score.total}
