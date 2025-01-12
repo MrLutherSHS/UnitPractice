@@ -6,11 +6,10 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Check, X } from 'lucide-react';
 import ScoreBox from './ScoreBox';
+import FeedbackBox from './FeedbackBox';
+import AnswerForm from './AnswerForm';
 
 interface Question {
   type: 'fileCount' | 'capacity';
@@ -237,74 +236,20 @@ const StorageCalculator = () => {
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-6 p-8">
-            <ScoreBox score={score} />
-
             {currentQuestion ? (
               <div className="space-y-6">
                 <div className="text-2xl font-semibold bg-gradient-to-r from-indigo-600 to-purple-600 text-white p-6 rounded-lg shadow">
                   {getQuestionText(currentQuestion)}
                 </div>
 
-                <form onSubmit={handleSubmit} className="flex gap-4">
-                  <Input
-                    type="number"
-                    step="any"
-                    value={userAnswer}
-                    onChange={handleAnswerChange}
-                    placeholder="Enter your answer"
-                    className="flex-1 border-2 border-indigo-200 focus:border-indigo-500 rounded-lg text-2xl p-6"
-                  />
-                  <Button
-                    type="submit"
-                    className="bg-gradient-to-r from-indigo-500 to-purple-500 hover:from-indigo-600 hover:to-purple-600 text-white font-semibold p-6 text-xl"
-                  >
-                    Check
-                  </Button>
-                </form>
+                <AnswerForm
+                  handleSubmit={handleSubmit}
+                  userAnswer={userAnswer}
+                  handleAnswerChange={handleAnswerChange}
+                  type="number"
+                />
 
-                {feedback && (
-                  <Alert
-                    className={`p-6 ${
-                      feedback.isCorrect
-                        ? 'bg-gradient-to-r from-green-50 to-emerald-50 border-green-200'
-                        : 'bg-gradient-to-r from-red-50 to-pink-50 border-red-200'
-                    }`}
-                  >
-                    <div className="flex items-start gap-3">
-                      {feedback.isCorrect ? (
-                        <Check className="h-6 w-6 text-green-600 mt-1" />
-                      ) : (
-                        <X className="h-6 w-6 text-red-600 mt-1" />
-                      )}
-                      <AlertDescription className="text-xl">
-                        <div
-                          className={
-                            feedback.isCorrect
-                              ? 'text-green-700'
-                              : 'text-red-700'
-                          }
-                        >
-                          {feedback.message}
-                        </div>
-                        {!feedback.isCorrect && (
-                          <div className="mt-4 text-gray-700">
-                            <div className="font-semibold text-xl text-indigo-900">
-                              Here's how to solve it:
-                            </div>
-                            {feedback.explanation.map((step, index) => (
-                              <div
-                                key={index}
-                                className="ml-4 mt-2 text-lg text-indigo-700"
-                              >
-                                {step}
-                              </div>
-                            ))}
-                          </div>
-                        )}
-                      </AlertDescription>
-                    </div>
-                  </Alert>
-                )}
+                {feedback && <FeedbackBox feedback={feedback} />}
               </div>
             ) : (
               <div className="text-2xl text-center text-indigo-600">
@@ -318,6 +263,7 @@ const StorageCalculator = () => {
             >
               New Question
             </Button>
+            <ScoreBox score={score} />
           </CardContent>
         </Card>
       </div>

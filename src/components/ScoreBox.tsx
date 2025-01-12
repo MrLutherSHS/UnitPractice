@@ -1,4 +1,4 @@
-const ScoreBox = ({ score }) => {
+const ScoreBox = ({ score }: { score: { correct: number; total: number } }) => {
   return (
     <div className="text-2xl mb-6 bg-gradient-to-r from-indigo-100 to-purple-100 p-4 rounded-lg">
       <span className="font-semibold">Score:</span> {score.correct}/
@@ -10,5 +10,4 @@ const ScoreBox = ({ score }) => {
     </div>
   );
 };
-
 export default ScoreBox;

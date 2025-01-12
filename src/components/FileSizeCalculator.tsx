@@ -6,11 +6,12 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Check, X } from 'lucide-react';
 import { Switch } from './ui/switch';
+import ScoreBox from './ScoreBox';
+import FeedbackBox from './FeedbackBox';
+import AnswerForm from './AnswerForm';
 
 interface Question {
   type: 'sound' | 'image' | 'text' | 'options' | 'bitsFromOptions';
@@ -287,83 +288,19 @@ const FileSizeCalculator = () => {
                 </div>
               </Alert>
             )}
-            <div className="text-2xl mb-6 bg-gradient-to-r from-blue-100 to-purple-100 p-4 rounded-lg">
-              <span className="font-semibold">Score:</span> {score.correct}/
-              {score.total}
-              <span className="text-blue-600 ml-2">
-                (
-                {score.total > 0
-                  ? Math.round((score.correct / score.total) * 100)
-                  : 0}
-                %)
-              </span>
-            </div>
             {currentQuestion ? (
               <div className="space-y-6">
                 <div className="text-2xl font-semibold bg-gradient-to-r from-blue-600 to-purple-600 text-white p-6 rounded-lg shadow">
                   {getQuestionText(currentQuestion)}
                 </div>
+                <AnswerForm
+                  handleSubmit={handleSubmit}
+                  userAnswer={userAnswer}
+                  handleAnswerChange={handleAnswerChange}
+                  type="number"
+                />
 
-                <form onSubmit={handleSubmit} className="flex gap-4">
-                  <Input
-                    type="number"
-                    step="any"
-                    value={userAnswer}
-                    onChange={handleAnswerChange}
-                    placeholder="Enter your answer"
-                    className="flex-1 border-2 border-blue-200 focus:border-blue-500 rounded-lg text-2xl p-6"
-                  />
-                  <Button
-                    type="submit"
-                    className="bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white font-semibold p-6 text-xl"
-                  >
-                    Check
-                  </Button>
-                </form>
-
-                {feedback && (
-                  <Alert
-                    className={`p-6 ${
-                      feedback.isCorrect
-                        ? 'bg-gradient-to-r from-green-50 to-emerald-50 border-green-200'
-                        : 'bg-gradient-to-r from-red-50 to-pink-50 border-red-200'
-                    }`}
-                  >
-                    <div className="flex items-center justify-center gap-3">
-                      {feedback.isCorrect ? (
-                        <Check className="h-6 w-6 text-green-600 mt-1" />
-                      ) : (
-                        <X className="h-6 w-6 text-red-600 mt-1" />
-                      )}
-                      <AlertDescription className="text-xl">
-                        <div
-                          className={
-                            feedback.isCorrect
-                              ? 'text-green-700'
-                              : 'text-red-700'
-                          }
-                        >
-                          {feedback.message}
-                        </div>
-                        {!feedback.isCorrect && (
-                          <div className="mt-4 text-gray-700">
-                            <div className="font-semibold text-xl text-blue-900">
-                              Here's how to solve it:
-                            </div>
-                            {feedback.explanation.map((step, index) => (
-                              <div
-                                key={index}
-                                className="ml-4 mt-2 text-lg text-blue-700"
-                              >
-                                {step}
-                              </div>
-                            ))}
-                          </div>
-                        )}
-                      </AlertDescription>
-                    </div>
-                  </Alert>
-                )}
+                {feedback && <FeedbackBox feedback={feedback} />}
               </div>
             ) : (
               <div className="text-2xl text-center text-blue-600">
@@ -376,6 +313,7 @@ const FileSizeCalculator = () => {
             >
               New Question
             </Button>
+            <ScoreBox score={score} />
           </CardContent>
         </Card>
       </div>
