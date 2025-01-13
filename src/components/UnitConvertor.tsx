@@ -9,10 +9,9 @@ import {
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { ArrowRight } from 'lucide-react';
 import { Switch } from '@/components/ui/switch';
-import ScoreBox from './ScoreBox';
 import FeedbackBox from './FeedbackBox';
 import AnswerForm from './AnswerForm';
-import NewQuestionButton from './NewQuestionButton';
+import { NewQuestionButton, ScoreBox } from './QuizComponents';
 
 interface Question {
   finalValue: number;
@@ -294,7 +293,7 @@ const DataUnitConverter = () => {
     return `Convert ${formatNumber(question.finalValue)} ${question.fromUnit} to ${question.toUnit}`;
   };
 
-  const title = '🦆 Data Unit Conversion Practice';
+  const title = 'Converting units';
 
   return (
     <div className="w-full">
@@ -302,23 +301,25 @@ const DataUnitConverter = () => {
         <Card className="mx-auto shadow-xl bg-white/80 backdrop-blur">
           <CardHeader className="bg-gradient-to-r from-indigo-500 to-purple-500 text-white rounded-t-lg p-8">
             <CardTitle className="flex justify-between items-center">
-              <span className="text-4xl font-bold">{title}</span>
+              <span className="text-2xl md:text-4xl font-bold">{title}</span>
             </CardTitle>
             <CardDescription className="text-white rounded-t-lg mt-4">
               <div className="flex flex-wrap items-center gap-6">
                 <div className="flex items-center gap-3">
-                  <span className="text-lg">Show unit order</span>
+                  <span className="text-md md:text-lg">Show unit order</span>
                   <Switch checked={showHint} onCheckedChange={setShowHint} />
                 </div>
                 <div className="flex items-center gap-3">
-                  <span className="text-lg">Show conversion path</span>
+                  <span className="text-md md:text-lg">
+                    Show conversion path
+                  </span>
                   <Switch
                     checked={showConversionPath}
                     onCheckedChange={setShowConversionPath}
                   />
                 </div>
                 <div className="flex items-center gap-3">
-                  <span className="text-lg">Advanced mode</span>
+                  <span className="text-md md:text-lg">Advanced mode</span>
                   <Switch
                     checked={isAdvancedMode}
                     onCheckedChange={(checked) => {
@@ -334,7 +335,7 @@ const DataUnitConverter = () => {
             {showHint && (
               <Alert className="bg-gradient-to-r from-blue-50 to-purple-50 border-none p-6">
                 <div className="flex items-center gap-3">
-                  <AlertDescription className="text-xl">
+                  <AlertDescription className="text-lg md:text-xl">
                     <div className="font-semibold text-indigo-900">
                       Units in order (smallest to largest):
                     </div>
@@ -380,7 +381,7 @@ const DataUnitConverter = () => {
                 {feedback && <FeedbackBox feedback={feedback} />}
               </div>
             ) : (
-              <div className="text-2xl text-center text-indigo-600">
+              <div className="text-lg md:text-2xl text-center text-indigo-600">
                 Click "New Question" to begin!
               </div>
             )}

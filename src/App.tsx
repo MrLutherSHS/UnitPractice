@@ -11,9 +11,9 @@ const App = () => {
   );
 
   return (
-    <div className="bg-gradient-to-b from-gray-50 to-gray-100 p-4 md:p-8 rounded-2xl">
+    <div className="bg-gradient-to-b from-gray-50 to-gray-100 p-2 md:p-4 rounded-2xl">
       <div className="max-w-7xl mx-auto">
-        <h1 className="text-3xl font-bold text-center mb-8 text-purple-600">
+        <h1 className="text-3xl font-bold text-center mb-4 md:mb-8 text-purple-600">
           Calculating size practice
         </h1>
 
@@ -58,7 +58,7 @@ const App = () => {
           <div className="max-w-7xl mx-auto">
             <button
               onClick={() => setSelectedComponent(null)}
-              className="mb-4 px-4 py-2 text-sm bg-white rounded-lg shadow hover:shadow-md transition-shadow duration-200 text-indigo-600 hover:bg-indigo-50"
+              className="mb-2 md:mb-4 px-4 py-2 text-sm bg-white rounded-lg shadow hover:shadow-md transition-shadow duration-200 text-indigo-600 hover:bg-indigo-50"
             >
               ← Back to selection
             </button>

@@ -8,10 +8,9 @@ import {
 } from '@/components/ui/card';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Switch } from './ui/switch';
-import ScoreBox from './ScoreBox';
+import { NewQuestionButton, ScoreBox } from './QuizComponents';
 import FeedbackBox from './FeedbackBox';
 import AnswerForm from './AnswerForm';
-import NewQuestionButton from './NewQuestionButton';
 
 interface Question {
   type: 'sound' | 'image' | 'text' | 'options' | 'bitsFromOptions';
