@@ -9,9 +9,12 @@ import {
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { ArrowRight } from 'lucide-react';
 import { Switch } from '@/components/ui/switch';
-import FeedbackBox from './FeedbackBox';
-import AnswerForm from './AnswerForm';
-import { NewQuestionButton, ScoreBox } from './QuizComponents';
+import {
+  AnswerForm,
+  FeedbackBox,
+  NewQuestionButton,
+  ScoreBox,
+} from './QuizComponents';
 
 interface Question {
   finalValue: number;

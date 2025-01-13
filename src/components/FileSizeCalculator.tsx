@@ -8,9 +8,12 @@ import {
 } from '@/components/ui/card';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Switch } from './ui/switch';
-import { NewQuestionButton, ScoreBox } from './QuizComponents';
-import FeedbackBox from './FeedbackBox';
-import AnswerForm from './AnswerForm';
+import {
+  AnswerForm,
+  FeedbackBox,
+  NewQuestionButton,
+  ScoreBox,
+} from './QuizComponents';
 
 interface Question {
   type: 'sound' | 'image' | 'text' | 'options' | 'bitsFromOptions';

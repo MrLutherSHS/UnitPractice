@@ -6,9 +6,12 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { NewQuestionButton, ScoreBox } from './QuizComponents';
-import FeedbackBox from './FeedbackBox';
-import AnswerForm from './AnswerForm';
+import {
+  AnswerForm,
+  FeedbackBox,
+  NewQuestionButton,
+  ScoreBox,
+} from './QuizComponents';
 
 interface Question {
   type: 'fileCount' | 'capacity';
