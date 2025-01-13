@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Card,
   CardContent,
@@ -9,12 +9,7 @@ import {
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { ArrowRight } from 'lucide-react';
 import { Switch } from '@/components/ui/switch';
-import {
-  AnswerForm,
-  FeedbackBox,
-  NewQuestionButton,
-  ScoreBox,
-} from './QuizComponents';
+import { AnswerForm, FeedbackBox, ScoreBox } from './QuizComponents';
 
 interface Question {
   finalValue: number;
@@ -48,6 +43,10 @@ const DataUnitConverter = () => {
   const [showConversionPath, setShowConversionPath] = useState<boolean>(false);
   const [isAdvancedMode, setIsAdvancedMode] = useState<boolean>(false);
   const [hasSubmitted, setHasSubmitted] = useState<boolean>(false);
+
+  useEffect(() => {
+    generateQuestion();
+  }, []);
 
   const formatNumber = (num: number): string => {
     const parts = num.toString().split('.');
@@ -379,6 +378,8 @@ const DataUnitConverter = () => {
                   userAnswer={displayAnswer}
                   handleAnswerChange={handleAnswerChange}
                   type="text"
+                  generateQuestion={generateQuestion}
+                  hasSubmitted={hasSubmitted}
                 />
 
                 {feedback && <FeedbackBox feedback={feedback} />}
@@ -389,7 +390,7 @@ const DataUnitConverter = () => {
               </div>
             )}
             <ScoreBox score={score} />
-            <NewQuestionButton generateQuestion={generateQuestion} />
+            {/* <NewQuestionButton generateQuestion={generateQuestion} /> */}
           </CardContent>
         </Card>
       </div>

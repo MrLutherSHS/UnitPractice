@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Card,
   CardContent,
@@ -8,12 +8,7 @@ import {
 } from '@/components/ui/card';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Switch } from './ui/switch';
-import {
-  AnswerForm,
-  FeedbackBox,
-  NewQuestionButton,
-  ScoreBox,
-} from './QuizComponents';
+import { AnswerForm, FeedbackBox, ScoreBox } from './QuizComponents';
 
 interface Question {
   type: 'sound' | 'image' | 'text' | 'options' | 'bitsFromOptions';
@@ -36,6 +31,10 @@ const FileSizeCalculator = () => {
   const [score, setScore] = useState({ correct: 0, total: 0 });
   const [showHint, setShowHint] = useState<boolean>(false);
   const [hasSubmitted, setHasSubmitted] = useState<boolean>(false);
+
+  useEffect(() => {
+    generateQuestion();
+  }, []);
 
   const formatNumber = (num: number): string => {
     const parts = num.toString().split('.');
@@ -300,6 +299,8 @@ const FileSizeCalculator = () => {
                   userAnswer={userAnswer}
                   handleAnswerChange={handleAnswerChange}
                   type="number"
+                  generateQuestion={generateQuestion}
+                  hasSubmitted={hasSubmitted}
                 />
 
                 {feedback && <FeedbackBox feedback={feedback} />}
@@ -310,7 +311,6 @@ const FileSizeCalculator = () => {
               </div>
             )}
             <ScoreBox score={score} />
-            <NewQuestionButton generateQuestion={generateQuestion} />
           </CardContent>
         </Card>
       </div>

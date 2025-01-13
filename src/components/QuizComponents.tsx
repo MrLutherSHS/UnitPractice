@@ -51,30 +51,41 @@ export const FeedbackBox = ({
 export const AnswerForm = ({
   handleSubmit,
   userAnswer,
+  generateQuestion,
   handleAnswerChange,
+  hasSubmitted,
   type,
 }: {
   handleSubmit: (event: React.FormEvent<HTMLFormElement>) => void;
   userAnswer: string | number;
+  generateQuestion: () => void;
   handleAnswerChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  hasSubmitted: boolean;
   type: string;
 }) => {
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col md:flex-row gap-4">
+    <form
+      onSubmit={handleSubmit}
+      className="flex flex-col md:flex-row gap-4 items-center"
+    >
       <Input
         type={type}
         step="any"
         value={userAnswer}
         onChange={handleAnswerChange}
         placeholder="Enter your answer"
-        className="flex-1 border-2 border-blue-200 focus:border-blue-500 rounded-lg text-2xl p-6"
+        className="flex-1 border-2 border-blue-200 focus:border-blue-500 rounded-lg text-lg p-8"
       />
-      <Button
-        type="submit"
-        className="bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white font-semibold p-6 text-xl"
-      >
-        Check
-      </Button>
+      {hasSubmitted ? (
+        <NewQuestionButton generateQuestion={generateQuestion} />
+      ) : (
+        <Button
+          type="submit"
+          className="h-14 px-8 w-full md:w-64 bg-blue-600 hover:bg-blue-700 text-white font-semibold text-lg"
+        >
+          Check
+        </Button>
+      )}
     </form>
   );
 };
@@ -104,7 +115,7 @@ export const NewQuestionButton = ({
   return (
     <Button
       onClick={generateQuestion}
-      className="w-full bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white font-semibold text-lg py-4 md:text-2xl md:py-8"
+      className="h-14 px-8 w-full md:w-64 bg-blue-600 hover:bg-blue-700 text-white font-semibold text-lg"
     >
       New Question
     </Button>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Card,
   CardContent,
@@ -6,12 +6,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import {
-  AnswerForm,
-  FeedbackBox,
-  NewQuestionButton,
-  ScoreBox,
-} from './QuizComponents';
+import { AnswerForm, FeedbackBox, ScoreBox } from './QuizComponents';
 
 interface Question {
   type: 'fileCount' | 'capacity';
@@ -34,6 +29,10 @@ const StorageCalculator = () => {
   } | null>(null);
   const [score, setScore] = useState({ correct: 0, total: 0 });
   const [hasSubmitted, setHasSubmitted] = useState<boolean>(false);
+
+  useEffect(() => {
+    generateQuestion();
+  }, []);
 
   const handleAnswerChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     const value = e.target.value;
@@ -249,6 +248,8 @@ const StorageCalculator = () => {
                   userAnswer={userAnswer}
                   handleAnswerChange={handleAnswerChange}
                   type="number"
+                  generateQuestion={generateQuestion}
+                  hasSubmitted={hasSubmitted}
                 />
 
                 {feedback && <FeedbackBox feedback={feedback} />}
@@ -260,7 +261,6 @@ const StorageCalculator = () => {
             )}
 
             <ScoreBox score={score} />
-            <NewQuestionButton generateQuestion={generateQuestion} />
           </CardContent>
         </Card>
       </div>
