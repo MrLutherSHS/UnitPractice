@@ -168,7 +168,10 @@ const FileSizeCalculator = () => {
       explanation: [
         `Step 1: Identify the values`,
         `Number of options: ${numberOfOptions}`,
-        `Step 2: Calculate log2(number of options)`,
+        `Step 2: Use trial and error - which power of 2 is it less than?`,
+        `2^1 = 2, 2^2 = 4, 2^3 = 8, 2=^4 = 16, 2^5 = 32, 2^6 = 64, 2^7 = 128, 2^8 = 256.`,
+        `Answer: ${answer} bits`,
+        `The Maths: Calculate log2(number of options)`,
         `log2(${numberOfOptions}) = ${answer} bits`,
       ],
     };
