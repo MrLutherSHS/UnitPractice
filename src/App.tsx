@@ -13,20 +13,20 @@ const App = () => {
   return (
     <div className="bg-gradient-to-b from-gray-50 to-gray-100 p-2 md:p-4 rounded-2xl">
       <div className="max-w-7xl mx-auto">
-        <h1 className="text-3xl font-bold text-center mb-4 md:mb-8 text-purple-600">
+        <h1 className="text-3xl font-bold text-center my-2 md:my-4 text-purple-600">
           Calculating size practice
         </h1>
 
         {!selectedComponent && (
           <Card className="max-w-7xl mx-auto">
-            <CardContent className="p-6 space-y-4">
+            <CardContent className="p-12 space-y-4">
               <h2 className="text-xl text-center mb-4 text-gray-700">
                 What would you like to practice?
               </h2>
-              <div className="space-y-3">
+              <div className="flex-col space-y-4">
                 <button
                   onClick={() => setSelectedComponent('converter')}
-                  className="w-full p-4 text-left bg-gradient-to-r from-indigo-50 to-purple-50 rounded-lg shadow hover:shadow-md transition-shadow duration-200 text-gray-700 hover:from-indigo-100 hover:to-purple-100"
+                  className="w-full p-8 text-left bg-gradient-to-r from-indigo-50 to-purple-50 rounded-lg shadow hover:shadow-md transition-shadow duration-200 text-gray-700 hover:from-indigo-100 hover:to-purple-100"
                 >
                   Moving between units
                   <p className="italic text-gray-400">100KB to MB</p>
