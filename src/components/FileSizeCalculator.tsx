@@ -47,7 +47,6 @@ const FileSizeCalculator = () => {
       bits: 1,
       bytes: 8,
       kilobytes: 8 * 1000,
-      megabytes: 8 * 1000 * 1000,
     };
     return bits / conversions[targetUnit];
   };
@@ -89,7 +88,7 @@ const FileSizeCalculator = () => {
       sampleRates[Math.floor(Math.random() * sampleRates.length)];
     const duration = Math.floor(Math.random() * 10) + 1; // 1-10 seconds
     const bitDepth = [2, 4, 8][Math.floor(Math.random() * 3)];
-    const targetUnit = ['kilobytes', 'megabytes'][
+    const targetUnit = ['bytes', 'kilobytes'][
       Math.floor(Math.random() * 2)
     ];
 
