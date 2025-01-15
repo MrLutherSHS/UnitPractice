@@ -88,9 +88,7 @@ const FileSizeCalculator = () => {
       sampleRates[Math.floor(Math.random() * sampleRates.length)];
     const duration = Math.floor(Math.random() * 10) + 1; // 1-10 seconds
     const bitDepth = [2, 4, 8][Math.floor(Math.random() * 3)];
-    const targetUnit = ['bytes', 'kilobytes'][
-      Math.floor(Math.random() * 2)
-    ];
+    const targetUnit = ['bytes', 'kilobytes'][Math.floor(Math.random() * 2)];
 
     const bits = sampleRate * duration * bitDepth;
     const answer = convertToUnit(bits, targetUnit);
