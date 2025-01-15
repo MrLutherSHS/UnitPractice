@@ -220,7 +220,7 @@ const StorageCalculator = () => {
     }
   };
 
-  const title = '💾 Storage Capacity Calculator';
+  const title = '💾 Capacity calculator';
 
   return (
     <div className="w-full">
@@ -228,18 +228,16 @@ const StorageCalculator = () => {
         <Card className="mx-auto shadow-xl bg-white/80 backdrop-blur">
           <CardHeader className="bg-gradient-to-r from-indigo-500 to-purple-500 text-white rounded-t-lg p-8">
             <CardTitle className="flex justify-between items-center">
-              <span className="text-4xl font-bold">{title}</span>
+              <span className="text-2xl md:text-4xl font-bold">{title}</span>
             </CardTitle>
             <CardDescription className="text-white text-xl rounded-t-lg">
-              <div className="flex items-center gap-4">
-                <div className="flex items-center gap-2"></div>
-              </div>
+              <div className="flex flex-col md:flex-row gap-6"></div>
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-6 p-8">
             {currentQuestion ? (
               <div className="space-y-6">
-                <div className="text-2xl font-semibold bg-gradient-to-r from-indigo-600 to-purple-600 text-white p-6 rounded-lg shadow">
+                <div className="text-xl md:text-2xl font-semibold bg-gradient-to-r from-indigo-600 to-purple-600 text-white p-6 rounded-lg shadow">
                   {getQuestionText(currentQuestion)}
                 </div>
 
@@ -255,7 +253,7 @@ const StorageCalculator = () => {
                 {feedback && <FeedbackBox feedback={feedback} />}
               </div>
             ) : (
-              <div className="text-2xl text-center text-indigo-600">
+              <div className="text-lg md:text-2xl text-center text-indigo-600">
                 Click "New Question" to begin!
               </div>
             )}

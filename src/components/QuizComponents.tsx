@@ -74,14 +74,14 @@ export const AnswerForm = ({
         value={userAnswer}
         onChange={handleAnswerChange}
         placeholder="Enter your answer"
-        className="flex-1 border-2 border-blue-200 focus:border-blue-500 rounded-lg text-lg p-8"
+        className="flex-1 p-4 h-14 border-2 border-blue-200 focus:border-blue-500 rounded-lg "
       />
       {hasSubmitted ? (
         <NewQuestionButton generateQuestion={generateQuestion} />
       ) : (
         <Button
           type="submit"
-          className="h-14 px-8 w-full md:w-64 bg-blue-600 hover:bg-blue-700 text-white font-semibold text-lg"
+          className="h-14 w-full md:w-64 font-semibold text-xl md:text-2xl text-white bg-blue-600 hover:bg-blue-700"
         >
           Check
         </Button>
@@ -115,7 +115,7 @@ export const NewQuestionButton = ({
   return (
     <Button
       onClick={generateQuestion}
-      className="h-14 px-8 w-full md:w-64 bg-blue-600 hover:bg-blue-700 text-white font-semibold text-lg"
+      className="h-14 w-full md:w-64 font-semibold text-xl md:text-2xl text-white bg-blue-600 hover:bg-blue-700"
     >
       New Question
     </Button>

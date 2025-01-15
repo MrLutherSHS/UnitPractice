@@ -243,11 +243,11 @@ const FileSizeCalculator = () => {
     if (!currentQuestion) return 'Multiply the numbers';
     switch (currentQuestion.type) {
       case 'image':
-        return `Image file size? Multiply colour depth * image height (px) * image width (px).`;
+        return `📷 - colour depth * image height (px) * image width (px).`;
       case 'sound':
-        return `Sound file size? Multiply sample rate (Hz) * duration (s) * bit depth`;
+        return `🔊 - sample rate (Hz) * duration (s) * bit depth`;
       case 'text':
-        return `Text file size? Multiply number of characters * bits per character (8 for ASCII)`;
+        return `🔤 - number of characters * bits per character (8 for ASCII)`;
       case 'options':
         return `Number of options? 2 to the power of the number of bits`;
       case 'bitsFromOptions':
@@ -257,7 +257,7 @@ const FileSizeCalculator = () => {
     }
   };
 
-  const title = '📊 File Size Calculator';
+  const title = '📊 File Sizes';
 
   return (
     <div className="w-full">
@@ -265,12 +265,14 @@ const FileSizeCalculator = () => {
         <Card className="mx-auto shadow-xl bg-white/80 backdrop-blur">
           <CardHeader className="bg-gradient-to-r from-blue-500 to-purple-500 text-white rounded-t-lg p-8">
             <CardTitle className="flex justify-between items-center">
-              <span className="text-4xl font-bold">{title}</span>
+              <span className="text-2xl md:text-4xl font-bold">{title}</span>
             </CardTitle>
-            <CardDescription className="text-white text-xl">
-              <div className="flex flex-wrap items-center gap-6">
-                <div className="flex items-center gap-3">
-                  <span className="text-lg">Show calculation help</span>
+            <CardDescription className="text-white rounded-t-lg mt-4">
+              <div className="flex flex-col md:flex-row gap-6">
+                <div className="flex justify-between items-center gap-3">
+                  <span className="text-md md:text-lg">
+                    Show calculation help
+                  </span>
                   <Switch checked={showHint} onCheckedChange={setShowHint} />
                 </div>
               </div>
@@ -280,9 +282,8 @@ const FileSizeCalculator = () => {
             {showHint && (
               <Alert className="bg-gradient-to-r from-blue-50 to-purple-50 border-none p-6">
                 <div className="flex items-center gap-3">
-                  <AlertDescription className="text-xl">
+                  <AlertDescription className="text-lg md:text-xl">
                     <div className="font-semibold text-indigo-900">
-                      <span className="text-lg"></span>
                       {getCalculationHint()}
                     </div>
                   </AlertDescription>
@@ -291,7 +292,7 @@ const FileSizeCalculator = () => {
             )}
             {currentQuestion ? (
               <div className="space-y-6">
-                <div className="text-2xl font-semibold bg-gradient-to-r from-blue-600 to-purple-600 text-white p-6 rounded-lg shadow">
+                <div className="text-xl md:text-2xl font-semibold bg-gradient-to-r from-indigo-600 to-purple-600 text-white p-6 rounded-lg shadow">
                   {getQuestionText(currentQuestion)}
                 </div>
                 <AnswerForm
@@ -306,7 +307,7 @@ const FileSizeCalculator = () => {
                 {feedback && <FeedbackBox feedback={feedback} />}
               </div>
             ) : (
-              <div className="text-2xl text-center text-indigo-600">
+              <div className="text-lg md:text-2xl text-center text-indigo-600">
                 Click "New Question" to begin!
               </div>
             )}

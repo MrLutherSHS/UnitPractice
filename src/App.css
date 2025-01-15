@@ -1,11 +1,6 @@
-@import 'tailwindcss/base';
-@import 'tailwindcss/components';
-@import 'tailwindcss/utilities';
-
 #root {
   width: 1280px;
   margin: 0 auto;
-  /* padding: 10rem; */
   text-align: center;
 }
 

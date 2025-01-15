@@ -306,12 +306,12 @@ const DataUnitConverter = () => {
               <span className="text-2xl md:text-4xl font-bold">{title}</span>
             </CardTitle>
             <CardDescription className="text-white rounded-t-lg mt-4">
-              <div className="flex flex-wrap items-center gap-6">
-                <div className="flex items-center gap-3">
+              <div className="flex flex-col md:flex-row gap-6">
+                <div className="flex justify-between items-center gap-3">
                   <span className="text-md md:text-lg">Show unit order</span>
                   <Switch checked={showHint} onCheckedChange={setShowHint} />
                 </div>
-                <div className="flex items-center gap-3">
+                <div className="flex justify-between items-center gap-3">
                   <span className="text-md md:text-lg">
                     Show conversion path
                   </span>
@@ -320,7 +320,7 @@ const DataUnitConverter = () => {
                     onCheckedChange={setShowConversionPath}
                   />
                 </div>
-                <div className="flex items-center gap-3">
+                <div className="flex justify-between items-center gap-3">
                   <span className="text-md md:text-lg">Advanced mode</span>
                   <Switch
                     checked={isAdvancedMode}
@@ -362,7 +362,7 @@ const DataUnitConverter = () => {
 
             {currentQuestion ? (
               <div className="space-y-6">
-                <div className="text-2xl font-semibold bg-gradient-to-r from-indigo-600 to-purple-600 text-white p-6 rounded-lg shadow">
+                <div className="text-xl md:text-2xl font-semibold bg-gradient-to-r from-indigo-600 to-purple-600 text-white p-6 rounded-lg shadow">
                   {getQuestionText(currentQuestion)}
                 </div>
 
