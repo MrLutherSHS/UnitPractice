@@ -283,7 +283,6 @@ export function UnitConverter({ onScoreUpdate }: UnitConverterProps) {
 	const hintTitleId = useId();
 	const conversionHintTitleId = useId();
 	const feedbackMessageId = useId();
-	const welcomeMessageId = useId();
 
 	useEffect(() => {
 		generateQuestion(
