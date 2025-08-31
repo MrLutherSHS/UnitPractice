@@ -56,16 +56,16 @@ const getSimpleFileSize = (): { size: number; unit: string } => {
 	const simpleSizes = [
 		{ size: 1, unit: "megabytes" },
 		{ size: 2, unit: "megabytes" },
-		// { size: 2.5, unit: "megabytes" },
-		// { size: 5, unit: "megabytes" },
-		// { size: 10, unit: "megabytes" },
-		// { size: 20, unit: "megabytes" },
-		// { size: 25, unit: "megabytes" },
-		// { size: 50, unit: "megabytes" },
-		// { size: 100, unit: "megabytes" },
-		// { size: 200, unit: "megabytes" },
-		// { size: 250, unit: "megabytes" },
-		// { size: 500, unit: "megabytes" },
+		{ size: 2.5, unit: "megabytes" },
+		{ size: 5, unit: "megabytes" },
+		{ size: 10, unit: "megabytes" },
+		{ size: 20, unit: "megabytes" },
+		{ size: 25, unit: "megabytes" },
+		{ size: 50, unit: "megabytes" },
+		{ size: 100, unit: "megabytes" },
+		{ size: 200, unit: "megabytes" },
+		{ size: 250, unit: "megabytes" },
+		{ size: 500, unit: "megabytes" },
 	];
 	return simpleSizes[Math.floor(Math.random() * simpleSizes.length)];
 };
@@ -75,13 +75,13 @@ const getSimpleDriveSize = (): { size: number; unit: string } => {
 	const simpleSizes = [
 		{ size: 500, unit: "megabytes" },
 		{ size: 1, unit: "gigabytes" },
-		// { size: 2, unit: "gigabytes" },
-		// { size: 4, unit: "gigabytes" },
-		// { size: 5, unit: "gigabytes" },
-		// { size: 10, unit: "gigabytes" },
-		// { size: 20, unit: "gigabytes" },
-		// { size: 50, unit: "gigabytes" },
-		// { size: 100, unit: "gigabytes" },
+		{ size: 2, unit: "gigabytes" },
+		{ size: 4, unit: "gigabytes" },
+		{ size: 5, unit: "gigabytes" },
+		{ size: 10, unit: "gigabytes" },
+		{ size: 20, unit: "gigabytes" },
+		{ size: 50, unit: "gigabytes" },
+		{ size: 100, unit: "gigabytes" },
 	];
 	return simpleSizes[Math.floor(Math.random() * simpleSizes.length)];
 };
