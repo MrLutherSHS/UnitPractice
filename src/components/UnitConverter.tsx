@@ -343,7 +343,7 @@ export function UnitConverter({ onScoreUpdate }: UnitConverterProps) {
 							<section aria-labelledby={currentQuestionId}>
 								<h2
 									id={currentQuestionId}
-									className="p-6 text-lg font-semibold text-white rounded-lg shadow bg-gradient-to-r from-indigo-600 to-purple-600"
+									className="p-6 text-lg font-semibold text-white bg-indigo-600 rounded-lg shadow"
 								>
 									{getQuestionText(currentQuestion)}
 								</h2>

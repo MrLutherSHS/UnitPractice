@@ -530,14 +530,7 @@ interface UnitConverterProps {
 }
 
 export function MultipleChoice({ onScoreUpdate }: UnitConverterProps) {
-	// Pre-generate the first question to improve LCP
-	const [currentQuestion, setCurrentQuestion] = useState<Question | null>(() => {
-		const questionTypes = [
-			generateConversionQuestion,
-			generateComparisonQuestion,
-		];
-		return questionTypes[Math.floor(Math.random() * questionTypes.length)]();
-	});
+	const [currentQuestion, setCurrentQuestion] = useState<Question | null>(null);
 	const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
 	const [feedback, setFeedback] = useState<{
 		isCorrect: boolean;
@@ -552,6 +545,15 @@ export function MultipleChoice({ onScoreUpdate }: UnitConverterProps) {
 	const optionsGroupId = useId();
 	const feedbackMessageId = useId();
 	const welcomeMessageId = useId();
+
+	useEffect(() => {
+		generateQuestion(
+			setHasSubmitted,
+			setCurrentQuestion,
+			setSelectedAnswer,
+			setFeedback,
+		);
+	}, []);
 
 	// Handle option selection and submission
 	const handleOptionClick = (optionIndex: number) => {
@@ -624,8 +626,7 @@ export function MultipleChoice({ onScoreUpdate }: UnitConverterProps) {
 							<section aria-labelledby={currentQuestionId}>
 								<h2
 									id={currentQuestionId}
-									className="p-6 text-lg font-semibold text-white rounded-lg bg-indigo-600"
-									style={{ containIntrinsicSize: '1px 80px' }}
+									className="p-6 text-lg font-semibold text-white bg-indigo-600 rounded-lg shadow"
 								>
 									{currentQuestion.questionText}
 								</h2>
