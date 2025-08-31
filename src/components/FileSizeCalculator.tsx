@@ -341,8 +341,8 @@ export function FileSizeCalculator({ onScoreUpdate }: FileSizeCalculatorProps) {
 				File Size Calculator
 			</h1>
 			<div className="p-4">
-				<Card className="mx-auto shadow-xl py-0 bg-white/80 backdrop-blur">
-					<CardContent className="space-y-6 p-8">
+				<Card className="py-0 mx-auto shadow-xl bg-white/80 backdrop-blur">
+					<CardContent className="p-8 space-y-6">
 						{/* Live region for screen reader announcements */}
 						<div aria-live="polite" aria-atomic="true" className="sr-only">
 							{feedback?.message}
@@ -352,7 +352,7 @@ export function FileSizeCalculator({ onScoreUpdate }: FileSizeCalculatorProps) {
 							<section aria-labelledby={currentQuestionId}>
 								<h2
 									id={currentQuestionId}
-									className="text-lg font-semibold bg-gradient-to-r from-indigo-600 to-purple-600 text-white p-6 rounded-lg shadow"
+									className="p-6 text-lg font-semibold text-white rounded-lg shadow bg-gradient-to-r from-indigo-600 to-purple-600"
 								>
 									{getQuestionText(currentQuestion)}
 								</h2>
@@ -382,7 +382,7 @@ export function FileSizeCalculator({ onScoreUpdate }: FileSizeCalculatorProps) {
 											aria-invalid={
 												feedback && !feedback.isCorrect ? "true" : "false"
 											}
-											className="text-2xl p-6 text-center font-bold border-2 border-indigo-200 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-200 rounded-xl shadow-lg transition-all duration-200 bg-gradient-to-r from-white to-indigo-50"
+											className="p-6 text-lg font-bold text-center transition-all duration-200 border-2 border-indigo-200 shadow-lg sm:text-2xl focus:border-indigo-500 focus:ring-4 focus:ring-indigo-200 rounded-xl bg-gradient-to-r from-white to-indigo-50"
 										/>
 									</div>
 								</form>
@@ -399,7 +399,7 @@ export function FileSizeCalculator({ onScoreUpdate }: FileSizeCalculatorProps) {
 											}`}
 										>
 											<AlertDescription>
-												<div className="space-y-4 w-full">
+												<div className="w-full space-y-4">
 													{/* Result Header */}
 													<div
 														className={`p-4 rounded-lg ${
@@ -415,7 +415,7 @@ export function FileSizeCalculator({ onScoreUpdate }: FileSizeCalculatorProps) {
 																	: "text-red-800"
 															}`}
 														>
-															<span className="text-2xl mr-3">
+															<span className="mr-3 text-2xl">
 																{feedback.isCorrect ? "🎉" : "❌"}
 															</span>
 															<span>
@@ -425,9 +425,9 @@ export function FileSizeCalculator({ onScoreUpdate }: FileSizeCalculatorProps) {
 															</span>
 														</div>
 														{!feedback.isCorrect && (
-															<div className="mt-2 text-red-700 font-semibold">
+															<div className="mt-2 font-semibold text-red-700">
 																The correct answer is{" "}
-																<span className="text-red-900 bg-red-200 px-2 py-1 rounded">
+																<span className="px-2 py-1 text-red-900 bg-red-200 rounded">
 																	{formatNumber(currentQuestion.answer)}
 																</span>
 															</div>
@@ -453,7 +453,7 @@ export function FileSizeCalculator({ onScoreUpdate }: FileSizeCalculatorProps) {
 																}, 100);
 															}}
 															aria-label="Generate next question"
-															className="px-8 py-3 font-semibold rounded-lg transition-all duration-200 shadow-lg bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white hover:shadow-xl transform hover:-translate-y-1"
+															className="px-8 py-3 font-semibold text-white transition-all duration-200 transform rounded-lg shadow-lg bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 hover:shadow-xl hover:-translate-y-1"
 														>
 															<span className="mr-2">🎯</span>
 															Next Question
@@ -462,7 +462,7 @@ export function FileSizeCalculator({ onScoreUpdate }: FileSizeCalculatorProps) {
 
 													{/* Explanation Section */}
 													<div className="space-y-4">
-														<h3 className="font-bold text-indigo-900 text-lg mb-3 flex items-center">
+														<h3 className="flex items-center mb-3 text-lg font-bold text-indigo-900">
 															<span className="mr-2">📚</span>
 															Step-by-step explanation:
 														</h3>
@@ -470,21 +470,21 @@ export function FileSizeCalculator({ onScoreUpdate }: FileSizeCalculatorProps) {
 															(section, sectionIndex) => (
 																<div
 																	key={section.title}
-																	className="bg-white bg-opacity-50 p-4 rounded-lg border border-gray-200"
+																	className="p-4 bg-white bg-opacity-50 border border-gray-200 rounded-lg"
 																>
-																	<h4 className="font-bold text-indigo-900 text-base mb-2 flex items-center">
-																		<span className="bg-indigo-100 text-indigo-800 rounded-full w-6 h-6 flex items-center justify-center text-sm font-semibold mr-3 flex-shrink-0">
+																	<h4 className="flex items-center mb-2 text-base font-bold text-indigo-900">
+																		<span className="flex items-center justify-center flex-shrink-0 w-6 h-6 mr-3 text-sm font-semibold text-indigo-800 bg-indigo-100 rounded-full">
 																			{sectionIndex + 1}
 																		</span>
 																		{section.title}
 																	</h4>
-																	<ul className="ml-9 space-y-1">
+																	<ul className="space-y-1 ml-9">
 																		{section.details.map((detail) => (
 																			<li
 																				key={detail}
 																				className="text-gray-800"
 																			>
-																				<span className="text-indigo-600 mr-2">
+																				<span className="mr-2 text-indigo-600">
 																					•
 																				</span>
 																				{detail}
@@ -503,10 +503,10 @@ export function FileSizeCalculator({ onScoreUpdate }: FileSizeCalculatorProps) {
 
 								<details className="mt-6 group">
 									<summary className="cursor-pointer focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 rounded-lg px-4 py-3 bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 hover:from-blue-100 hover:to-indigo-100 transition-all duration-200 shadow-sm hover:shadow-md list-none [&::-webkit-details-marker]:hidden">
-										<span className="text-blue-800 font-semibold flex items-center">
+										<span className="flex items-center font-semibold text-blue-800">
 											<span className="mr-2 text-lg">💡</span>
 											Get calculation help
-											<span className="ml-auto group-open:rotate-180 transition-transform duration-200">
+											<span className="ml-auto transition-transform duration-200 group-open:rotate-180">
 												▼
 											</span>
 										</span>
@@ -515,8 +515,8 @@ export function FileSizeCalculator({ onScoreUpdate }: FileSizeCalculatorProps) {
 										<h3 id={hintTitleId} className="sr-only">
 											Calculation Hint
 										</h3>
-										<div className="mt-3 p-4 bg-gradient-to-r from-blue-50 to-indigo-50 border-l-4 border-blue-400 rounded-r-lg shadow-inner">
-											<div className="text-blue-800 font-light text-sm">
+										<div className="p-4 mt-3 border-l-4 border-blue-400 rounded-r-lg shadow-inner bg-gradient-to-r from-blue-50 to-indigo-50">
+											<div className="text-sm font-light text-blue-800">
 												{getCalculationHint()}
 											</div>
 										</div>
@@ -525,18 +525,18 @@ export function FileSizeCalculator({ onScoreUpdate }: FileSizeCalculatorProps) {
 							</section>
 						) : (
 							<section
-								className="text-center py-12"
+								className="py-12 text-center"
 								aria-labelledby={welcomeMessageId}
 							>
-								<div className="bg-gradient-to-r from-indigo-50 to-purple-50 p-8 rounded-xl border border-indigo-200 shadow-lg">
-									<div className="text-6xl mb-4">🧮</div>
+								<div className="p-8 border border-indigo-200 shadow-lg bg-gradient-to-r from-indigo-50 to-purple-50 rounded-xl">
+									<div className="mb-4 text-6xl">🧮</div>
 									<h2
 										id={welcomeMessageId}
-										className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent mb-4"
+										className="mb-4 text-2xl font-bold text-transparent md:text-3xl bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text"
 									>
 										File Size Calculator
 									</h2>
-									<p className="text-lg text-gray-600 mb-6 max-w-md mx-auto">
+									<p className="max-w-md mx-auto mb-6 text-lg text-gray-600">
 										Practice calculating file sizes for images, sounds, and text
 										files. Master the fundamentals of digital storage!
 									</p>
@@ -550,7 +550,7 @@ export function FileSizeCalculator({ onScoreUpdate }: FileSizeCalculatorProps) {
 												setFeedback,
 											);
 										}}
-										className="px-8 py-3 font-semibold rounded-lg transition-all duration-200 shadow-lg bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white hover:shadow-xl transform hover:-translate-y-1"
+										className="px-8 py-3 font-semibold text-white transition-all duration-200 transform rounded-lg shadow-lg bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 hover:shadow-xl hover:-translate-y-1"
 									>
 										<span className="mr-2">🚀</span>
 										Start Practicing

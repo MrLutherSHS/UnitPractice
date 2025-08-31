@@ -30,19 +30,21 @@ const ConversionPathVisual = ({
 	const path = getConversionPath(fromUnit, toUnit);
 
 	return (
-		<div className="flex flex-wrap items-center gap-2 p-4 rounded-lg shadow-inner bg-gradient-to-r from-blue-50 to-purple-50">
-			{path.map((unit, index) => (
-				<span key={unit}>
-					<div
-						className={`px-3 py-1 rounded-md shadow-sm ${getUnitColor(unit)}`}
-					>
-						{unit}
-					</div>
-					{index < path.length - 1 && (
-						<ArrowRight className="w-4 h-4 text-indigo-400" />
-					)}
-				</span>
-			))}
+		<div className="flex flex-wrap items-center gap-1 p-3 rounded-lg shadow-inner sm:gap-2 sm:p-4 bg-gradient-to-r from-blue-50 to-purple-50">
+			{path.map((unit, index) => [
+				<div
+					key={unit}
+					className={`px-2 sm:px-3 py-1 text-xs sm:text-sm rounded-md shadow-sm ${getUnitColor(unit)}`}
+				>
+					{unit}
+				</div>,
+				index < path.length - 1 && (
+					<ArrowRight
+						key={`path-arrow-from-${unit}-to-${path[index + 1]}`}
+						className="flex-shrink-0 w-3 h-3 text-indigo-400 sm:w-4 sm:h-4"
+					/>
+				),
+			])}
 		</div>
 	);
 };
@@ -330,9 +332,9 @@ export function UnitConverter({ onScoreUpdate }: UnitConverterProps) {
 			<h1 id={converterTitleId} className="sr-only">
 				Unit Converter
 			</h1>
-			<div className="p-4">
+			<div className="p-2 sm:p-4">
 				<Card className="py-0 mx-auto shadow-xl bg-white/80 backdrop-blur">
-					<CardContent className="p-8 space-y-6">
+					<CardContent className="p-4 space-y-4 sm:p-6 lg:p-8 sm:space-y-6">
 						{/* Live region for screen reader announcements */}
 						<div aria-live="polite" aria-atomic="true" className="sr-only">
 							{feedback?.message}
@@ -340,42 +342,42 @@ export function UnitConverter({ onScoreUpdate }: UnitConverterProps) {
 
 						{/* Settings Section */}
 						<div className="mb-6">
-							<div className="p-4 border border-gray-200 rounded-lg bg-gradient-to-r from-gray-50 to-blue-50">
-								<div className="flex items-center justify-between gap-4">
+							<div className="p-3 border border-gray-200 rounded-lg sm:p-4 bg-gradient-to-r from-gray-50 to-blue-50">
+								<div className="flex flex-col items-start justify-between gap-3 sm:flex-row sm:items-center sm:gap-4">
 									{/* Units Order Hint */}
-									<div className="flex items-center gap-2">
-										<span className="text-lg">📋</span>
-										<span className="text-sm font-semibold text-gray-800 whitespace-nowrap">
+									<div className="flex items-center min-w-0 gap-2">
+										<span className="text-base sm:text-lg">📋</span>
+										<span className="text-xs font-semibold text-gray-800 truncate sm:text-sm">
 											Units Order
 										</span>
 										<Switch
 											checked={showUnitsOrder}
 											onCheckedChange={setShowUnitsOrder}
-											className="data-[state=unchecked]:bg-gray-200 data-[state=checked]:bg-blue-600"
+											className="data-[state=unchecked]:bg-gray-200 data-[state=checked]:bg-blue-600 flex-shrink-0"
 											aria-label="Toggle units order hint"
 											title="Show/hide the ordered list of units from smallest to largest"
 										/>
 									</div>
 
 									{/* Conversion Path Hint */}
-									<div className="flex items-center gap-2">
-										<span className="text-lg">🗺️</span>
-										<span className="text-sm font-semibold text-gray-800 whitespace-nowrap">
+									<div className="flex items-center min-w-0 gap-2">
+										<span className="text-base sm:text-lg">🗺️</span>
+										<span className="text-xs font-semibold text-gray-800 truncate sm:text-sm">
 											Conversion Path
 										</span>
 										<Switch
 											checked={showConversionPath}
 											onCheckedChange={setShowConversionPath}
-											className="data-[state=unchecked]:bg-gray-200 data-[state=checked]:bg-blue-600"
+											className="data-[state=unchecked]:bg-gray-200 data-[state=checked]:bg-blue-600 flex-shrink-0"
 											aria-label="Toggle conversion path hint"
 											title="Show/hide the step-by-step conversion path between units"
 										/>
 									</div>
 
 									{/* Advanced Mode */}
-									<div className="flex items-center gap-2">
-										<span className="text-lg">⚙️</span>
-										<span className="text-sm font-semibold text-gray-800 whitespace-nowrap">
+									<div className="flex items-center min-w-0 gap-2">
+										<span className="text-base sm:text-lg">⚙️</span>
+										<span className="text-xs font-semibold text-gray-800 truncate sm:text-sm">
 											Advanced Mode
 										</span>
 										<Switch
@@ -391,7 +393,7 @@ export function UnitConverter({ onScoreUpdate }: UnitConverterProps) {
 													checked,
 												);
 											}}
-											className="data-[state=unchecked]:bg-gray-200 data-[state=checked]:bg-blue-600"
+											className="data-[state=unchecked]:bg-gray-200 data-[state=checked]:bg-blue-600 flex-shrink-0"
 											aria-label="Toggle advanced mode"
 											title="Enable harder questions with decimal values and complex conversions"
 										/>
@@ -434,7 +436,7 @@ export function UnitConverter({ onScoreUpdate }: UnitConverterProps) {
 											aria-invalid={
 												feedback && !feedback.isCorrect ? "true" : "false"
 											}
-											className="p-6 text-2xl font-bold text-center transition-all duration-200 border-2 border-indigo-200 shadow-lg focus:border-indigo-500 focus:ring-4 focus:ring-indigo-200 rounded-xl bg-gradient-to-r from-white to-indigo-50"
+											className="p-6 text-lg font-bold text-center transition-all duration-200 border-2 border-indigo-200 shadow-lg sm:text-2xl focus:border-indigo-500 focus:ring-4 focus:ring-indigo-200 rounded-xl bg-gradient-to-r from-white to-indigo-50"
 										/>
 									</div>
 								</form>
@@ -570,18 +572,20 @@ export function UnitConverter({ onScoreUpdate }: UnitConverterProps) {
 										</h3>
 										<div className="p-4 border-l-4 border-purple-400 rounded-r-lg shadow-inner bg-gradient-to-r from-blue-50 to-indigo-50">
 											<div className="flex flex-wrap items-center gap-2">
-												{units.map((unit, index) => (
-													<span key={unit}>
-														<span
-															className={`px-2 py-1 rounded text-sm ${getUnitColor(unit)}`}
-														>
-															{unit}
-														</span>
-														{index < units.length - 1 && (
-															<ArrowRight className="w-4 h-4 text-purple-400" />
-														)}
-													</span>
-												))}
+												{units.map((unit, index) => [
+													<span
+														key={unit}
+														className={`px-2 py-1 rounded text-sm ${getUnitColor(unit)}`}
+													>
+														{unit}
+													</span>,
+													index < units.length - 1 && (
+														<ArrowRight
+															key={`arrow-from-${unit}-to-${units[index + 1]}`}
+															className="w-4 h-4 text-purple-400"
+														/>
+													),
+												])}
 											</div>
 										</div>
 									</section>
@@ -601,7 +605,7 @@ export function UnitConverter({ onScoreUpdate }: UnitConverterProps) {
 											<span className="mr-2 text-lg">🗺️</span>
 											Path for this conversion
 										</h3>
-										<div className="p-4 border-l-4 border-purple-400 rounded-r-lg shadow-inner bg-gradient-to-r from-purple-50 to-pink-50">
+										<div className="border-l-4 border-purple-400 rounded-r-lg shadow-inner bg-gradient-to-r from-purple-50 to-pink-50">
 											<ConversionPathVisual
 												fromUnit={currentQuestion.fromUnit}
 												toUnit={currentQuestion.toUnit}

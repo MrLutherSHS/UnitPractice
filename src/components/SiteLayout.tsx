@@ -32,7 +32,7 @@ export function SiteLayout({
 				title={`${titleIcon} ${title} ${titleIcon}`}
 				subtitle={subtitle}
 			/>
-			<main className="p-6 bg-white">
+			<main className="p-4 sm:p-6 bg-white">
 				<div className="mx-auto">{children}</div>
 			</main>
 		</>

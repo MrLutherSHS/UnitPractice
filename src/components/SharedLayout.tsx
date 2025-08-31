@@ -74,24 +74,33 @@ export function SharedLayout({ children }: SharedLayoutProps) {
 			}
 		>
 			{/* Mode Switch Buttons */}
-			<div className="flex justify-center gap-4 mt-2 mb-8">
+			<div className="flex flex-col justify-center gap-2 px-4 mt-2 mb-8 sm:flex-row sm:gap-4">
 				{MODES.map((mode) => (
-					<Link key={mode.path} to={mode.path}>
+					<Link key={mode.path} to={mode.path} className="flex-1 sm:flex-none">
 						<QuizButton
 							variant="menu"
-							className={
+							className={`w-full sm:w-auto text-sm sm:text-base px-3 sm:px-6 py-3 sm:py-6 ${
 								location.pathname === mode.path
 									? "text-white bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 hover:shadow-lg"
 									: ""
-							}
+							}`}
 						>
-							{mode.label}
+							{/* Responsive text - abbreviated on mobile */}
+							<span className="hidden sm:inline">{mode.label}</span>
+							<span className="sm:hidden">
+								{mode.label
+									.split(" ")
+									.map((word) => word[0])
+									.join("")}
+							</span>
 						</QuizButton>
 					</Link>
 				))}
 			</div>
 			{/* Main Body */}
-			<div className="max-w-4xl mx-auto">{children(recordScoreAndUpdate)}</div>
+			<div className="max-w-4xl px-0 mx-auto sm:px-6">
+				{children(recordScoreAndUpdate)}
+			</div>
 			<StatsModal
 				isOpen={showStatsModal}
 				onClose={() => setShowStatsModal(false)}

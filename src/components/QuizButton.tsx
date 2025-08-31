@@ -33,7 +33,7 @@ export type { QuizButtonProps };
 const buttonVariants = {
 	// Answer buttons - core quiz interaction
 	answer: `
-    relative py-4 px-12 text-lg font-semibold rounded-lg border-2 
+    relative py-3 sm:py-4 px-6 sm:px-12 text-base sm:text-lg font-semibold rounded-lg border-2 
     bg-gradient-to-br from-gray-50 to-gray-100 text-gray-800 border-gray-300
     hover:bg-gradient-to-br hover:from-indigo-500 hover:to-purple-600 
     hover:text-white hover:border-indigo-600
@@ -41,24 +41,24 @@ const buttonVariants = {
     transition-all duration-200 shadow-sm
   `,
 	"answer-selected": `
-    relative py-4 px-12 text-lg font-semibold rounded-lg border-2 
+    relative py-3 sm:py-4 px-6 sm:px-12 text-base sm:text-lg font-semibold rounded-lg border-2 
     bg-gradient-to-r from-blue-500 to-blue-600 text-white border-blue-600 shadow-lg
     transition-all duration-200
   `,
 	"answer-correct": `
-    relative py-4 px-12 text-lg font-semibold rounded-lg border-2 
+    relative py-3 sm:py-4 px-6 sm:px-12 text-base sm:text-lg font-semibold rounded-lg border-2 
     bg-gradient-to-r from-green-500 to-green-600 text-white border-green-600 shadow-lg
     transition-all duration-200
   `,
 	"answer-incorrect": `
-    relative py-4 px-12 text-lg font-semibold rounded-lg border-2 
+    relative py-3 sm:py-4 px-6 sm:px-12 text-base sm:text-lg font-semibold rounded-lg border-2 
     bg-gradient-to-r from-red-500 to-red-600 text-white border-red-600 shadow-lg
     transition-all duration-200
   `,
 
 	// Action buttons - Next Question, hints, etc.
 	action: `
-    px-8 py-3 font-semibold rounded-lg transition-all duration-200 shadow-lg
+    px-4 sm:px-8 py-2 sm:py-3 text-sm sm:text-base font-semibold rounded-lg transition-all duration-200 shadow-lg
     bg-gradient-to-r from-green-500 to-green-600 
     hover:from-green-600 hover:to-green-700 
     text-white hover:shadow-xl transform hover:-translate-y-1
@@ -104,7 +104,7 @@ const buttonVariants = {
     text-white shadow-md hover:shadow-lg
   `,
 	menu: `
-    px-6 py-6 font-semibold rounded-lg transition-all duration-200
+    px-3 sm:px-6 py-3 sm:py-6 text-sm sm:text-base font-semibold rounded-lg transition-all duration-200
     bg-gradient-to-r from-gray-100 to-gray-200
     hover:from-gray-200 hover:to-gray-300
     text-gray-800 shadow-md hover:shadow-lg
