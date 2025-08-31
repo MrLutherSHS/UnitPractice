@@ -2,11 +2,16 @@ import { useEffect, useId, useState } from "react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Card, CardContent } from "@/components/ui/card";
 import { type ExplanationSection, formatNumber } from "@/lib/numberUtils";
-import { Button } from './ui/button';
+import { Button } from "./ui/button";
 
 interface Question {
 	category: "Multiple Choice";
-	type: "conversion" | "smallest" | "largest";
+	type:
+		| "conversion"
+		| "smallest"
+		| "largest"
+		| "second smallest"
+		| "second largest";
 	params: {
 		sourceValue?: number;
 		sourceUnit?: string;
@@ -65,19 +70,19 @@ const generateConversionQuestion = (): Question => {
 		{ source: 1.2, sourceUnit: "TB", targetUnit: "GB", answer: 1200 },
 		{ source: 1.5, sourceUnit: "TB", targetUnit: "GB", answer: 1500 },
 		{ source: 2.5, sourceUnit: "TB", targetUnit: "GB", answer: 2500 },
-		
+
 		// Multi-digit TB to GB conversions
 		{ source: 12, sourceUnit: "TB", targetUnit: "GB", answer: 12000 },
 		{ source: 25, sourceUnit: "TB", targetUnit: "GB", answer: 25000 },
 		{ source: 35, sourceUnit: "TB", targetUnit: "GB", answer: 35000 },
 		{ source: 48, sourceUnit: "TB", targetUnit: "GB", answer: 48000 },
 		{ source: 75, sourceUnit: "TB", targetUnit: "GB", answer: 75000 },
-		
+
 		// Decimal TB to MB conversions
 		{ source: 0.15, sourceUnit: "TB", targetUnit: "MB", answer: 150000 },
 		{ source: 0.25, sourceUnit: "TB", targetUnit: "MB", answer: 250000 },
 		{ source: 0.8, sourceUnit: "TB", targetUnit: "MB", answer: 800000 },
-		
+
 		// Decimal GB to MB conversions
 		{ source: 1.5, sourceUnit: "GB", targetUnit: "MB", answer: 1500 },
 		{ source: 2.5, sourceUnit: "GB", targetUnit: "MB", answer: 2500 },
@@ -86,13 +91,13 @@ const generateConversionQuestion = (): Question => {
 		{ source: 6.4, sourceUnit: "GB", targetUnit: "MB", answer: 6400 },
 		{ source: 7.5, sourceUnit: "GB", targetUnit: "MB", answer: 7500 },
 		{ source: 12.5, sourceUnit: "GB", targetUnit: "MB", answer: 12500 },
-		
+
 		// Multi-digit GB to MB conversions
 		{ source: 15, sourceUnit: "GB", targetUnit: "MB", answer: 15000 },
 		{ source: 24, sourceUnit: "GB", targetUnit: "MB", answer: 24000 },
 		{ source: 32, sourceUnit: "GB", targetUnit: "MB", answer: 32000 },
 		{ source: 64, sourceUnit: "GB", targetUnit: "MB", answer: 64000 },
-		
+
 		// Multi-thousand MB to GB conversions
 		{ source: 1200, sourceUnit: "MB", targetUnit: "GB", answer: 1.2 },
 		{ source: 1500, sourceUnit: "MB", targetUnit: "GB", answer: 1.5 },
@@ -102,21 +107,21 @@ const generateConversionQuestion = (): Question => {
 		{ source: 6400, sourceUnit: "MB", targetUnit: "GB", answer: 6.4 },
 		{ source: 7500, sourceUnit: "MB", targetUnit: "GB", answer: 7.5 },
 		{ source: 12500, sourceUnit: "MB", targetUnit: "GB", answer: 12.5 },
-		
+
 		// Decimal MB to KB conversions
 		{ source: 1.5, sourceUnit: "MB", targetUnit: "KB", answer: 1500 },
 		{ source: 2.5, sourceUnit: "MB", targetUnit: "KB", answer: 2500 },
 		{ source: 4.2, sourceUnit: "MB", targetUnit: "KB", answer: 4200 },
 		{ source: 6.8, sourceUnit: "MB", targetUnit: "KB", answer: 6800 },
 		{ source: 12.5, sourceUnit: "MB", targetUnit: "KB", answer: 12500 },
-		
+
 		// Multi-digit MB to KB conversions
 		{ source: 15, sourceUnit: "MB", targetUnit: "KB", answer: 15000 },
 		{ source: 24, sourceUnit: "MB", targetUnit: "KB", answer: 24000 },
 		{ source: 32, sourceUnit: "MB", targetUnit: "KB", answer: 32000 },
 		{ source: 48, sourceUnit: "MB", targetUnit: "KB", answer: 48000 },
 		{ source: 64, sourceUnit: "MB", targetUnit: "KB", answer: 64000 },
-		
+
 		// Multi-thousand KB to MB conversions
 		{ source: 1200, sourceUnit: "KB", targetUnit: "MB", answer: 1.2 },
 		{ source: 1500, sourceUnit: "KB", targetUnit: "MB", answer: 1.5 },
@@ -129,7 +134,7 @@ const generateConversionQuestion = (): Question => {
 		{ source: 15000, sourceUnit: "KB", targetUnit: "MB", answer: 15 },
 		{ source: 24000, sourceUnit: "KB", targetUnit: "MB", answer: 24 },
 		{ source: 32000, sourceUnit: "KB", targetUnit: "MB", answer: 32 },
-		
+
 		// Multi-million bytes to MB conversions
 		{ source: 1500000, sourceUnit: "bytes", targetUnit: "MB", answer: 1.5 },
 		{ source: 2500000, sourceUnit: "bytes", targetUnit: "MB", answer: 2.5 },
@@ -138,21 +143,21 @@ const generateConversionQuestion = (): Question => {
 		{ source: 24000000, sourceUnit: "bytes", targetUnit: "MB", answer: 24 },
 		{ source: 32000000, sourceUnit: "bytes", targetUnit: "MB", answer: 32 },
 		{ source: 48000000, sourceUnit: "bytes", targetUnit: "MB", answer: 48 },
-		
+
 		// Decimal MB to bytes conversions
 		{ source: 1.5, sourceUnit: "MB", targetUnit: "bytes", answer: 1500000 },
 		{ source: 2.5, sourceUnit: "MB", targetUnit: "bytes", answer: 2500000 },
 		{ source: 4.2, sourceUnit: "MB", targetUnit: "bytes", answer: 4200000 },
 		{ source: 6.8, sourceUnit: "MB", targetUnit: "bytes", answer: 6800000 },
 		{ source: 12.5, sourceUnit: "MB", targetUnit: "bytes", answer: 12500000 },
-		
+
 		// Multi-hundred KB to bytes conversions
 		{ source: 150, sourceUnit: "KB", targetUnit: "bytes", answer: 150000 },
 		{ source: 250, sourceUnit: "KB", targetUnit: "bytes", answer: 250000 },
 		{ source: 420, sourceUnit: "KB", targetUnit: "bytes", answer: 420000 },
 		{ source: 680, sourceUnit: "KB", targetUnit: "bytes", answer: 680000 },
 		{ source: 1250, sourceUnit: "KB", targetUnit: "bytes", answer: 1250000 },
-		
+
 		// Large bytes to KB conversions
 		{ source: 150000, sourceUnit: "bytes", targetUnit: "KB", answer: 150 },
 		{ source: 250000, sourceUnit: "bytes", targetUnit: "KB", answer: 250 },
@@ -269,7 +274,8 @@ const generateConversionQuestion = (): Question => {
 };
 
 const generateComparisonQuestion = (): Question => {
-	const type = Math.random() < 0.5 ? "smallest" : "largest";
+	const types: Question["type"][] = ["smallest", "second smallest", "second largest", "largest"];
+	const type: Question["type"] = types[Math.floor(Math.random() * types.length)];
 
 	// Predefined sets of values that are calculator-friendly and create good distractors
 	const comparisonSets = [
@@ -566,7 +572,13 @@ const generateComparisonQuestion = (): Question => {
 	// Sort by bytes to find correct answer
 	valuesWithBytes.sort((a, b) => a.bytes - b.bytes);
 	const correctValue =
-		type === "smallest" ? valuesWithBytes[0] : valuesWithBytes[3];
+		type === "smallest"
+			? valuesWithBytes[0]
+			: type === "second smallest"
+				? valuesWithBytes[1]
+				: type === "second largest"
+					? valuesWithBytes[2]
+					: valuesWithBytes[3];
 
 	// Shuffle the display order
 	const shuffledValues = [...valuesWithBytes].sort(() => Math.random() - 0.5);
@@ -626,7 +638,7 @@ const generateQuestion = (
 	];
 	const newQuestion =
 		questionTypes[Math.floor(Math.random() * questionTypes.length)]();
-	console.log(newQuestion)
+	console.log(newQuestion);
 	setCurrentQuestion(newQuestion);
 	setSelectedAnswer(null);
 	setFeedback(null);
@@ -679,6 +691,23 @@ export function MultipleChoice({ onScoreUpdate }: UnitConverterProps) {
 		onScoreUpdate(isCorrect, currentQuestion.category);
 	};
 
+	useEffect(() => {
+		const handleKeyDown = (event: KeyboardEvent) => {
+			if (hasSubmitted || !currentQuestion) return;
+
+			const key = parseInt(event.key, 10);
+			if (key >= 1 && key <= 4) {
+				const optionIndex = key - 1; // Convert '1' key to index 0, etc.
+				if (optionIndex < currentQuestion.options.length) {
+					handleOptionClick(optionIndex);
+				}
+			}
+		};
+
+		document.addEventListener("keydown", handleKeyDown);
+		return () => document.removeEventListener("keydown", handleKeyDown);
+	}, [hasSubmitted, currentQuestion]);
+
 	// Global keyboard listener for Enter key when hasSubmitted is true
 	useEffect(() => {
 		const handleKeyDown = (event: KeyboardEvent) => {
@@ -697,8 +726,9 @@ export function MultipleChoice({ onScoreUpdate }: UnitConverterProps) {
 	}, [hasSubmitted, currentQuestion]);
 
 	const getButtonClassName = (optionIndex: number): string => {
+		// MODIFICATION: Added 'relative' and changed 'text-left' to 'text-center'
 		const baseClasses =
-			"w-full p-4 text-left text-lg font-semibold transition-all duration-200 rounded-lg border-2 shadow-md hover:shadow-lg";
+			"relative w-full p-6 text-center text-lg font-semibold transition-all duration-200 rounded-lg border-2 shadow-md hover:shadow-lg";
 
 		if (!hasSubmitted) {
 			return `${baseClasses} bg-gradient-to-r from-gray-50 to-gray-100 border-gray-200 hover:from-indigo-50 hover:to-purple-50 hover:border-indigo-300 text-gray-800 hover:text-indigo-800`;
@@ -732,7 +762,7 @@ export function MultipleChoice({ onScoreUpdate }: UnitConverterProps) {
 							<section aria-labelledby={currentQuestionId}>
 								<h2
 									id={currentQuestionId}
-									className="p-4 text-lg font-semibold text-white bg-indigo-600 rounded-lg shadow"
+									className="p-6 text-lg font-semibold text-white bg-indigo-600 rounded-lg shadow"
 								>
 									{currentQuestion.questionText}
 								</h2>
@@ -740,7 +770,8 @@ export function MultipleChoice({ onScoreUpdate }: UnitConverterProps) {
 								<div className="mt-6">
 									<fieldset>
 										<legend className="sr-only">Choose your answer</legend>
-										<div className="flex flex-col gap-4 mb-2 sm:grid sm:grid-cols-2" aria-labelledby={currentQuestionId}>
+										<div className="flex flex-col gap-4 mb-2 sm:grid sm:grid-cols-2">
+											{/* MODIFICATION: Updated button structure */}
 											{currentQuestion.options.map((option, index) => (
 												<Button
 													key={option}
@@ -752,18 +783,21 @@ export function MultipleChoice({ onScoreUpdate }: UnitConverterProps) {
 														hasSubmitted ? feedbackMessageId : undefined
 													}
 												>
-													<div className="flex items-center justify-between">
-														<span>{option}</span>
-														{hasSubmitted && (
-															<span className="text-2xl">
-																{index === currentQuestion.correctAnswer
-																	? "✅"
-																	: index === selectedAnswer
-																		? "❌"
-																		: ""}
-															</span>
-														)}
-													</div>
+													<span className="absolute flex items-center justify-center text-sm font-bold text-white bg-indigo-500 rounded-full shadow-sm top-2 left-2 w-7 h-7">
+														{index + 1}
+													</span>
+
+													<span>{option}</span>
+
+													{hasSubmitted && (
+														<span className="absolute text-2xl -translate-y-1/2 right-4 top-1/2">
+															{index === currentQuestion.correctAnswer
+																? "✅"
+																: index === selectedAnswer
+																	? "❌"
+																	: ""}
+														</span>
+													)}
 												</Button>
 											))}
 										</div>

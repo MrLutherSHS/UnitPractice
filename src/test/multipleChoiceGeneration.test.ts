@@ -1,4 +1,4 @@
-import { describe, expect, it, vi, beforeEach, afterEach } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 // Mock the numberUtils module
 vi.mock("@/lib/numberUtils", () => ({
@@ -65,11 +65,17 @@ const generateConversionQuestion = (): Question => {
 		{ source: 4000, sourceUnit: "KB", targetUnit: "MB", answer: 4 },
 	];
 
-	const conversion = conversionPairs[Math.floor(Math.random() * conversionPairs.length)];
-	const { source: sourceValue, sourceUnit, targetUnit, answer: correctAnswer } = conversion;
+	const conversion =
+		conversionPairs[Math.floor(Math.random() * conversionPairs.length)];
+	const {
+		source: sourceValue,
+		sourceUnit,
+		targetUnit,
+		answer: correctAnswer,
+	} = conversion;
 
 	// Generate distractors
-	let wrongAnswers = [
+	const wrongAnswers = [
 		correctAnswer * 10,
 		correctAnswer / 10,
 		correctAnswer * 100,
@@ -129,7 +135,8 @@ const generateComparisonQuestion = (): Question => {
 		],
 	];
 
-	const selectedSet = comparisonSets[Math.floor(Math.random() * comparisonSets.length)];
+	const selectedSet =
+		comparisonSets[Math.floor(Math.random() * comparisonSets.length)];
 
 	const valuesWithBytes = selectedSet.map((v) => ({
 		...v,
@@ -137,10 +144,13 @@ const generateComparisonQuestion = (): Question => {
 	}));
 
 	valuesWithBytes.sort((a, b) => a.bytes - b.bytes);
-	const correctValue = type === "smallest" ? valuesWithBytes[0] : valuesWithBytes[3];
+	const correctValue =
+		type === "smallest" ? valuesWithBytes[0] : valuesWithBytes[3];
 
 	const shuffledValues = [...valuesWithBytes].sort(() => Math.random() - 0.5);
-	const correctAnswerIndex = shuffledValues.findIndex((v) => v.bytes === correctValue.bytes);
+	const correctAnswerIndex = shuffledValues.findIndex(
+		(v) => v.bytes === correctValue.bytes,
+	);
 
 	const formattedOptions = shuffledValues.map(
 		(v) => `${v.value.toLocaleString()} ${v.unit}`,
@@ -206,7 +216,7 @@ describe("MultipleChoice Question Generation", () => {
 
 		it("should generate questions with different unit combinations", () => {
 			const questions = [];
-			
+
 			// Generate multiple questions to test variety
 			for (let i = 0; i < 10; i++) {
 				const question = generateConversionQuestion();
@@ -218,7 +228,7 @@ describe("MultipleChoice Question Generation", () => {
 
 			// Should have some variety in unit combinations
 			const uniqueCombinations = new Set(
-				questions.map(q => `${q.sourceUnit}->${q.targetUnit}`)
+				questions.map((q) => `${q.sourceUnit}->${q.targetUnit}`),
 			);
 			expect(uniqueCombinations.size).toBeGreaterThan(1);
 		});
@@ -234,7 +244,7 @@ describe("MultipleChoice Question Generation", () => {
 			expect(question.params.sourceValue).toBe(2);
 			expect(question.params.sourceUnit).toBe("TB");
 			expect(question.params.targetUnit).toBe("GB");
-			
+
 			// The correct answer should be in the options
 			const correctOptionText = question.options[question.correctAnswer];
 			expect(correctOptionText).toContain("2,000 GB");
@@ -242,11 +252,13 @@ describe("MultipleChoice Question Generation", () => {
 
 		it("should generate believable distractors", () => {
 			const question = generateConversionQuestion();
-			
-		// All options should be valid numbers with units
-		question.options.forEach(option => {
-			expect(option).toMatch(/^(\d[\d,]*(\.\d+)?|\d+\.\d+) (bytes|KB|MB|GB|TB)$/);
-		});			// Should have exactly 4 unique options
+
+			// All options should be valid numbers with units
+			question.options.forEach((option) => {
+				expect(option).toMatch(
+					/^(\d[\d,]*(\.\d+)?|\d+\.\d+) (bytes|KB|MB|GB|TB)$/,
+				);
+			}); // Should have exactly 4 unique options
 			const uniqueOptions = new Set(question.options);
 			expect(uniqueOptions.size).toBe(4);
 		});
@@ -257,8 +269,8 @@ describe("MultipleChoice Question Generation", () => {
 			expect(question.explanation).toHaveLength(2);
 			expect(question.explanation[0].title).toBe("Identify the conversion");
 			expect(question.explanation[1].title).toBe("Calculate the result");
-			
-			question.explanation.forEach(section => {
+
+			question.explanation.forEach((section) => {
 				expect(section.details).toBeInstanceOf(Array);
 				expect(section.details.length).toBeGreaterThan(0);
 			});
@@ -278,7 +290,9 @@ describe("MultipleChoice Question Generation", () => {
 			expect(["smallest", "largest"]).toContain(question.type);
 			expect(question.params.values).toBeDefined();
 			expect(question.params.values).toHaveLength(4);
-			expect(question.questionText).toMatch(/Identify the (smallest|largest) secondary storage capacity/);
+			expect(question.questionText).toMatch(
+				/Identify the (smallest|largest) secondary storage capacity/,
+			);
 			expect(question.options).toHaveLength(4);
 			expect(question.correctAnswer).toBeGreaterThanOrEqual(0);
 			expect(question.correctAnswer).toBeLessThan(4);
@@ -287,7 +301,7 @@ describe("MultipleChoice Question Generation", () => {
 
 		it("should generate both smallest and largest question types", () => {
 			const types = new Set();
-			
+
 			// Generate multiple questions to test both types
 			for (let i = 0; i < 20; i++) {
 				const question = generateComparisonQuestion();
@@ -305,43 +319,41 @@ describe("MultipleChoice Question Generation", () => {
 				.mockReturnValue(0); // Place correct answer first
 
 			const question = generateComparisonQuestion();
-			
+
 			if (question.type === "smallest") {
 				// Verify the correct answer is indeed the smallest
 				const values = question.params.values!;
 				const correctValue = values[question.correctAnswer];
-				const allValues = values.map(v => v.bytes);
+				const allValues = values.map((v) => v.bytes);
 				const minBytes = Math.min(...allValues);
-				
+
 				expect(correctValue.bytes).toBe(minBytes);
 			}
 		});
 
 		it("should have mathematically correct largest answer", () => {
 			vi.spyOn(Math, "random")
-				.mockReturnValueOnce(0.3) // Select "largest"  
+				.mockReturnValueOnce(0.3) // Select "largest"
 				.mockReturnValueOnce(0) // Select first comparison set
 				.mockReturnValue(0); // Place correct answer first
 
 			const question = generateComparisonQuestion();
-			
+
 			if (question.type === "largest") {
 				// Verify the correct answer is indeed the largest
 				const values = question.params.values!;
 				const correctValue = values[question.correctAnswer];
-				const allValues = values.map(v => v.bytes);
+				const allValues = values.map((v) => v.bytes);
 				const maxBytes = Math.max(...allValues);
-				
+
 				expect(correctValue.bytes).toBe(maxBytes);
 			}
 		});
 
 		it("should have options with different units", () => {
 			const question = generateComparisonQuestion();
-			const units = new Set(
-				question.params.values!.map(v => v.unit)
-			);
-			
+			const units = new Set(question.params.values?.map((v) => v.unit));
+
 			// Should have at least 2 different units
 			expect(units.size).toBeGreaterThanOrEqual(2);
 		});
@@ -350,12 +362,16 @@ describe("MultipleChoice Question Generation", () => {
 			const question = generateComparisonQuestion();
 
 			expect(question.explanation).toHaveLength(2);
-			expect(question.explanation[0].title).toBe("Convert all values to a common base unit (MB)");
-			expect(question.explanation[1].title).toMatch(/Find the (smallest|largest) value/);
-			
+			expect(question.explanation[0].title).toBe(
+				"Convert all values to a common base unit (MB)",
+			);
+			expect(question.explanation[1].title).toMatch(
+				/Find the (smallest|largest) value/,
+			);
+
 			// First explanation section should have 4 conversion details (one for each option)
 			expect(question.explanation[0].details).toHaveLength(4);
-			
+
 			// Second explanation section should identify the correct answer
 			expect(question.explanation[1].details).toHaveLength(1);
 		});
@@ -364,7 +380,7 @@ describe("MultipleChoice Question Generation", () => {
 	describe("Question Randomization", () => {
 		it("should generate different questions on multiple calls", () => {
 			const questions = [];
-			
+
 			for (let i = 0; i < 10; i++) {
 				const conversionQuestion = generateConversionQuestion();
 				const comparisonQuestion = generateComparisonQuestion();
@@ -372,23 +388,22 @@ describe("MultipleChoice Question Generation", () => {
 			}
 
 			// Should have some variety in question texts
-			const uniqueQuestionTexts = new Set(questions.map(q => q.questionText));
+			const uniqueQuestionTexts = new Set(questions.map((q) => q.questionText));
 			expect(uniqueQuestionTexts.size).toBeGreaterThan(1);
 		});
 
 		it("should randomize option order", () => {
 			const questions = [];
-			
+
 			// Generate same question type multiple times
-			vi.spyOn(Math, "random")
-				.mockReturnValue(0); // Always select first options
-				
+			vi.spyOn(Math, "random").mockReturnValue(0); // Always select first options
+
 			// Reset and generate with different shuffling
 			for (let i = 0; i < 5; i++) {
 				vi.spyOn(Math, "random")
 					.mockReturnValueOnce(0) // Same question selection
 					.mockReturnValue(i * 0.2); // Different shuffling
-				
+
 				const question = generateConversionQuestion();
 				questions.push(question.correctAnswer);
 			}

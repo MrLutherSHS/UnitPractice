@@ -163,7 +163,7 @@ describe("MultipleChoice Utility Functions", () => {
 			expect(convertToBytes(0, "MB")).toBe(0);
 			expect(convertToBytes(0, "GB")).toBe(0);
 			expect(convertToBytes(0, "TB")).toBe(0);
-			
+
 			expect(convertFromBytes(0, "KB")).toBe(0);
 			expect(convertFromBytes(0, "MB")).toBe(0);
 			expect(convertFromBytes(0, "GB")).toBe(0);
@@ -181,7 +181,7 @@ describe("MultipleChoice Utility Functions", () => {
 			const largeTB = 1000;
 			const largeBytes = convertToBytes(largeTB, "TB");
 			expect(largeBytes).toBe(1000000000000000);
-			
+
 			const backToTB = convertFromBytes(largeBytes, "TB");
 			expect(backToTB).toBe(largeTB);
 		});

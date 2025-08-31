@@ -1,21 +1,21 @@
-import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import { MultipleChoice } from '@/components/MultipleChoice';
+import { fireEvent, render, screen, waitFor } from "@testing-library/react";
+import { beforeEach, describe, expect, it, vi } from "vitest";
+import { MultipleChoice } from "@/components/MultipleChoice";
 
 // Mock the numberUtils module
-vi.mock('@/lib/numberUtils', () => ({
-	formatNumber: vi.fn((value: number) => value.toLocaleString())
+vi.mock("@/lib/numberUtils", () => ({
+	formatNumber: vi.fn((value: number) => value.toLocaleString()),
 }));
 
 // Mock the quizHooks module
-vi.mock('@/lib/quizHooks', () => ({
+vi.mock("@/lib/quizHooks", () => ({
 	useQuizAriaIds: vi.fn(() => ({
-		questionId: 'test-question-id',
-		optionGroupId: 'test-option-group-id'
-	}))
+		questionId: "test-question-id",
+		optionGroupId: "test-option-group-id",
+	})),
 }));
 
-describe('MultipleChoice Component', () => {
+describe("MultipleChoice Component", () => {
 	let mockOnScoreUpdate: ReturnType<typeof vi.fn>;
 	let mathRandomSpy: ReturnType<typeof vi.spyOn>;
 
@@ -27,7 +27,9 @@ describe('MultipleChoice Component', () => {
 
 	describe("Component Rendering", () => {
 		it("renders without crashing", () => {
-			expect(() => render(<MultipleChoice onScoreUpdate={mockOnScoreUpdate} />)).not.toThrow();
+			expect(() =>
+				render(<MultipleChoice onScoreUpdate={mockOnScoreUpdate} />),
+			).not.toThrow();
 		});
 
 		it("displays multiple choice options immediately", async () => {
@@ -41,12 +43,13 @@ describe('MultipleChoice Component', () => {
 			await waitFor(() => {
 				const buttons = screen.getAllByRole("button");
 				// Should have 4 option buttons
-				const optionButtons = buttons.filter(btn => 
-					btn.textContent?.includes("GB") || 
-					btn.textContent?.includes("MB") || 
-					btn.textContent?.includes("KB") || 
-					btn.textContent?.includes("TB") ||
-					btn.textContent?.includes("bytes")
+				const optionButtons = buttons.filter(
+					(btn) =>
+						btn.textContent?.includes("GB") ||
+						btn.textContent?.includes("MB") ||
+						btn.textContent?.includes("KB") ||
+						btn.textContent?.includes("TB") ||
+						btn.textContent?.includes("bytes"),
 				);
 				expect(optionButtons).toHaveLength(4);
 			});
@@ -64,7 +67,9 @@ describe('MultipleChoice Component', () => {
 
 			await waitFor(() => {
 				// Should contain conversion question text
-				expect(screen.getByText(/Identify the quantity of.*that is the same as/i)).toBeInTheDocument();
+				expect(
+					screen.getByText(/Identify the quantity of.*that is the same as/i),
+				).toBeInTheDocument();
 			});
 		});
 
@@ -79,7 +84,11 @@ describe('MultipleChoice Component', () => {
 
 			await waitFor(() => {
 				// Should contain comparison question text
-				expect(screen.getByText(/Identify the (smallest|largest) secondary storage capacity/i)).toBeInTheDocument();
+				expect(
+					screen.getByText(
+						/Identify the (smallest|largest) secondary storage capacity/i,
+					),
+				).toBeInTheDocument();
 			});
 		});
 	});
@@ -94,13 +103,16 @@ describe('MultipleChoice Component', () => {
 			render(<MultipleChoice onScoreUpdate={mockOnScoreUpdate} />);
 
 			await waitFor(() => {
-				const optionButtons = screen.getAllByRole("button").filter(btn => 
-					btn.textContent?.includes("GB") || 
-					btn.textContent?.includes("MB") || 
-					btn.textContent?.includes("KB") || 
-					btn.textContent?.includes("TB") ||
-					btn.textContent?.includes("bytes")
-				);
+				const optionButtons = screen
+					.getAllByRole("button")
+					.filter(
+						(btn) =>
+							btn.textContent?.includes("GB") ||
+							btn.textContent?.includes("MB") ||
+							btn.textContent?.includes("KB") ||
+							btn.textContent?.includes("TB") ||
+							btn.textContent?.includes("bytes"),
+					);
 				expect(optionButtons.length).toBeGreaterThan(0);
 
 				// Click the first option
@@ -122,21 +134,24 @@ describe('MultipleChoice Component', () => {
 			render(<MultipleChoice onScoreUpdate={mockOnScoreUpdate} />);
 
 			await waitFor(() => {
-				const optionButtons = screen.getAllByRole("button").filter(btn => 
-					btn.textContent?.includes("GB") || 
-					btn.textContent?.includes("MB") || 
-					btn.textContent?.includes("KB") || 
-					btn.textContent?.includes("TB") ||
-					btn.textContent?.includes("bytes")
-				);
-				
+				const optionButtons = screen
+					.getAllByRole("button")
+					.filter(
+						(btn) =>
+							btn.textContent?.includes("GB") ||
+							btn.textContent?.includes("MB") ||
+							btn.textContent?.includes("KB") ||
+							btn.textContent?.includes("TB") ||
+							btn.textContent?.includes("bytes"),
+					);
+
 				fireEvent.click(optionButtons[0]);
 			});
 
 			// Should show feedback
 			await waitFor(() => {
 				expect(
-					screen.getByText("Correct!") || screen.getByText("Incorrect")
+					screen.getByText("Correct!") || screen.getByText("Incorrect"),
 				).toBeInTheDocument();
 			});
 		});
@@ -150,14 +165,17 @@ describe('MultipleChoice Component', () => {
 			render(<MultipleChoice onScoreUpdate={mockOnScoreUpdate} />);
 
 			await waitFor(() => {
-				const optionButtons = screen.getAllByRole("button").filter(btn => 
-					btn.textContent?.includes("GB") || 
-					btn.textContent?.includes("MB") || 
-					btn.textContent?.includes("KB") || 
-					btn.textContent?.includes("TB") ||
-					btn.textContent?.includes("bytes")
-				);
-				
+				const optionButtons = screen
+					.getAllByRole("button")
+					.filter(
+						(btn) =>
+							btn.textContent?.includes("GB") ||
+							btn.textContent?.includes("MB") ||
+							btn.textContent?.includes("KB") ||
+							btn.textContent?.includes("TB") ||
+							btn.textContent?.includes("bytes"),
+					);
+
 				fireEvent.click(optionButtons[0]);
 			});
 
@@ -183,11 +201,11 @@ describe('MultipleChoice Component', () => {
 			await waitFor(() => {
 				// Check for radiogroup
 				expect(screen.getByRole("radiogroup")).toBeInTheDocument();
-				
+
 				// Check for fieldset/legend structure (multiple groups are expected: fieldset and details)
 				const groups = screen.getAllByRole("group");
 				expect(groups).toHaveLength(2); // fieldset and details both have group role
-				
+
 				// Check for proper heading structure
 				expect(screen.getByRole("heading", { level: 1 })).toBeInTheDocument();
 				expect(screen.getByRole("heading", { level: 2 })).toBeInTheDocument();
