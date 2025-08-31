@@ -54,6 +54,7 @@ export function SiteNavigation({
 				<DropdownMenuTrigger asChild>
 					<Button
 						variant="ghost"
+						aria-label="Open navigation menu"
 						className={cn(
 							"flex items-center gap-1 sm:gap-2 px-2 sm:px-4 py-1 sm:py-2 rounded-lg",
 							"bg-white/10 hover:bg-white/20 backdrop-blur-sm",
