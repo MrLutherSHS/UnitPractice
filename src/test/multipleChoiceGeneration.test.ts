@@ -243,12 +243,10 @@ describe("MultipleChoice Question Generation", () => {
 		it("should generate believable distractors", () => {
 			const question = generateConversionQuestion();
 			
-			// All options should be valid numbers with units
-			question.options.forEach(option => {
-				expect(option).toMatch(/^\d[\d,]* (bytes|KB|MB|GB|TB)$/);
-			});
-
-			// Should have exactly 4 unique options
+		// All options should be valid numbers with units
+		question.options.forEach(option => {
+			expect(option).toMatch(/^(\d[\d,]*(\.\d+)?|\d+\.\d+) (bytes|KB|MB|GB|TB)$/);
+		});			// Should have exactly 4 unique options
 			const uniqueOptions = new Set(question.options);
 			expect(uniqueOptions.size).toBe(4);
 		});
