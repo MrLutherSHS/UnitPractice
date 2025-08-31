@@ -2,6 +2,7 @@ import { useEffect, useId, useState } from "react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Card, CardContent } from "@/components/ui/card";
 import { type ExplanationSection, formatNumber } from "@/lib/numberUtils";
+import { Button } from './ui/button';
 
 interface Question {
 	category: "Multiple Choice";
@@ -57,8 +58,113 @@ const convertFromBytes = (bytes: number, targetUnit: string): number => {
 const generateConversionQuestion = (): Question => {
 	// Define conversion pairs that work well without calculator
 	const conversionPairs = [
+		// Decimal TB to GB conversions
+		{ source: 0.2, sourceUnit: "TB", targetUnit: "GB", answer: 200 },
+		{ source: 0.5, sourceUnit: "TB", targetUnit: "GB", answer: 500 },
+		{ source: 0.75, sourceUnit: "TB", targetUnit: "GB", answer: 750 },
+		{ source: 1.2, sourceUnit: "TB", targetUnit: "GB", answer: 1200 },
+		{ source: 1.5, sourceUnit: "TB", targetUnit: "GB", answer: 1500 },
+		{ source: 2.5, sourceUnit: "TB", targetUnit: "GB", answer: 2500 },
+		
+		// Multi-digit TB to GB conversions
+		{ source: 12, sourceUnit: "TB", targetUnit: "GB", answer: 12000 },
+		{ source: 25, sourceUnit: "TB", targetUnit: "GB", answer: 25000 },
+		{ source: 35, sourceUnit: "TB", targetUnit: "GB", answer: 35000 },
+		{ source: 48, sourceUnit: "TB", targetUnit: "GB", answer: 48000 },
+		{ source: 75, sourceUnit: "TB", targetUnit: "GB", answer: 75000 },
+		
+		// Decimal TB to MB conversions
+		{ source: 0.15, sourceUnit: "TB", targetUnit: "MB", answer: 150000 },
+		{ source: 0.25, sourceUnit: "TB", targetUnit: "MB", answer: 250000 },
+		{ source: 0.8, sourceUnit: "TB", targetUnit: "MB", answer: 800000 },
+		
+		// Decimal GB to MB conversions
+		{ source: 1.5, sourceUnit: "GB", targetUnit: "MB", answer: 1500 },
+		{ source: 2.5, sourceUnit: "GB", targetUnit: "MB", answer: 2500 },
+		{ source: 3.2, sourceUnit: "GB", targetUnit: "MB", answer: 3200 },
+		{ source: 4.8, sourceUnit: "GB", targetUnit: "MB", answer: 4800 },
+		{ source: 6.4, sourceUnit: "GB", targetUnit: "MB", answer: 6400 },
+		{ source: 7.5, sourceUnit: "GB", targetUnit: "MB", answer: 7500 },
+		{ source: 12.5, sourceUnit: "GB", targetUnit: "MB", answer: 12500 },
+		
+		// Multi-digit GB to MB conversions
+		{ source: 15, sourceUnit: "GB", targetUnit: "MB", answer: 15000 },
+		{ source: 24, sourceUnit: "GB", targetUnit: "MB", answer: 24000 },
+		{ source: 32, sourceUnit: "GB", targetUnit: "MB", answer: 32000 },
+		{ source: 64, sourceUnit: "GB", targetUnit: "MB", answer: 64000 },
+		
+		// Multi-thousand MB to GB conversions
+		{ source: 1200, sourceUnit: "MB", targetUnit: "GB", answer: 1.2 },
+		{ source: 1500, sourceUnit: "MB", targetUnit: "GB", answer: 1.5 },
+		{ source: 2400, sourceUnit: "MB", targetUnit: "GB", answer: 2.4 },
+		{ source: 3200, sourceUnit: "MB", targetUnit: "GB", answer: 3.2 },
+		{ source: 4800, sourceUnit: "MB", targetUnit: "GB", answer: 4.8 },
+		{ source: 6400, sourceUnit: "MB", targetUnit: "GB", answer: 6.4 },
+		{ source: 7500, sourceUnit: "MB", targetUnit: "GB", answer: 7.5 },
+		{ source: 12500, sourceUnit: "MB", targetUnit: "GB", answer: 12.5 },
+		
+		// Decimal MB to KB conversions
+		{ source: 1.5, sourceUnit: "MB", targetUnit: "KB", answer: 1500 },
+		{ source: 2.5, sourceUnit: "MB", targetUnit: "KB", answer: 2500 },
+		{ source: 4.2, sourceUnit: "MB", targetUnit: "KB", answer: 4200 },
+		{ source: 6.8, sourceUnit: "MB", targetUnit: "KB", answer: 6800 },
+		{ source: 12.5, sourceUnit: "MB", targetUnit: "KB", answer: 12500 },
+		
+		// Multi-digit MB to KB conversions
+		{ source: 15, sourceUnit: "MB", targetUnit: "KB", answer: 15000 },
+		{ source: 24, sourceUnit: "MB", targetUnit: "KB", answer: 24000 },
+		{ source: 32, sourceUnit: "MB", targetUnit: "KB", answer: 32000 },
+		{ source: 48, sourceUnit: "MB", targetUnit: "KB", answer: 48000 },
+		{ source: 64, sourceUnit: "MB", targetUnit: "KB", answer: 64000 },
+		
+		// Multi-thousand KB to MB conversions
+		{ source: 1200, sourceUnit: "KB", targetUnit: "MB", answer: 1.2 },
+		{ source: 1500, sourceUnit: "KB", targetUnit: "MB", answer: 1.5 },
+		{ source: 2400, sourceUnit: "KB", targetUnit: "MB", answer: 2.4 },
+		{ source: 3200, sourceUnit: "KB", targetUnit: "MB", answer: 3.2 },
+		{ source: 4800, sourceUnit: "KB", targetUnit: "MB", answer: 4.8 },
+		{ source: 6400, sourceUnit: "KB", targetUnit: "MB", answer: 6.4 },
+		{ source: 7500, sourceUnit: "KB", targetUnit: "MB", answer: 7.5 },
+		{ source: 12500, sourceUnit: "KB", targetUnit: "MB", answer: 12.5 },
+		{ source: 15000, sourceUnit: "KB", targetUnit: "MB", answer: 15 },
+		{ source: 24000, sourceUnit: "KB", targetUnit: "MB", answer: 24 },
+		{ source: 32000, sourceUnit: "KB", targetUnit: "MB", answer: 32 },
+		
+		// Multi-million bytes to MB conversions
+		{ source: 1500000, sourceUnit: "bytes", targetUnit: "MB", answer: 1.5 },
+		{ source: 2500000, sourceUnit: "bytes", targetUnit: "MB", answer: 2.5 },
+		{ source: 12000000, sourceUnit: "bytes", targetUnit: "MB", answer: 12 },
+		{ source: 15000000, sourceUnit: "bytes", targetUnit: "MB", answer: 15 },
+		{ source: 24000000, sourceUnit: "bytes", targetUnit: "MB", answer: 24 },
+		{ source: 32000000, sourceUnit: "bytes", targetUnit: "MB", answer: 32 },
+		{ source: 48000000, sourceUnit: "bytes", targetUnit: "MB", answer: 48 },
+		
+		// Decimal MB to bytes conversions
+		{ source: 1.5, sourceUnit: "MB", targetUnit: "bytes", answer: 1500000 },
+		{ source: 2.5, sourceUnit: "MB", targetUnit: "bytes", answer: 2500000 },
+		{ source: 4.2, sourceUnit: "MB", targetUnit: "bytes", answer: 4200000 },
+		{ source: 6.8, sourceUnit: "MB", targetUnit: "bytes", answer: 6800000 },
+		{ source: 12.5, sourceUnit: "MB", targetUnit: "bytes", answer: 12500000 },
+		
+		// Multi-hundred KB to bytes conversions
+		{ source: 150, sourceUnit: "KB", targetUnit: "bytes", answer: 150000 },
+		{ source: 250, sourceUnit: "KB", targetUnit: "bytes", answer: 250000 },
+		{ source: 420, sourceUnit: "KB", targetUnit: "bytes", answer: 420000 },
+		{ source: 680, sourceUnit: "KB", targetUnit: "bytes", answer: 680000 },
+		{ source: 1250, sourceUnit: "KB", targetUnit: "bytes", answer: 1250000 },
+		
+		// Large bytes to KB conversions
+		{ source: 150000, sourceUnit: "bytes", targetUnit: "KB", answer: 150 },
+		{ source: 250000, sourceUnit: "bytes", targetUnit: "KB", answer: 250 },
+		{ source: 420000, sourceUnit: "bytes", targetUnit: "KB", answer: 420 },
+		{ source: 680000, sourceUnit: "bytes", targetUnit: "KB", answer: 680 },
+		{ source: 1250000, sourceUnit: "bytes", targetUnit: "KB", answer: 1250 },
+		{ source: 3200000, sourceUnit: "bytes", targetUnit: "KB", answer: 3200 },
+		// Original
+		{ source: 0.2, sourceUnit: "TB", targetUnit: "GB", answer: 200 },
 		{ source: 2, sourceUnit: "TB", targetUnit: "GB", answer: 2000 },
 		{ source: 3, sourceUnit: "TB", targetUnit: "GB", answer: 3000 },
+		{ source: 35, sourceUnit: "TB", targetUnit: "GB", answer: 35000 },
 		{ source: 5, sourceUnit: "TB", targetUnit: "GB", answer: 5000 },
 		{ source: 2, sourceUnit: "TB", targetUnit: "MB", answer: 2000000 },
 		{ source: 4, sourceUnit: "GB", targetUnit: "MB", answer: 4000 },
@@ -520,6 +626,7 @@ const generateQuestion = (
 	];
 	const newQuestion =
 		questionTypes[Math.floor(Math.random() * questionTypes.length)]();
+	console.log(newQuestion)
 	setCurrentQuestion(newQuestion);
 	setSelectedAnswer(null);
 	setFeedback(null);
@@ -542,7 +649,6 @@ export function MultipleChoice({ onScoreUpdate }: UnitConverterProps) {
 	// Generate unique IDs for accessibility
 	const converterTitleId = useId();
 	const currentQuestionId = useId();
-	const optionsGroupId = useId();
 	const feedbackMessageId = useId();
 	const welcomeMessageId = useId();
 
@@ -626,7 +732,7 @@ export function MultipleChoice({ onScoreUpdate }: UnitConverterProps) {
 							<section aria-labelledby={currentQuestionId}>
 								<h2
 									id={currentQuestionId}
-									className="p-6 text-lg font-semibold text-white bg-indigo-600 rounded-lg shadow"
+									className="p-4 text-lg font-semibold text-white bg-indigo-600 rounded-lg shadow"
 								>
 									{currentQuestion.questionText}
 								</h2>
@@ -634,14 +740,9 @@ export function MultipleChoice({ onScoreUpdate }: UnitConverterProps) {
 								<div className="mt-6">
 									<fieldset>
 										<legend className="sr-only">Choose your answer</legend>
-										<div
-											id={optionsGroupId}
-											className="space-y-3"
-											role="radiogroup"
-											aria-labelledby={currentQuestionId}
-										>
+										<div className="flex flex-col gap-4 mb-2 sm:grid sm:grid-cols-2" aria-labelledby={currentQuestionId}>
 											{currentQuestion.options.map((option, index) => (
-												<button
+												<Button
 													key={option}
 													type="button"
 													onClick={() => handleOptionClick(index)}
@@ -663,14 +764,14 @@ export function MultipleChoice({ onScoreUpdate }: UnitConverterProps) {
 															</span>
 														)}
 													</div>
-												</button>
+												</Button>
 											))}
 										</div>
 									</fieldset>
 								</div>
 
 								{feedback && (
-									<div className="mt-6">
+									<div className="mt-4">
 										<Alert
 											id={feedbackMessageId}
 											aria-live="polite"
