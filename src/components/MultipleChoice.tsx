@@ -274,8 +274,14 @@ const generateConversionQuestion = (): Question => {
 };
 
 const generateComparisonQuestion = (): Question => {
-	const types: Question["type"][] = ["smallest", "second smallest", "second largest", "largest"];
-	const type: Question["type"] = types[Math.floor(Math.random() * types.length)];
+	const types: Question["type"][] = [
+		"smallest",
+		"second smallest",
+		"second largest",
+		"largest",
+	];
+	const type: Question["type"] =
+		types[Math.floor(Math.random() * types.length)];
 
 	// Predefined sets of values that are calculator-friendly and create good distractors
 	const comparisonSets = [

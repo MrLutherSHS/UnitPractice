@@ -84,7 +84,7 @@ export function StatsModal({
 						className="flex items-center gap-3 text-2xl font-bold"
 					>
 						<span>{headerIcon}</span>
-						 {title}
+						{title}
 					</p>
 					<button
 						type="button"
@@ -166,13 +166,13 @@ export function StatsModal({
 							</Card>
 
 							{/* Overall Statistics */}
-							<Card className='gap-4 p-4'>
-								<CardHeader className='px-2 mb-0'>
+							<Card className="gap-4 p-4">
+								<CardHeader className="px-2 mb-0">
 									<CardTitle className="flex items-center">
 										📈 Overall Statistics
 									</CardTitle>
 								</CardHeader>
-								<CardContent className='px-2'>
+								<CardContent className="px-2">
 									<div className="grid grid-cols-1 gap-4 md:grid-cols-3">
 										<div className="p-4 text-center border-l-4 border-green-500 rounded-lg bg-green-50">
 											<div className="text-2xl font-bold text-green-600">
@@ -199,13 +199,13 @@ export function StatsModal({
 							</Card>
 
 							{/* Breakdown by Category */}
-							<Card className='gap-4 p-4'>
-								<CardHeader className='px-2 mb-0'>
+							<Card className="gap-4 p-4">
+								<CardHeader className="px-2 mb-0">
 									<CardTitle className="flex items-center">
 										📋 Breakdown by Category
 									</CardTitle>
 								</CardHeader>
-								<CardContent className='px-2'>
+								<CardContent className="px-2">
 									<div className="space-y-4">
 										{Object.entries(typeStats).map(
 											([type, stats]) =>
