@@ -173,6 +173,12 @@ export function StatsModal({
 								</CardHeader>
 								<CardContent>
 									<div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+										<div className="p-4 text-center border-l-4 border-green-500 rounded-lg bg-green-50">
+											<div className="text-2xl font-bold text-green-600">
+												{overallStats.totalCorrect}
+											</div>
+											<div className="text-sm text-gray-600">Correct</div>
+										</div>
 										<div className="p-4 text-center border-l-4 border-blue-500 rounded-lg bg-blue-50">
 											<div className="text-2xl font-bold text-blue-600">
 												{overallStats.totalAttempts}
@@ -180,13 +186,7 @@ export function StatsModal({
 											<div className="text-sm text-gray-600">
 												Total Attempts
 											</div>
-										</div>
-										<div className="p-4 text-center border-l-4 border-green-500 rounded-lg bg-green-50">
-											<div className="text-2xl font-bold text-green-600">
-												{overallStats.totalCorrect}
-											</div>
-											<div className="text-sm text-gray-600">Correct</div>
-										</div>
+										</div>{" "}
 										<div className="p-4 text-center border-l-4 border-purple-500 rounded-lg bg-purple-50">
 											<div className="text-2xl font-bold text-purple-600">
 												{Math.floor(overallStats.accuracy)}%

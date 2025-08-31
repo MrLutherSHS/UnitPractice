@@ -13,7 +13,8 @@ export type QuizButtonVariant =
 	| "selection" // Program/item selection buttons
 	| "primary" // Main call-to-action
 	| "secondary" // Secondary actions
-	| "destructive"; // Destructive actions
+	| "destructive" // Destructive actions
+	| "menu"; // Menu actions
 
 export type QuizButtonSize = "xs" | "sm" | "md" | "lg" | "xl";
 
@@ -101,6 +102,12 @@ const buttonVariants = {
     bg-gradient-to-r from-red-500 to-red-600
     hover:from-red-600 hover:to-red-700
     text-white shadow-md hover:shadow-lg
+  `,
+	menu: `
+    px-6 py-6 font-semibold rounded-lg transition-all duration-200
+    bg-gradient-to-r from-gray-100 to-gray-200
+    hover:from-gray-200 hover:to-gray-300
+    text-gray-800 shadow-md hover:shadow-lg
   `,
 };
 

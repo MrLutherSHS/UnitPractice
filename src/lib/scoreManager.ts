@@ -9,22 +9,31 @@ export interface LevelInfo {
 export interface ScoreData {
 	attempts: number;
 	correct: number;
-	totalScore: number;
+	streak: number;
 	byType: Record<string, { attempts: number; correct: number }>;
 	history: Array<{
 		timestamp: number;
 		correct: boolean;
-		addressType: string;
-		address: string;
+		questionType: string;
 	}>;
 }
+
+const blankScoreData = {
+	attempts: 0,
+	correct: 0,
+	streak: 0,
+	byType: {
+		"Converting Units": { attempts: 0, correct: 0 },
+		"Capacity Calculator": { attempts: 0, correct: 0 },
+		"File Size Calculator": { attempts: 0, correct: 0 },
+	},
+	history: [],
+};
 
 export class ScoreManager {
 	private siteKey: string;
 	private storageKey: string;
-	private streakKey: string;
-	private scores: Record<string, ScoreData> = {};
-	private streak: number = 0;
+	private scores: ScoreData = blankScoreData;
 	private levels: LevelInfo[];
 
 	// Default generic levels that can be used as fallback
@@ -76,19 +85,17 @@ export class ScoreManager {
 	constructor(siteKey = "generic-quiz", customLevels?: LevelInfo[]) {
 		this.siteKey = siteKey;
 		this.storageKey = `gcse-cs-scores-${this.siteKey}`;
-		this.streakKey = `${this.storageKey}-streak`;
 		this.levels = customLevels || ScoreManager.DEFAULT_LEVELS;
 		this.scores = this.loadScores();
-		this.streak = this.loadStreak();
 	}
 
-	private loadScores(): Record<string, ScoreData> {
+	private loadScores(): ScoreData {
 		try {
 			const stored = localStorage.getItem(this.storageKey);
-			return stored ? JSON.parse(stored) : {};
+			return stored ? JSON.parse(stored) : blankScoreData;
 		} catch (error) {
 			console.warn("Error loading scores:", error);
-			return {};
+			return blankScoreData;
 		}
 	}
 
@@ -100,91 +107,39 @@ export class ScoreManager {
 		}
 	}
 
-	private loadStreak(): number {
-		try {
-			const stored = localStorage.getItem(this.streakKey);
-			return stored ? parseInt(stored, 10) : 0;
-		} catch (error) {
-			console.warn("Error loading streak:", error);
-			return 0;
-		}
-	}
-
-	private saveStreak(): void {
-		try {
-			localStorage.setItem(this.streakKey, this.streak.toString());
-		} catch (error) {
-			console.warn("Error saving streak:", error);
-		}
-	}
-
-	updateStreak(isCorrect: boolean): number {
-		if (isCorrect) {
-			this.streak++;
-		} else {
-			this.streak = 0;
-		}
-		this.saveStreak();
-		return this.streak;
-	}
-
 	getStreak(): number {
-		return this.streak;
+		return this.scores.streak;
 	}
 
 	resetStreak(): void {
-		this.streak = 0;
-		this.saveStreak();
+		this.scores.streak = 0;
+		this.saveScores();
 	}
 
-	recordScore(
-		itemKey: string,
-		score: number,
-		maxScore = 100,
-		addressType: string | null = null,
-		address = "",
-	): void {
-		const percentage = Math.round((score / maxScore) * 100);
-
-		if (!this.scores[itemKey]) {
-			this.scores[itemKey] = {
-				attempts: 0,
-				correct: 0,
-				totalScore: 0,
-				byType: {
-					IPv4: { attempts: 0, correct: 0 },
-					IPv6: { attempts: 0, correct: 0 },
-					MAC: { attempts: 0, correct: 0 },
-					none: { attempts: 0, correct: 0 },
-				},
-				history: [],
-			};
+	recordScore(isCorrect: boolean, questionType: string): void {
+		if (!this.scores) {
+			this.scores = blankScoreData;
 		}
 
-		const scoreData = this.scores[itemKey];
-		scoreData.attempts++;
-		if (score === maxScore) {
-			scoreData.correct++;
-		}
-		scoreData.totalScore += percentage;
-
-		if (addressType && scoreData.byType[addressType]) {
-			scoreData.byType[addressType].attempts++;
-			if (score === maxScore) {
-				scoreData.byType[addressType].correct++;
-			}
+		this.scores.attempts++;
+		this.scores.byType[questionType].attempts++;
+		if (isCorrect) {
+			this.scores.correct++;
+			this.scores.byType[questionType].correct++;
+			this.scores.streak++;
+		} else {
+			this.scores.streak = 0;
 		}
 
 		// Add to history (keep last 50 entries)
-		scoreData.history.unshift({
+		this.scores.history.unshift({
 			timestamp: Date.now(),
-			correct: score === maxScore,
-			addressType: addressType || "unknown",
-			address,
+			correct: isCorrect,
+			questionType: questionType || "unknown",
 		});
 
-		if (scoreData.history.length > 50) {
-			scoreData.history = scoreData.history.slice(0, 50);
+		if (this.scores.history.length > 20) {
+			this.scores.history = this.scores.history.slice(0, 20);
 		}
 
 		this.saveScores();
@@ -198,21 +153,14 @@ export class ScoreManager {
 		level: LevelInfo;
 		progress: number;
 		nextLevel: LevelInfo | null;
+		streak: number;
 	} {
-		const stats = Object.values(this.scores).reduce(
-			(acc, score) => ({
-				totalAttempts: acc.totalAttempts + score.attempts,
-				totalCorrect: acc.totalCorrect + score.correct,
-				totalScore: acc.totalScore + score.totalScore,
-			}),
-			{ totalAttempts: 0, totalCorrect: 0, totalScore: 0 },
-		);
-
+		const totalAttempts = this.scores.attempts;
+		const totalCorrect = this.scores.correct;
+		const streak = this.scores.streak;
+		const totalPoints = totalCorrect;
 		const accuracy =
-			stats.totalAttempts > 0
-				? (stats.totalCorrect / stats.totalAttempts) * 100
-				: 0;
-		const totalPoints = stats.totalCorrect;
+			totalAttempts > 0 ? (totalCorrect / totalAttempts) * 100 : 0;
 
 		// Find current level
 		let currentLevel = this.levels[0];
@@ -246,13 +194,14 @@ export class ScoreManager {
 		}
 
 		return {
-			totalAttempts: stats.totalAttempts,
-			totalCorrect: stats.totalCorrect,
+			totalAttempts,
+			totalCorrect,
 			accuracy,
 			totalPoints,
 			level: currentLevel,
 			progress,
 			nextLevel,
+			streak,
 		};
 	}
 
@@ -265,14 +214,12 @@ export class ScoreManager {
 			{ attempts: number; correct: number; accuracy: number }
 		> = {};
 
-		Object.values(this.scores).forEach((score) => {
-			Object.entries(score.byType).forEach(([type, stats]) => {
-				if (!typeStats[type]) {
-					typeStats[type] = { attempts: 0, correct: 0, accuracy: 0 };
-				}
-				typeStats[type].attempts += stats.attempts;
-				typeStats[type].correct += stats.correct;
-			});
+		Object.entries(this.scores.byType).forEach(([type, stats]) => {
+			if (!typeStats[type]) {
+				typeStats[type] = { attempts: 0, correct: 0, accuracy: 0 };
+			}
+			typeStats[type].attempts += stats.attempts;
+			typeStats[type].correct += stats.correct;
 		});
 
 		// Calculate accuracy for each type
@@ -286,10 +233,8 @@ export class ScoreManager {
 	}
 
 	resetAllScores(): void {
-		this.scores = {};
-		this.streak = 0;
+		this.scores = blankScoreData;
 		this.saveScores();
-		this.saveStreak();
 	}
 
 	formatStreakEmojis(streak: number): string {

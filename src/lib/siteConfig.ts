@@ -18,10 +18,6 @@ export interface SiteConfig {
 }
 
 export interface ScoringConfig {
-	/** Points awarded for correct answers */
-	pointsPerCorrect: number;
-	/** Points deducted for incorrect answers */
-	pointsPerIncorrect: number;
 	/** Custom level system (optional, falls back to duck levels) */
 	customLevels?: LevelInfo[];
 }
@@ -36,53 +32,52 @@ export interface Level {
 
 /** Network Address Practice site configuration */
 export const SITE_CONFIG: SiteConfig = {
-	siteKey: "network-addresses",
-	title: "Network Address Practice",
-	subtitle: "Master the identification of IPv4, IPv6, and MAC addresses",
+	siteKey: "data-units",
+	title: "Data Units",
+	subtitle: "Master the conversion of data units & file sizes",
 	icon: "🦆",
 	scoring: {
-		pointsPerCorrect: 10,
-		pointsPerIncorrect: 0,
 		customLevels: [
 			{
 				emoji: "🥚",
-				title: "Network Newbie",
-				description: "Just hatched into networking!",
+				title: "Byte Beginner",
+				description: "Just cracked into the world of storage!",
 				minPoints: 0,
 				minAccuracy: 0,
 			},
 			{
 				emoji: "🐣",
-				title: "Address Apprentice",
-				description: "Taking your first paddle through IP waters!",
+				title: "Kilobyte Chick",
+				description: "Taking your first waddle through file sizes!",
 				minPoints: 5,
 				minAccuracy: 0,
 			},
 			{
 				emoji: "🐤",
-				title: "Protocol Paddler",
-				description: "Your address recognition is making waves!",
+				title: "Megabyte Mallard",
+				description: "Your storage calculations are really taking flight!",
 				minPoints: 12,
 				minAccuracy: 60,
 			},
 			{
 				emoji: "🦆",
-				title: "Network Navigator",
-				description: "Swimming confidently through address formats!",
+				title: "Gigabyte Goose",
+				description: "Swimming smoothly through unit conversions!",
 				minPoints: 25,
 				minAccuracy: 70,
 			},
 			{
 				emoji: "🦆✨",
-				title: "Packet Pond Master",
-				description: "Soaring above the subnet with elegant identification!",
+				title: "Terabyte Teal",
+				description: "Soaring through storage with byte-sized brilliance!",
 				minPoints: 50,
 				minAccuracy: 80,
 			},
 			{
 				emoji: "🪿👑",
-				title: "Golden Gateway Guru",
-				description: "The legendary address whisperer of the network!",
+				title: "Petabyte Pond Emperor",
+				description:
+					"The legendary storage sage - no file size can ruffle your feathers!",
 				minPoints: 75,
 				minAccuracy: 90,
 			},

@@ -1,216 +1,158 @@
 
-# 🦆 Network Address Practice - React Edition
+# GCSE Units - Computer Science Practice
 
-A modern React application for learning and practicing network address identification. Students can identify IPv4, IPv6, MAC addresses, and invalid address formats through interactive quizzes with a duck-themed progression system.
+A comprehensive practice application for GCSE Computer Science students to master unit conversions, file size calculations, and storage capacity problems. Built with modern React, TypeScript, and Tailwind CSS.
 
-## 🚀 Features
+## 🎯 Features
 
-- **Interactive Quiz**: Identify different types of network addresses
-- **Address Types**: IPv4, IPv6, MAC addresses, and invalid formats
-- **Progression System**: Duck-themed levels from "Network Newbie" 🥚 to "Golden Gateway Guru" 🪿👑
-- **Streak Tracking**: Visual streak counter with emoji representations
-- **Score Analytics**: Detailed statistics by address type and overall performance
-- **Keyboard Shortcuts**: Use keys 1-4 for quick answer selection
-- **Hint System**: Built-in reference guide for address formats
-- **Navigation Hub**: Links to other GCSE Computer Science practice tools
+- **Unit Conversion Practice** - Convert between bytes, kilobytes, megabytes, gigabytes, and terabytes
+- **File Size Calculator** - Calculate image, sound, and text file sizes with detailed explanations  
+- **Capacity Calculator** - Determine storage requirements and file counts
+- **Progress Tracking** - Built-in scoring system with detailed analytics
+- **Responsive Design** - Works seamlessly on desktop, tablet, and mobile
+- **Educational Explanations** - Step-by-step breakdowns for every calculation
 
-## 🛠️ Tech Stack
+## 🚀 Live Demo
 
-- **React 19** with TypeScript
-- **TanStack React Router** (file-based routing)
-- **Tailwind CSS** (utility-first styling)
-- **Vite** (build tool with SWC)
-- **Vitest** (testing framework)
-- **Biome** (linting and formatting)
+Visit the live application: [GCSE Units Practice](https://gcseunits.netlify.app/)
 
-## 📦 Installation
+## 🛠️ Technology Stack
 
-1. **Clone the repository**
-   ```bash
-   git clone <repository-url>
-   cd IPorMAC-React
-   ```
+- **React 19** & **TypeScript** for type-safe component development
+- **Vite** for fast development and optimized builds
+- **TanStack React Router** for client-side routing
+- **Tailwind CSS** for responsive, utility-first styling
+- **Biome** for consistent code formatting and linting
+- **Vitest + Testing Library** for comprehensive testing
 
-2. **Install dependencies**
-   ```bash
-   npm install
-   ```
+## 🎮 How to Use
 
-3. **Start development server**
-   ```bash
-   npm run dev
-   ```
+### Unit Converter
+Practice converting between different data units:
+- Enter a value and select source/target units
+- Get instant feedback with detailed conversion steps
+- Advanced mode includes decimal and complex conversions
 
-4. **Open in browser**
-   Navigate to `http://localhost:5173`
+### File Size Calculator  
+Calculate storage requirements for digital files:
+- **Image Files:** Based on dimensions and color depth
+- **Sound Files:** Based on sample rate, bit depth, and duration
+- **Text Files:** Based on character count and encoding
 
-## 📜 Available Scripts
+### Capacity Calculator
+Understand storage capacity relationships:
+- Calculate how many files fit on a storage device
+- Determine total storage needed for multiple files
+- Learn the relationship between file sizes and storage capacity
 
-- `npm run dev` - Start development server
-- `npm run build` - Build for production
-- `npm run preview` - Preview production build
-- `npm run test` - Run tests
-- `npm run test:ui` - Run tests with UI
-- `npm run lint` - Check code quality
-- `npm run format` - Format code
-- `npm run type-check` - Check TypeScript types
-- `npm run preview` - Preview production build
-- `npm run test` - Run tests
-- `npm run test:ui` - Run tests with UI
-- `npm run lint` - Check code quality
-- `npm run format` - Format code
-- `npm run type-check` - Check TypeScript types
+## 🏁 Getting Started
 
-## 🎯 How to Use
+### Prerequisites
+- Node.js 18+ and npm
 
-### Playing the Quiz
+### Installation
 
-1. **View the Address**: A network address will be displayed in the blue panel
-2. **Choose Answer Type**: Click one of the four options or use keyboard shortcuts:
-   - **1** for IPv4
-   - **2** for IPv6  
-   - **3** for MAC
-   - **4** for None (invalid address)
-3. **Get Feedback**: See if you're correct and learn why
-4. **Continue**: Click "Next Question" or press Enter/Space to continue
-5. **Track Progress**: View your streak and access detailed statistics
+```bash
+# Clone the repository
+git clone https://github.com/domluther/GCSEUnits.git
+cd GCSEUnits
 
-### Understanding Address Types
+# Install dependencies
+npm install
 
-- **IPv4**: 4 decimal numbers (0-255) separated by dots
-  - Example: `192.168.1.1`
-- **IPv6**: 8 groups of 4 hex digits separated by colons
-  - Example: `2001:0db8:85a3:0000:0000:8a2e:0370:7334`
-- **MAC**: 6 pairs of hex digits separated by colons or dashes
-  - Example: `00:1A:2B:3C:4D:5E`
-- **Invalid**: Addresses that don't follow proper formatting rules
-
-### Level Progression
-
-Progress through duck-themed levels based on your performance:
-- 🥚 **Network Newbie** (0+ points, 0%+ accuracy)
-- 🐣 **Address Apprentice** (5+ points, 0%+ accuracy)
-- 🐤 **Protocol Paddler** (12+ points, 60%+ accuracy)
-- 🦆 **Network Navigator** (25+ points, 70%+ accuracy)
-- 🦆✨ **Packet Pond Master** (50+ points, 80%+ accuracy)
-- 🪿👑 **Golden Gateway Guru** (75+ points, 90%+ accuracy)
-
-## 🔧 Project Structure
-
-```
-src/
-├── components/              # React components
-│   ├── ui/                 # UI primitives (shadcn/ui)
-│   ├── Footer.tsx          # Site footer
-│   ├── Header.tsx          # Site header with navigation
-│   ├── HintPanel.tsx       # Address format reference
-│   ├── QuizButton.tsx      # Custom button component
-│   ├── QuizLayout.tsx      # Main layout wrapper
-│   ├── ScoreButton.tsx     # Score display button
-│   ├── SimpleQuizBody.tsx  # Quiz interface
-│   ├── SiteNavigation.tsx  # Navigation menu
-│   ├── StatsModal.tsx      # Statistics modal
-│   └── index.ts            # Component exports
-├── hooks/                  # Custom React hooks
-│   ├── useQuizLogic.ts     # Quiz state management
-│   └── index.ts            # Hook exports
-├── lib/                    # Utilities and business logic
-│   ├── addressGenerator.ts # Address generation logic
-│   ├── navigationConfig.ts # Navigation configuration
-│   ├── scoreManager.ts     # Score tracking and levels
-│   ├── siteConfig.ts       # Site configuration
-│   └── utils.ts            # Shared utilities
-├── routes/                 # File-based routing
-│   ├── __root.tsx          # Root layout
-│   └── index.tsx           # Main quiz page
-└── test/                   # Test files
+# Start development server
+npm run dev
 ```
 
-## 🎨 Styling
+### Available Scripts
 
-This project uses Tailwind CSS for styling with:
-- Responsive design for all screen sizes
-- Gradient backgrounds and modern UI components
-- Smooth transitions and hover effects
-- Accessibility-focused design patterns
+### Available Scripts
 
-## 📊 Data Persistence
+```bash
+# Development server
+npm run dev
 
-- **Local Storage**: Scores, streaks, and progress are saved locally
-- **Statistics Tracking**: Performance broken down by address type
-- **History**: Recent quiz attempts are tracked
-- **Reset Option**: Users can reset all scores if needed
+# Production build
+npm run build
+
+# Preview production build
+npm run preview
+
+# Run tests
+npm run test
+npm run test:run  # Run once
+npm run test:ui   # Test UI
+
+# Code quality
+npm run lint      # Check linting
+npm run format    # Format code
+npm run type-check # TypeScript checking
+```
+
+## 📚 Educational Value
+
+This application is designed specifically for GCSE Computer Science students and covers:
+
+- **Data Representation:** Understanding how different file types are stored
+- **Units and Calculations:** Converting between binary units (bytes, KB, MB, GB, TB) 
+- **Problem Solving:** Working through multi-step calculations with guidance
+- **Real-World Applications:** Understanding storage requirements for actual file types
+
+## 🎓 GCSE Curriculum Alignment
+
+- **AQA Computer Science:** Unit 3.2 (Data Representation)
+- **OCR Computer Science:** J277 Component 1 (Data representation)
+- **Edexcel Computer Science:** Topic 4 (Data representation)
 
 ## 🧪 Testing
 
+The application includes comprehensive test coverage for:
+- Question generation algorithms
+- Answer validation logic  
+- UI component interactions
+- Score tracking and persistence
+
 Run tests with:
 ```bash
-npm run test        # Run tests in watch mode
-npm run test:run    # Run tests once
-npm run test:ui     # Run tests with UI
+npm run test        # Watch mode
+npm run test:run    # Single run
+npm run test:ui     # Interactive UI
 ```
 
-## 🏗️ Architecture Highlights
+## 🏗️ Architecture
 
-### Component Library Structure
-- **Reusable Components**: All components are generic and configurable via props
-- **Site Configuration**: Centralized config in `siteConfig.ts` with hints and custom levels
-- **Generic ScoreManager**: Accepts custom level systems for different quiz types
-- **Absolute Imports**: Consistent `@/` imports throughout the codebase
+### Component Structure
+- **Route Components:** Individual calculator pages with shared layout
+- **Calculator Components:** Core logic for each practice mode
+- **Shared Components:** Reusable UI elements and layouts  
+- **Hooks & Utils:** Quiz logic, scoring, and mathematical utilities
 
-### Key Features
-- **Generic Quiz Logic**: `useQuizLogic` hook handles common quiz patterns
-- **Configurable Hints**: Site-specific help content in configuration
-- **Custom Level Systems**: Each site can define its own progression themes
-- **Type Safety**: Full TypeScript coverage with proper interfaces
-
-## 🔄 Migration from Legacy Version
-
-This React version replaces the vanilla JavaScript version with:
-
-### ✅ Maintained Features
-- All original quiz functionality
-- Duck-themed progression system
-- Score tracking and statistics
-- Keyboard shortcuts (1-4)
-- Hint panel with address format rules
-- Navigation to other GCSE CS tools
-- Streak tracking with emoji visualization
-
-### ⚡ Improvements
-- Modern React architecture with TypeScript
-- Generic, reusable component library
-- Configurable site settings and level systems
-- Better responsive design and accessibility
-- Improved code maintainability and error handling
-- Modern development tooling (Vite, Biome)
-- Absolute import paths for better refactoring
-
-## 🌐 Related Projects
-
-This is part of a suite of GCSE Computer Science practice tools:
-- [Data Units Converter](https://convertdataunits.netlify.app/)
-- [Sorting Algorithm Visualizer](https://ocrsortvisualiser.netlify.app/)
-- [Trace Table Practice](https://tracetablepractice.netlify.app/)
-- [Programming Practice](https://input-output-practice.netlify.app/)
-- [Boolean Algebra Practice](https://booleanalgebrapractice.netlify.app/)
-
-## 📝 License
-
-Created by [Mr Luther](https://mrluthercodes.netlify.app/) - 2025
+### Key Files
+- `src/routes/` - Application pages (unit converter, file size, capacity)
+- `src/components/` - Reusable React components  
+- `src/lib/` - Utility functions, configuration, and business logic
+- `src/contexts/` - React contexts (theme provider)
 
 ## 🤝 Contributing
 
 1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add some amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
+2. Create a feature branch (`git checkout -b feature/improvement`)
+3. Commit changes (`git commit -am 'Add new feature'`)
+4. Push to the branch (`git push origin feature/improvement`) 
 5. Open a Pull Request
 
-## 🐛 Bug Reports
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 🙏 Acknowledgments
+
+- Built for GCSE Computer Science students and educators
+- Inspired by the need for interactive, educational calculation practice
+- Uses modern web technologies for optimal learning experience
 
 ---
 
-Happy learning! 🦆📚
+*For technical documentation and development guides, see the other markdown files in this repository.*
 
 

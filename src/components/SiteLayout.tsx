@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 import { Header } from "@/components/Header";
 
-interface QuizLayoutProps {
+interface SiteLayoutProps {
 	/** The main content area of the quiz */
 	children: ReactNode;
 	/** Title displayed in the header */
@@ -18,13 +18,13 @@ interface QuizLayoutProps {
  * Reusable layout component for GCSE CS practice sites
  * Provides consistent header, navigation, and content structure
  */
-export function QuizLayout({
+export function SiteLayout({
 	children,
 	title,
 	subtitle,
 	scoreButton,
 	titleIcon = "🦆",
-}: QuizLayoutProps) {
+}: SiteLayoutProps) {
 	return (
 		<>
 			<Header
