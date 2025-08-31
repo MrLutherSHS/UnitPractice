@@ -352,6 +352,8 @@ export function UnitConverter({ onScoreUpdate }: UnitConverterProps) {
 											checked={showUnitsOrder}
 											onCheckedChange={setShowUnitsOrder}
 											className="data-[state=unchecked]:bg-gray-200 data-[state=checked]:bg-blue-600"
+											aria-label="Toggle units order hint"
+											title="Show/hide the ordered list of units from smallest to largest"
 										/>
 									</div>
 
@@ -365,6 +367,8 @@ export function UnitConverter({ onScoreUpdate }: UnitConverterProps) {
 											checked={showConversionPath}
 											onCheckedChange={setShowConversionPath}
 											className="data-[state=unchecked]:bg-gray-200 data-[state=checked]:bg-blue-600"
+											aria-label="Toggle conversion path hint"
+											title="Show/hide the step-by-step conversion path between units"
 										/>
 									</div>
 
@@ -388,6 +392,8 @@ export function UnitConverter({ onScoreUpdate }: UnitConverterProps) {
 												);
 											}}
 											className="data-[state=unchecked]:bg-gray-200 data-[state=checked]:bg-blue-600"
+											aria-label="Toggle advanced mode"
+											title="Enable harder questions with decimal values and complex conversions"
 										/>
 									</div>
 								</div>
