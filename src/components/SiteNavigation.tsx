@@ -66,10 +66,10 @@ export function SiteNavigation({
 							<Menu className="w-4 h-4 sm:w-5 sm:h-5" />
 						) : (
 							<>
-								<span className="hidden lg:block text-sm xl:text-base">
+								<span className="hidden text-sm lg:block xl:text-base">
 									{icon} {title}
 								</span>
-								<span className="hidden sm:block lg:hidden text-sm">
+								<span className="hidden text-sm sm:block lg:hidden">
 									{icon}
 								</span>
 								<Menu className="w-4 h-4 sm:w-5 sm:h-5 lg:hidden" />
@@ -90,7 +90,7 @@ export function SiteNavigation({
 					sideOffset={8}
 				>
 					{/* Header */}
-					<div className="px-3 sm:px-4 py-2 sm:py-3 text-xs sm:text-sm font-semibold text-center text-white uppercase bg-gradient-to-r from-gray-700 to-gray-900">
+					<div className="px-3 py-2 text-xs font-semibold text-center text-white uppercase sm:px-4 sm:py-3 sm:text-sm bg-gradient-to-r from-header/80 to-header">
 						Computer Science Practice
 					</div>
 
@@ -110,10 +110,10 @@ export function SiteNavigation({
 									rel="noopener noreferrer"
 								>
 									<div className="flex flex-col space-y-1">
-										<div className="text-base sm:text-lg font-bold text-center transition-colors group-hover:text-indigo-600">
+										<div className="text-base font-bold text-center transition-colors sm:text-lg group-hover:text-indigo-600">
 											{item.title}
 										</div>
-										<div className="text-xs sm:text-sm text-gray-600 leading-tight">
+										<div className="text-xs leading-tight text-gray-600 sm:text-sm">
 											{item.description}
 										</div>
 									</div>

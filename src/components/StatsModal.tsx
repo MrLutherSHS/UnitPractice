@@ -78,17 +78,17 @@ export function StatsModal({
 				role="document"
 			>
 				{/* Header */}
-				<div className="flex items-center justify-between px-6 py-4 text-white bg-gradient-to-r from-gray-700 to-gray-900">
+				<div className="flex items-center justify-between px-6 py-4 text-white bg-gradient-to-r from-header/80 to-header">
 					<h2
 						id={titleId}
-						className="flex items-center text-2xl font-bold gap-2"
+						className="flex items-center gap-2 text-2xl font-bold"
 					>
 						{headerIcon} {title}
 					</h2>
 					<button
 						type="button"
 						onClick={onClose}
-						className="flex items-center justify-center w-8 h-8 text-2xl text-white hover:text-gray-200 transition-colors"
+						className="flex items-center justify-center w-8 h-8 text-2xl text-white transition-colors hover:text-gray-200"
 					>
 						<X className="w-6 h-6" />
 					</button>
@@ -136,7 +136,7 @@ export function StatsModal({
 											className="h-2 mb-3 [&>div]:bg-green-600 "
 										/>
 										{/* Detailed requirements */}
-										<div className="text-sm text-white space-y-1">
+										<div className="space-y-1 text-sm text-white">
 											{overallStats.accuracy <
 												overallStats.nextLevel.minAccuracy && (
 												<div>
@@ -172,7 +172,7 @@ export function StatsModal({
 									</CardTitle>
 								</CardHeader>
 								<CardContent>
-									<div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+									<div className="grid grid-cols-1 gap-4 md:grid-cols-3">
 										<div className="p-4 text-center border-l-4 border-green-500 rounded-lg bg-green-50">
 											<div className="text-2xl font-bold text-green-600">
 												{overallStats.totalCorrect}
@@ -260,7 +260,7 @@ export function StatsModal({
 				</div>
 
 				{/* Footer */}
-				<div className="flex items-center justify-between px-6 py-4 bg-gray-50 gap-4">
+				<div className="flex items-center justify-between gap-4 px-6 py-4 bg-gray-50">
 					<Button variant="destructive" onClick={handleResetScores}>
 						Reset All Scores
 					</Button>
