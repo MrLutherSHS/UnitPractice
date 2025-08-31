@@ -770,7 +770,7 @@ export function MultipleChoice({ onScoreUpdate }: UnitConverterProps) {
 								<div className="mt-6">
 									<fieldset>
 										<legend className="sr-only">Choose your answer</legend>
-										<div className="flex flex-col gap-4 mb-2 sm:grid sm:grid-cols-2">
+										<div className="flex flex-col mb-2 gap-4 sm:grid sm:grid-cols-2">
 											{/* MODIFICATION: Updated button structure */}
 											{currentQuestion.options.map((option, index) => (
 												<Button
@@ -868,7 +868,7 @@ export function MultipleChoice({ onScoreUpdate }: UnitConverterProps) {
 																);
 															}}
 															aria-label="Generate next question"
-															className="px-8 py-3 font-semibold text-white transition-all duration-200 transform rounded-lg shadow-lg bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 hover:shadow-xl hover:-translate-y-1"
+															className="px-8 py-3 font-semibold text-white rounded-lg shadow-lg transition-all duration-200 transform bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 hover:shadow-xl hover:-translate-y-1"
 														>
 															<span className="mr-2">🎯</span>
 															Next Question
@@ -885,7 +885,7 @@ export function MultipleChoice({ onScoreUpdate }: UnitConverterProps) {
 															(section, sectionIndex) => (
 																<div
 																	key={section.title}
-																	className="p-4 bg-white bg-opacity-50 border border-gray-200 rounded-lg"
+																	className="p-4 bg-white border border-gray-200 rounded-lg bg-opacity-50"
 																>
 																	<h4 className="flex items-center mb-2 text-base font-bold text-indigo-900">
 																		<span className="flex items-center justify-center flex-shrink-0 w-6 h-6 mr-3 text-sm font-semibold text-indigo-800 bg-indigo-100 rounded-full">
@@ -964,7 +964,7 @@ export function MultipleChoice({ onScoreUpdate }: UnitConverterProps) {
 												setFeedback,
 											);
 										}}
-										className="px-8 py-3 font-semibold text-white transition-all duration-200 transform rounded-lg shadow-lg bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 hover:shadow-xl hover:-translate-y-1"
+										className="px-8 py-3 font-semibold text-white rounded-lg shadow-lg transition-all duration-200 transform bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 hover:shadow-xl hover:-translate-y-1"
 									>
 										<span className="mr-2">🚀</span>
 										Start Practicing

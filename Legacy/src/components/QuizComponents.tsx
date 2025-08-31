@@ -18,9 +18,9 @@ export const FeedbackBox = ({
 		>
 			<div className="flex items-center justify-center gap-3">
 				{feedback.isCorrect ? (
-					<Check className="h-6 w-6 text-green-600 mt-1" />
+					<Check className="w-6 h-6 mt-1 text-green-600" />
 				) : (
-					<X className="h-6 w-6 text-red-600 mt-1" />
+					<X className="w-6 h-6 mt-1 text-red-600" />
 				)}
 				<AlertDescription className="text-xl">
 					<div
@@ -30,11 +30,11 @@ export const FeedbackBox = ({
 					</div>
 					{!feedback.isCorrect && (
 						<div className="mt-4 text-gray-700">
-							<div className="font-semibold text-xl text-blue-900">
+							<div className="text-xl font-semibold text-blue-900">
 								Here's how to solve it:
 							</div>
 							{feedback.explanation.map((step, index) => (
-								<div key={index} className="ml-4 mt-2 text-lg text-blue-700">
+								<div key={index} className="mt-2 ml-4 text-lg text-blue-700">
 									{step}
 								</div>
 							))}
@@ -64,7 +64,7 @@ export const AnswerForm = ({
 	return (
 		<form
 			onSubmit={handleSubmit}
-			className="flex flex-col md:flex-row gap-4 items-center"
+			className="flex flex-col items-center md:flex-row gap-4"
 		>
 			<Input
 				type={type}
@@ -72,14 +72,14 @@ export const AnswerForm = ({
 				value={userAnswer}
 				onChange={handleAnswerChange}
 				placeholder="Enter your answer"
-				className="flex-1 p-4 h-14 border-2 border-blue-200 focus:border-blue-500 rounded-lg "
+				className="flex-1 p-4 border-2 border-blue-200 rounded-lg h-14 focus:border-blue-500 "
 			/>
 			{hasSubmitted ? (
 				<NewQuestionButton generateQuestion={generateQuestion} />
 			) : (
 				<Button
 					type="submit"
-					className="h-14 w-full md:w-64 font-semibold text-xl md:text-2xl text-white bg-blue-600 hover:bg-blue-700"
+					className="w-full text-xl font-semibold text-white bg-blue-600 h-14 md:w-64 md:text-2xl hover:bg-blue-700"
 				>
 					Check
 				</Button>
@@ -94,10 +94,10 @@ export const ScoreBox = ({
 	score: { correct: number; total: number };
 }) => {
 	return (
-		<div className="text-lg md:text-2xl mb-6 bg-gradient-to-r from-indigo-100 to-purple-100 p-2 md:p-4 rounded-lg">
+		<div className="p-2 mb-6 text-lg rounded-lg md:text-2xl bg-gradient-to-r from-indigo-100 to-purple-100 md:p-4">
 			<span className="font-semibold">Score:</span> {score.correct}/
 			{score.total}
-			<span className="text-indigo-600 ml-2">
+			<span className="ml-2 text-indigo-600">
 				({score.total > 0 ? Math.round((score.correct / score.total) * 100) : 0}
 				%)
 			</span>
@@ -113,7 +113,7 @@ export const NewQuestionButton = ({
 	return (
 		<Button
 			onClick={generateQuestion}
-			className="h-14 w-full md:w-64 font-semibold text-xl md:text-2xl text-white bg-blue-600 hover:bg-blue-700"
+			className="w-full text-xl font-semibold text-white bg-blue-600 h-14 md:w-64 md:text-2xl hover:bg-blue-700"
 		>
 			New Question
 		</Button>

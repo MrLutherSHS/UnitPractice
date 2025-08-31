@@ -6,7 +6,7 @@ export function ThemeToggle() {
 	const { theme, setTheme } = useTheme();
 
 	return (
-		<div className="flex items-center rounded-md border bg-card p-1">
+		<div className="flex items-center p-1 border rounded-md bg-card">
 			<button
 				onClick={() => setTheme("light")}
 				className={cn(
@@ -18,7 +18,7 @@ export function ThemeToggle() {
 				title="Light mode"
 				type="button"
 			>
-				<Sun className="h-4 w-4" />
+				<Sun className="w-4 h-4" />
 				<span className="sr-only">Light mode</span>
 			</button>
 			<button
@@ -32,7 +32,7 @@ export function ThemeToggle() {
 				title="Dark mode"
 				type="button"
 			>
-				<Moon className="h-4 w-4" />
+				<Moon className="w-4 h-4" />
 				<span className="sr-only">Dark mode</span>
 			</button>
 			<button
@@ -46,7 +46,7 @@ export function ThemeToggle() {
 				type="button"
 				title="System preference"
 			>
-				<Monitor className="h-4 w-4" />
+				<Monitor className="w-4 h-4" />
 				<span className="sr-only">System preference</span>
 			</button>
 		</div>
@@ -64,9 +64,9 @@ export function SimpleThemeToggle() {
 	};
 
 	const getIcon = () => {
-		if (theme === "light") return <Sun className="h-4 w-4" />;
-		if (theme === "dark") return <Moon className="h-4 w-4" />;
-		return <Monitor className="h-4 w-4" />;
+		if (theme === "light") return <Sun className="w-4 h-4" />;
+		if (theme === "dark") return <Moon className="w-4 h-4" />;
+		return <Monitor className="w-4 h-4" />;
 	};
 
 	const getLabel = () => {
@@ -79,7 +79,7 @@ export function SimpleThemeToggle() {
 		<button
 			onClick={toggleTheme}
 			type="button"
-			className="inline-flex items-center justify-center rounded-md px-3 py-2 text-sm font-medium ring-offset-background transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50"
+			className="inline-flex items-center justify-center px-3 py-2 text-sm font-medium rounded-md ring-offset-background transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50"
 			title={getLabel()}
 		>
 			{getIcon()}

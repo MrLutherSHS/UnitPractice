@@ -81,7 +81,7 @@ export function StatsModal({
 				<div className="flex items-center justify-between px-6 py-4 text-white bg-gradient-to-r from-header/80 to-header">
 					<h2
 						id={titleId}
-						className="flex items-center gap-2 text-2xl font-bold"
+						className="flex items-center text-2xl font-bold gap-2"
 					>
 						{headerIcon} {title}
 					</h2>
@@ -136,7 +136,7 @@ export function StatsModal({
 											className="h-2 mb-3 [&>div]:bg-green-600 "
 										/>
 										{/* Detailed requirements */}
-										<div className="space-y-1 text-sm text-white">
+										<div className="text-sm text-white space-y-1">
 											{overallStats.accuracy <
 												overallStats.nextLevel.minAccuracy && (
 												<div>
@@ -260,7 +260,7 @@ export function StatsModal({
 				</div>
 
 				{/* Footer */}
-				<div className="flex items-center justify-between gap-4 px-6 py-4 bg-gray-50">
+				<div className="flex items-center justify-between px-6 py-4 gap-4 bg-gray-50">
 					<Button variant="destructive" onClick={handleResetScores}>
 						Reset All Scores
 					</Button>

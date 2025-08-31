@@ -264,13 +264,13 @@ const FileSizeCalculator = () => {
 		<div className="w-full">
 			<div className="p-4">
 				<Card className="mx-auto shadow-xl bg-white/80 backdrop-blur">
-					<CardHeader className="bg-gradient-to-r from-blue-500 to-purple-500 text-white rounded-t-lg p-8">
-						<CardTitle className="flex justify-between items-center">
-							<span className="text-2xl md:text-4xl font-bold">{title}</span>
+					<CardHeader className="p-8 text-white rounded-t-lg bg-gradient-to-r from-blue-500 to-purple-500">
+						<CardTitle className="flex items-center justify-between">
+							<span className="text-2xl font-bold md:text-4xl">{title}</span>
 						</CardTitle>
-						<CardDescription className="text-white rounded-t-lg mt-4">
+						<CardDescription className="mt-4 text-white rounded-t-lg">
 							<div className="flex flex-col md:flex-row gap-6">
-								<div className="flex justify-between items-center gap-3">
+								<div className="flex items-center justify-between gap-3">
 									<span className="text-md md:text-lg">
 										Show calculation help
 									</span>
@@ -279,9 +279,9 @@ const FileSizeCalculator = () => {
 							</div>
 						</CardDescription>
 					</CardHeader>
-					<CardContent className="space-y-6 p-8">
+					<CardContent className="p-8 space-y-6">
 						{showHint && (
-							<Alert className="bg-gradient-to-r from-blue-50 to-purple-50 border-none p-6">
+							<Alert className="p-6 border-none bg-gradient-to-r from-blue-50 to-purple-50">
 								<div className="flex items-center gap-3">
 									<AlertDescription className="text-lg md:text-xl">
 										<div className="font-semibold text-indigo-900">
@@ -293,7 +293,7 @@ const FileSizeCalculator = () => {
 						)}
 						{currentQuestion ? (
 							<div className="space-y-6">
-								<div className="text-xl md:text-2xl font-semibold bg-gradient-to-r from-indigo-600 to-purple-600 text-white p-6 rounded-lg shadow">
+								<div className="p-6 text-xl font-semibold text-white rounded-lg shadow md:text-2xl bg-gradient-to-r from-indigo-600 to-purple-600">
 									{getQuestionText(currentQuestion)}
 								</div>
 								<AnswerForm
@@ -308,7 +308,7 @@ const FileSizeCalculator = () => {
 								{feedback && <FeedbackBox feedback={feedback} />}
 							</div>
 						) : (
-							<div className="text-lg md:text-2xl text-center text-indigo-600">
+							<div className="text-lg text-center text-indigo-600 md:text-2xl">
 								Click "New Question" to begin!
 							</div>
 						)}

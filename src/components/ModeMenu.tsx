@@ -18,9 +18,9 @@ export const ModeMenu = () => {
 				<Link key={mode.path} to={mode.path} className="flex-1 sm:flex-none">
 					<QuizButton
 						variant="menu"
-						className={`w-full sm:w-auto text-sm sm:text-base px-3 sm:px-6 py-3 sm:py-6 ${
+						className={`w-full sm:w-auto text-sm sm:text-base p-3 sm:p-6 ${
 							location.pathname === mode.path
-								? "text-white bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 hover:shadow-lg"
+								? "text-white bg-green-600  hover:bg-green-700 hover:shadow-lg"
 								: ""
 						}`}
 					>
