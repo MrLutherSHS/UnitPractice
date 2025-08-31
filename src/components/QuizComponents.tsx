@@ -2,4 +2,4 @@
 export {
 	AnswerForm,
 	FeedbackBox,
-} from "../../Legacy/src/components/QuizComponents";
+} from "../../legacy/src/components/QuizComponents";
