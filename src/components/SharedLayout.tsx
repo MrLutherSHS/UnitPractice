@@ -12,7 +12,7 @@ interface SharedLayoutProps {
 
 // Mode button data
 const MODES = [
-	{ label: "Converting Units", path: "/unitconvertor" },
+	{ label: "Converting Units", path: "/unitconverter" },
 	{ label: "Capacity Calculator", path: "/capacitycalculator" },
 	{ label: "File Size Calculator", path: "/filesize" },
 ];

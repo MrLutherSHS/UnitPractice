@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 
 // We need to extract the conversion functions from the component for testing
-// These are the core conversion functions from UnitConvertor.tsx
+// These are the core conversion functions from UnitConverter.tsx
 
 const units = [
 	"bits",
@@ -79,7 +79,7 @@ const getConversionPath = (fromUnit: string, toUnit: string): string[] => {
 	return path;
 };
 
-describe("Unit Convertor Functions", () => {
+describe("Unit Converter Functions", () => {
 	describe("getMultiplier", () => {
 		it("should return correct multipliers for each unit", () => {
 			expect(getMultiplier("bytes")).toBe(1);
