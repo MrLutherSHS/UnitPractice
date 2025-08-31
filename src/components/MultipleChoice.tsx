@@ -1,0 +1,845 @@
+import { useEffect, useId, useState } from "react";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Card, CardContent } from "@/components/ui/card";
+import { type ExplanationSection, formatNumber } from "@/lib/numberUtils";
+
+interface Question {
+	category: "Multiple Choice";
+	type: "conversion" | "smallest" | "largest";
+	params: {
+		sourceValue?: number;
+		sourceUnit?: string;
+		targetUnit?: string;
+		values?: Array<{ value: number; unit: string; bytes: number }>;
+	};
+	questionText: string;
+	options: string[];
+	correctAnswer: number; // Index of correct answer (0-3)
+	explanation: ExplanationSection[];
+}
+
+const expandUnit = (unit: string): string => {
+	switch (unit) {
+		case "bytes":
+			return "bytes";
+		case "KB":
+			return "kilobytes";
+		case "MB":
+			return "megabytes";
+		case "GB":
+			return "gigabytes";
+		case "TB":
+			return "terabytes";
+		default:
+			return unit;
+	}
+};
+
+// Unit conversion utilities
+const unitConversions: { [key: string]: number } = {
+	// All values in bytes
+	bytes: 1,
+	KB: 1000,
+	MB: 1000 * 1000,
+	GB: 1000 * 1000 * 1000,
+	TB: 1000 * 1000 * 1000 * 1000,
+};
+
+const convertToBytes = (value: number, unit: string): number => {
+	return value * unitConversions[unit];
+};
+
+const convertFromBytes = (bytes: number, targetUnit: string): number => {
+	return bytes / unitConversions[targetUnit];
+};
+
+// Question generators
+const generateConversionQuestion = (): Question => {
+	// Define conversion pairs that work well without calculator
+	const conversionPairs = [
+		{ source: 2, sourceUnit: "TB", targetUnit: "GB", answer: 2000 },
+		{ source: 3, sourceUnit: "TB", targetUnit: "GB", answer: 3000 },
+		{ source: 5, sourceUnit: "TB", targetUnit: "GB", answer: 5000 },
+		{ source: 2, sourceUnit: "TB", targetUnit: "MB", answer: 2000000 },
+		{ source: 4, sourceUnit: "GB", targetUnit: "MB", answer: 4000 },
+		{ source: 5, sourceUnit: "GB", targetUnit: "MB", answer: 5000 },
+		{ source: 8, sourceUnit: "GB", targetUnit: "MB", answer: 8000 },
+		{ source: 3000, sourceUnit: "MB", targetUnit: "GB", answer: 3 },
+		{ source: 5000, sourceUnit: "MB", targetUnit: "GB", answer: 5 },
+		{ source: 2000, sourceUnit: "KB", targetUnit: "MB", answer: 2 },
+		{ source: 4000, sourceUnit: "KB", targetUnit: "MB", answer: 4 },
+		{ source: 8000, sourceUnit: "KB", targetUnit: "MB", answer: 8 },
+		{ source: 3, sourceUnit: "MB", targetUnit: "KB", answer: 3000 },
+		{ source: 5, sourceUnit: "MB", targetUnit: "KB", answer: 5000 },
+		{ source: 2000000, sourceUnit: "bytes", targetUnit: "MB", answer: 2 },
+		{ source: 4000000, sourceUnit: "bytes", targetUnit: "MB", answer: 4 },
+	];
+
+	const conversion =
+		conversionPairs[Math.floor(Math.random() * conversionPairs.length)];
+	const {
+		source: sourceValue,
+		sourceUnit,
+		targetUnit,
+		answer: correctAnswer,
+	} = conversion;
+
+	// Generate believable distractors
+	let wrongAnswers: number[];
+
+	// For conversions where we expect the same starting digit, create distractors with different scales
+	if (
+		(sourceUnit === "TB" && targetUnit === "MB") ||
+		(sourceUnit === "GB" && targetUnit === "KB") ||
+		(sourceUnit === "MB" && targetUnit === "bytes")
+	) {
+		// These are big jumps - create distractors with wrong number of zeros
+		wrongAnswers = [
+			correctAnswer / 1000, // Missing 3 zeros
+			correctAnswer / 100, // Missing 2 zeros
+			correctAnswer * 10, // Extra zero
+		];
+	} else if (sourceUnit === "TB" && targetUnit === "GB") {
+		// TB to GB: should have same starting digit with 000
+		wrongAnswers = [
+			sourceValue * 100, // Wrong scale (100 instead of 1000)
+			sourceValue * 10, // Wrong scale (10 instead of 1000)
+			sourceValue * 10000, // Too many zeros
+		];
+	} else if (targetUnit === "bytes") {
+		// Converting to bytes - create distractors with different scales
+		wrongAnswers = [
+			correctAnswer / 1000, // Divided instead of multiplied
+			correctAnswer * 10, // Wrong scale
+			correctAnswer / 100, // Wrong calculation
+		];
+	} else {
+		// General distractors
+		wrongAnswers = [
+			correctAnswer * 10,
+			correctAnswer / 10,
+			correctAnswer * 100,
+		];
+	}
+
+	// Ensure wrong answers are positive and reasonable
+	wrongAnswers = wrongAnswers.filter((ans) => ans > 0 && ans !== correctAnswer);
+
+	// Take first 3 distractors and add correct answer
+	const allOptions = [correctAnswer, ...wrongAnswers.slice(0, 3)];
+	const shuffledOptions = allOptions.sort(() => Math.random() - 0.5);
+	const correctIndex = shuffledOptions.indexOf(correctAnswer);
+
+	const formattedOptions = shuffledOptions.map((option) => {
+		if (targetUnit === "bytes") {
+			return `${formatNumber(Math.round(option))} ${targetUnit}`;
+		}
+		return `${formatNumber(option)} ${targetUnit}`;
+	});
+
+	return {
+		category: "Multiple Choice",
+		type: "conversion",
+		params: { sourceValue, sourceUnit, targetUnit },
+		questionText: `Identify the quantity of ${expandUnit(targetUnit)} that is the same as ${formatNumber(sourceValue)} ${expandUnit(sourceUnit)}.`,
+		options: formattedOptions,
+		correctAnswer: correctIndex,
+		explanation: [
+			{
+				title: "Identify the conversion",
+				details: [
+					`Converting ${formatNumber(sourceValue)} ${sourceUnit} to ${targetUnit}`,
+					`1 ${sourceUnit} = ${formatNumber(unitConversions[sourceUnit] / unitConversions[targetUnit])} ${targetUnit}`,
+				],
+			},
+			{
+				title: "Calculate the result",
+				details: [
+					`${formatNumber(sourceValue)} × ${formatNumber(unitConversions[sourceUnit] / unitConversions[targetUnit])} = ${formatNumber(correctAnswer)} ${targetUnit}`,
+				],
+			},
+		],
+	};
+};
+
+const generateComparisonQuestion = (): Question => {
+	const type = Math.random() < 0.5 ? "smallest" : "largest";
+
+	// Predefined sets of values that are calculator-friendly and create good distractors
+	const comparisonSets = [
+		// Set 1: Mix of units with clear ordering
+		[
+			{ value: 300, unit: "MB" },
+			{ value: 2.1, unit: "GB" },
+			{ value: 200000, unit: "KB" },
+			{ value: 0.0021, unit: "TB" },
+		],
+		// Set 2: Different scale mix
+		[
+			{ value: 2000000, unit: "bytes" },
+			{ value: 2300, unit: "KB" },
+			{ value: 200, unit: "MB" },
+			{ value: 0.1, unit: "GB" },
+		],
+		// Set 3: Close values requiring careful conversion
+		[
+			{ value: 1500, unit: "MB" },
+			{ value: 1.6, unit: "GB" },
+			{ value: 1300000, unit: "KB" },
+			{ value: 0.0014, unit: "TB" },
+		],
+		// Set 4: Another mix
+		[
+			{ value: 5000000, unit: "bytes" },
+			{ value: 4800, unit: "KB" },
+			{ value: 5.2, unit: "MB" },
+			{ value: 0.004, unit: "GB" },
+		],
+		// Set 5: Larger numbers
+		[
+			{ value: 800, unit: "MB" },
+			{ value: 0.9, unit: "GB" },
+			{ value: 750000, unit: "KB" },
+			{ value: 0.0008, unit: "TB" },
+		],
+		// Set 6: Small file sizes
+		[
+			{ value: 50000, unit: "bytes" },
+			{ value: 45, unit: "KB" },
+			{ value: 0.06, unit: "MB" },
+			{ value: 0.000055, unit: "GB" },
+		],
+		// Set 7: Medium range mix
+		[
+			{ value: 750, unit: "MB" },
+			{ value: 0.8, unit: "GB" },
+			{ value: 700000, unit: "KB" },
+			{ value: 800000000, unit: "bytes" },
+		],
+		// Set 8: Close decimals
+		[
+			{ value: 2.5, unit: "GB" },
+			{ value: 2400, unit: "MB" },
+			{ value: 2600000, unit: "KB" },
+			{ value: 0.0023, unit: "TB" },
+		],
+		// Set 9: Round numbers
+		[
+			{ value: 3000, unit: "MB" },
+			{ value: 3.2, unit: "GB" },
+			{ value: 2800000, unit: "KB" },
+			{ value: 0.003, unit: "TB" },
+		],
+		// Set 10: Smaller scale
+		[
+			{ value: 120, unit: "MB" },
+			{ value: 0.15, unit: "GB" },
+			{ value: 100000, unit: "KB" },
+			{ value: 140000000, unit: "bytes" },
+		],
+		// Set 11: Mixed decimals
+		[
+			{ value: 4.5, unit: "GB" },
+			{ value: 4200, unit: "MB" },
+			{ value: 4800000, unit: "KB" },
+			{ value: 0.004, unit: "TB" },
+		],
+		// Set 12: Large range
+		[
+			{ value: 6000, unit: "MB" },
+			{ value: 5.8, unit: "GB" },
+			{ value: 6200000, unit: "KB" },
+			{ value: 0.0059, unit: "TB" },
+		],
+		// Set 13: Very small files
+		[
+			{ value: 15000, unit: "bytes" },
+			{ value: 12, unit: "KB" },
+			{ value: 0.018, unit: "MB" },
+			{ value: 0.000014, unit: "GB" },
+		],
+		// Set 14: Tricky decimals
+		[
+			{ value: 1.2, unit: "GB" },
+			{ value: 1300, unit: "MB" },
+			{ value: 1100000, unit: "KB" },
+			{ value: 0.0012, unit: "TB" },
+		],
+		// Set 15: Mid-range variety
+		[
+			{ value: 900, unit: "MB" },
+			{ value: 0.85, unit: "GB" },
+			{ value: 950000, unit: "KB" },
+			{ value: 880000000, unit: "bytes" },
+		],
+		// Set 16: Large files
+		[
+			{ value: 7500, unit: "MB" },
+			{ value: 7.2, unit: "GB" },
+			{ value: 7800000, unit: "KB" },
+			{ value: 0.007, unit: "TB" },
+		],
+		// Set 17: Close comparison
+		[
+			{ value: 2.8, unit: "GB" },
+			{ value: 2700, unit: "MB" },
+			{ value: 2900000, unit: "KB" },
+			{ value: 0.0028, unit: "TB" },
+		],
+		// Set 18: Mixed small/large
+		[
+			{ value: 350, unit: "MB" },
+			{ value: 0.4, unit: "GB" },
+			{ value: 320000, unit: "KB" },
+			{ value: 380000000, unit: "bytes" },
+		],
+		// Set 19: Even distribution
+		[
+			{ value: 1800, unit: "MB" },
+			{ value: 1.7, unit: "GB" },
+			{ value: 1900000, unit: "KB" },
+			{ value: 0.0018, unit: "TB" },
+		],
+		// Set 20: Final variety set
+		[
+			{ value: 650, unit: "MB" },
+			{ value: 0.7, unit: "GB" },
+			{ value: 600000, unit: "KB" },
+			{ value: 680000000, unit: "bytes" },
+		],
+		// Set 1: Mix of units with clear ordering
+		[
+			{ value: 300, unit: "MB" },
+			{ value: 2.1, unit: "GB" },
+			{ value: 200000, unit: "KB" },
+			{ value: 0.0021, unit: "TB" },
+		],
+		// Set 2: Different scale mix
+		[
+			{ value: 2000000, unit: "bytes" },
+			{ value: 2300, unit: "KB" },
+			{ value: 200, unit: "MB" },
+			{ value: 0.1, unit: "GB" },
+		],
+		// Set 3: Close values requiring careful conversion
+		[
+			{ value: 1500, unit: "MB" },
+			{ value: 1.6, unit: "GB" },
+			{ value: 1300000, unit: "KB" },
+			{ value: 0.0014, unit: "TB" },
+		],
+		// Set 4: Bytes looks biggest but isn't
+		[
+			{ value: 8000000, unit: "bytes" },
+			{ value: 12, unit: "MB" },
+			{ value: 9500, unit: "KB" },
+			{ value: 0.01, unit: "GB" },
+		],
+		// Set 5: TB looks smallest but is largest
+		[
+			{ value: 450, unit: "MB" },
+			{ value: 520000, unit: "KB" },
+			{ value: 600000000, unit: "bytes" },
+			{ value: 0.8, unit: "GB" },
+		],
+		// Set 6: KB number is huge but actually small
+		[
+			{ value: 750000, unit: "KB" },
+			{ value: 0.9, unit: "GB" },
+			{ value: 800, unit: "MB" },
+			{ value: 700000000, unit: "bytes" },
+		],
+		// Set 7: Decimal GB is actually largest
+		[
+			{ value: 1200000, unit: "KB" },
+			{ value: 1500000000, unit: "bytes" },
+			{ value: 1100, unit: "MB" },
+			{ value: 1.8, unit: "GB" },
+		],
+		// Set 8: Small TB beats everything
+		[
+			{ value: 2500, unit: "MB" },
+			{ value: 2800000, unit: "KB" },
+			{ value: 2200000000, unit: "bytes" },
+			{ value: 0.003, unit: "TB" },
+		],
+		// Set 9: Bytes looks massive but is tiny
+		[
+			{ value: 95000000, unit: "bytes" },
+			{ value: 120, unit: "MB" },
+			{ value: 110000, unit: "KB" },
+			{ value: 0.08, unit: "GB" },
+		],
+		// Set 10: Close race between units
+		[
+			{ value: 0.65, unit: "GB" },
+			{ value: 680, unit: "MB" },
+			{ value: 620000, unit: "KB" },
+			{ value: 700000000, unit: "bytes" },
+		],
+		// Set 11: TB decimal wins despite small number
+		[
+			{ value: 1800, unit: "MB" },
+			{ value: 1950000, unit: "KB" },
+			{ value: 1700000000, unit: "bytes" },
+			{ value: 0.002, unit: "TB" },
+		],
+		// Set 12: GB decimal vs large KB
+		[
+			{ value: 1.4, unit: "GB" },
+			{ value: 1500000, unit: "KB" },
+			{ value: 1350, unit: "MB" },
+			{ value: 1600000000, unit: "bytes" },
+		],
+		// Set 13: Mixed small/medium values
+		[
+			{ value: 85000000, unit: "bytes" },
+			{ value: 92, unit: "MB" },
+			{ value: 88000, unit: "KB" },
+			{ value: 0.09, unit: "GB" },
+		],
+		// Set 14: Large KB vs small GB
+		[
+			{ value: 950000, unit: "KB" },
+			{ value: 0.85, unit: "GB" },
+			{ value: 1000, unit: "MB" },
+			{ value: 900000000, unit: "bytes" },
+		],
+		// Set 15: Tricky ordering
+		[
+			{ value: 1.25, unit: "GB" },
+			{ value: 1350000, unit: "KB" },
+			{ value: 1200, unit: "MB" },
+			{ value: 1400000000, unit: "bytes" },
+		],
+		// Set 16: Small decimals vs large numbers
+		[
+			{ value: 0.0035, unit: "TB" },
+			{ value: 3200, unit: "MB" },
+			{ value: 3500000, unit: "KB" },
+			{ value: 3000000000, unit: "bytes" },
+		],
+		// Set 17: Close competition
+		[
+			{ value: 2.3, unit: "GB" },
+			{ value: 2400000, unit: "KB" },
+			{ value: 2200, unit: "MB" },
+			{ value: 2500000000, unit: "bytes" },
+		],
+		// Set 18: Misleading large numbers
+		[
+			{ value: 750000000, unit: "bytes" },
+			{ value: 0.82, unit: "GB" },
+			{ value: 800000, unit: "KB" },
+			{ value: 720, unit: "MB" },
+		],
+		// Set 19: Very close values
+		[
+			{ value: 1.15, unit: "GB" },
+			{ value: 1180, unit: "MB" },
+			{ value: 1120000, unit: "KB" },
+			{ value: 1200000000, unit: "bytes" },
+		],
+		// Set 20: Final challenging set
+		[
+			{ value: 0.0028, unit: "TB" },
+			{ value: 2650, unit: "MB" },
+			{ value: 2900000, unit: "KB" },
+			{ value: 2400000000, unit: "bytes" },
+		],
+	];
+	const selectedSet =
+		comparisonSets[Math.floor(Math.random() * comparisonSets.length)];
+
+	// Calculate bytes for each value
+	const valuesWithBytes = selectedSet.map((v) => ({
+		...v,
+		bytes: convertToBytes(v.value, v.unit),
+	}));
+
+	// Sort by bytes to find correct answer
+	valuesWithBytes.sort((a, b) => a.bytes - b.bytes);
+	const correctValue =
+		type === "smallest" ? valuesWithBytes[0] : valuesWithBytes[3];
+
+	// Shuffle the display order
+	const shuffledValues = [...valuesWithBytes].sort(() => Math.random() - 0.5);
+	const correctAnswerIndex = shuffledValues.findIndex(
+		(v) => v.bytes === correctValue.bytes,
+	);
+
+	const formattedOptions = shuffledValues.map(
+		(v) => `${formatNumber(v.value)} ${v.unit}`,
+	);
+
+	return {
+		category: "Multiple Choice",
+		type,
+		params: { values: shuffledValues },
+		questionText: `Identify the ${type} secondary storage capacity.`,
+		options: formattedOptions,
+		correctAnswer: correctAnswerIndex,
+		explanation: [
+			{
+				title: "Convert all values to a common base unit (MB)",
+				details: shuffledValues.map((v) => {
+					const inMB = convertFromBytes(v.bytes, "MB");
+					if (v.unit === "MB") {
+						return `${formatNumber(v.value)} ${v.unit} = ${formatNumber(v.value)} MB`;
+					}
+					return `${formatNumber(v.value)} ${v.unit} = ${formatNumber(inMB)} MB`;
+				}),
+			},
+			{
+				title: `Find the ${type} value`,
+				details: [
+					`${type === "smallest" ? "Smallest" : "Largest"}: ${formatNumber(correctValue.value)} ${correctValue.unit} = ${formatNumber(Math.round(convertFromBytes(correctValue.bytes, "MB")))} MB`,
+				],
+			},
+		],
+	};
+};
+
+// Main question generator function
+const generateQuestion = (
+	setHasSubmitted: (value: boolean) => void,
+	setCurrentQuestion: (question: Question | null) => void,
+	setSelectedAnswer: (answer: number | null) => void,
+	setFeedback: (
+		feedback: {
+			isCorrect: boolean;
+			message: string;
+			explanation: ExplanationSection[];
+		} | null,
+	) => void,
+): void => {
+	setHasSubmitted(false);
+	const questionTypes = [
+		generateConversionQuestion,
+		generateComparisonQuestion,
+	];
+	const newQuestion =
+		questionTypes[Math.floor(Math.random() * questionTypes.length)]();
+	setCurrentQuestion(newQuestion);
+	setSelectedAnswer(null);
+	setFeedback(null);
+};
+
+interface UnitConverterProps {
+	onScoreUpdate: (isCorrect: boolean, questionType: string) => void;
+}
+
+export function MultipleChoice({ onScoreUpdate }: UnitConverterProps) {
+	const [currentQuestion, setCurrentQuestion] = useState<Question | null>(null);
+	const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
+	const [feedback, setFeedback] = useState<{
+		isCorrect: boolean;
+		message: string;
+		explanation: ExplanationSection[];
+	} | null>(null);
+	const [hasSubmitted, setHasSubmitted] = useState<boolean>(false);
+
+	// Generate unique IDs for accessibility
+	const converterTitleId = useId();
+	const currentQuestionId = useId();
+	const optionsGroupId = useId();
+	const feedbackMessageId = useId();
+	const welcomeMessageId = useId();
+
+	useEffect(() => {
+		generateQuestion(
+			setHasSubmitted,
+			setCurrentQuestion,
+			setSelectedAnswer,
+			setFeedback,
+		);
+	}, []);
+
+	// Handle option selection and submission
+	const handleOptionClick = (optionIndex: number) => {
+		if (hasSubmitted || !currentQuestion) return;
+
+		setSelectedAnswer(optionIndex);
+		setHasSubmitted(true);
+
+		const isCorrect = optionIndex === currentQuestion.correctAnswer;
+
+		setFeedback({
+			isCorrect,
+			message: isCorrect ? "Correct!" : "Incorrect",
+			explanation: currentQuestion.explanation,
+		});
+		console.log("Option clicked:", optionIndex);
+		onScoreUpdate(isCorrect, currentQuestion.category);
+	};
+
+	// Global keyboard listener for Enter key when hasSubmitted is true
+	useEffect(() => {
+		const handleKeyDown = (event: KeyboardEvent) => {
+			if (event.key === "Enter" && hasSubmitted && currentQuestion) {
+				generateQuestion(
+					setHasSubmitted,
+					setCurrentQuestion,
+					setSelectedAnswer,
+					setFeedback,
+				);
+			}
+		};
+
+		document.addEventListener("keydown", handleKeyDown);
+		return () => document.removeEventListener("keydown", handleKeyDown);
+	}, [hasSubmitted, currentQuestion]);
+
+	const getButtonClassName = (optionIndex: number): string => {
+		const baseClasses =
+			"w-full p-4 text-left text-lg font-semibold transition-all duration-200 rounded-lg border-2 shadow-md hover:shadow-lg";
+
+		if (!hasSubmitted) {
+			return `${baseClasses} bg-gradient-to-r from-gray-50 to-gray-100 border-gray-200 hover:from-indigo-50 hover:to-purple-50 hover:border-indigo-300 text-gray-800 hover:text-indigo-800`;
+		}
+
+		if (optionIndex === currentQuestion?.correctAnswer) {
+			return `${baseClasses} bg-gradient-to-r from-green-100 to-emerald-100 border-green-400 text-green-800`;
+		}
+
+		if (optionIndex === selectedAnswer) {
+			return `${baseClasses} bg-gradient-to-r from-red-100 to-pink-100 border-red-400 text-red-800`;
+		}
+
+		return `${baseClasses} bg-gradient-to-r from-gray-100 to-gray-200 border-gray-300 text-gray-600`;
+	};
+
+	return (
+		<main className="w-full" aria-labelledby={converterTitleId}>
+			<h1 id={converterTitleId} className="sr-only">
+				Unit Converter Quiz
+			</h1>
+			<div className="p-2 sm:p-4">
+				<Card className="py-0 mx-auto shadow-xl bg-white/80 backdrop-blur">
+					<CardContent className="p-4 space-y-4 sm:p-6 lg:p-8 sm:space-y-6">
+						{/* Live region for screen reader announcements */}
+						<div aria-live="polite" aria-atomic="true" className="sr-only">
+							{feedback?.message}
+						</div>
+
+						{currentQuestion ? (
+							<section aria-labelledby={currentQuestionId}>
+								<h2
+									id={currentQuestionId}
+									className="p-6 text-lg font-semibold text-white rounded-lg shadow bg-gradient-to-r from-indigo-600 to-purple-600"
+								>
+									{currentQuestion.questionText}
+								</h2>
+
+								<div className="mt-6">
+									<fieldset>
+										<legend className="sr-only">Choose your answer</legend>
+										<div
+											id={optionsGroupId}
+											className="space-y-3"
+											role="radiogroup"
+											aria-labelledby={currentQuestionId}
+										>
+											{currentQuestion.options.map((option, index) => (
+												<button
+													key={option}
+													type="button"
+													onClick={() => handleOptionClick(index)}
+													disabled={hasSubmitted}
+													className={getButtonClassName(index)}
+													aria-describedby={
+														hasSubmitted ? feedbackMessageId : undefined
+													}
+												>
+													<div className="flex items-center justify-between">
+														<span>{option}</span>
+														{hasSubmitted && (
+															<span className="text-2xl">
+																{index === currentQuestion.correctAnswer
+																	? "✅"
+																	: index === selectedAnswer
+																		? "❌"
+																		: ""}
+															</span>
+														)}
+													</div>
+												</button>
+											))}
+										</div>
+									</fieldset>
+								</div>
+
+								{feedback && (
+									<div className="mt-6">
+										<Alert
+											id={feedbackMessageId}
+											aria-live="polite"
+											className={`border-2 shadow-lg ${
+												feedback.isCorrect
+													? "bg-gradient-to-r from-green-50 to-emerald-50 border-green-300 shadow-green-100"
+													: "bg-gradient-to-r from-red-50 to-pink-50 border-red-300 shadow-red-100"
+											}`}
+										>
+											<AlertDescription>
+												<div className="w-full space-y-4">
+													{/* Result Header */}
+													<div
+														className={`p-4 rounded-lg ${
+															feedback.isCorrect
+																? "bg-gradient-to-r from-green-100 to-emerald-100"
+																: "bg-gradient-to-r from-red-100 to-pink-100"
+														}`}
+													>
+														<div
+															className={`flex items-center text-xl font-bold ${
+																feedback.isCorrect
+																	? "text-green-800"
+																	: "text-red-800"
+															}`}
+														>
+															<span className="mr-3 text-2xl">
+																{feedback.isCorrect ? "🎉" : "❌"}
+															</span>
+															<span>
+																{feedback.isCorrect
+																	? "Excellent work!"
+																	: "Not quite right"}
+															</span>
+														</div>
+														{!feedback.isCorrect && (
+															<div className="mt-2 font-semibold text-red-700">
+																The correct answer is{" "}
+																<span className="px-2 py-1 text-red-900 bg-red-200 rounded">
+																	{
+																		currentQuestion.options[
+																			currentQuestion.correctAnswer
+																		]
+																	}
+																</span>
+															</div>
+														)}
+													</div>
+
+													{/* Next Question Button */}
+													<div className="flex justify-center pt-2">
+														<button
+															type="button"
+															onClick={() => {
+																generateQuestion(
+																	setHasSubmitted,
+																	setCurrentQuestion,
+																	setSelectedAnswer,
+																	setFeedback,
+																);
+															}}
+															aria-label="Generate next question"
+															className="px-8 py-3 font-semibold text-white transition-all duration-200 transform rounded-lg shadow-lg bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 hover:shadow-xl hover:-translate-y-1"
+														>
+															<span className="mr-2">🎯</span>
+															Next Question
+														</button>
+													</div>
+
+													{/* Explanation Section */}
+													<div className="space-y-4">
+														<h3 className="flex items-center mb-3 text-lg font-bold text-indigo-900">
+															<span className="mr-2">📚</span>
+															Step-by-step explanation:
+														</h3>
+														{feedback.explanation.map(
+															(section, sectionIndex) => (
+																<div
+																	key={section.title}
+																	className="p-4 bg-white bg-opacity-50 border border-gray-200 rounded-lg"
+																>
+																	<h4 className="flex items-center mb-2 text-base font-bold text-indigo-900">
+																		<span className="flex items-center justify-center flex-shrink-0 w-6 h-6 mr-3 text-sm font-semibold text-indigo-800 bg-indigo-100 rounded-full">
+																			{sectionIndex + 1}
+																		</span>
+																		{section.title}
+																	</h4>
+																	<ul className="space-y-1 ml-9">
+																		{section.details.map((detail) => (
+																			<li
+																				key={detail}
+																				className="text-gray-800"
+																			>
+																				<span className="mr-2 text-indigo-600">
+																					•
+																				</span>
+																				{detail}
+																			</li>
+																		))}
+																	</ul>
+																</div>
+															),
+														)}
+													</div>
+												</div>
+											</AlertDescription>
+										</Alert>
+									</div>
+								)}
+
+								<details className="mt-6 group">
+									<summary className="cursor-pointer focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 rounded-lg px-4 py-3 bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 hover:from-blue-100 hover:to-indigo-100 transition-all duration-200 shadow-sm hover:shadow-md list-none [&::-webkit-details-marker]:hidden">
+										<span className="flex items-center font-semibold text-blue-800">
+											<span className="mr-2 text-lg">💡</span>
+											Get conversion help
+											<span className="ml-auto transition-transform duration-200 group-open:rotate-180">
+												▼
+											</span>
+										</span>
+									</summary>
+									<section>
+										<div className="p-4 mt-3 border-l-4 border-blue-400 rounded-r-lg shadow-inner bg-gradient-to-r from-blue-50 to-indigo-50">
+											<div className="text-sm font-light text-blue-800">
+												{currentQuestion.type === "conversion"
+													? "💾 - Remember: 1 KB = 1,000 bytes, 1 MB = 1,000 KB, 1 GB = 1,000 MB, 1 TB = 1,000 GB"
+													: "📊 - Convert all values to the same unit (like bytes) to compare them easily"}
+											</div>
+										</div>
+									</section>
+								</details>
+							</section>
+						) : (
+							<section
+								className="py-12 text-center"
+								aria-labelledby={welcomeMessageId}
+							>
+								<div className="p-8 border border-indigo-200 shadow-lg bg-gradient-to-r from-indigo-50 to-purple-50 rounded-xl">
+									<div className="mb-4 text-6xl">📏</div>
+									<h2
+										id={welcomeMessageId}
+										className="mb-4 text-2xl font-bold text-transparent md:text-3xl bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text"
+									>
+										Unit Converter Quiz
+									</h2>
+									<p className="max-w-md mx-auto mb-6 text-lg text-gray-600">
+										Practice converting between storage units and comparing file
+										sizes. Master bytes, KB, MB, GB, and TB!
+									</p>
+									<button
+										type="button"
+										onClick={() => {
+											generateQuestion(
+												setHasSubmitted,
+												setCurrentQuestion,
+												setSelectedAnswer,
+												setFeedback,
+											);
+										}}
+										className="px-8 py-3 font-semibold text-white transition-all duration-200 transform rounded-lg shadow-lg bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 hover:shadow-xl hover:-translate-y-1"
+									>
+										<span className="mr-2">🚀</span>
+										Start Practicing
+									</button>
+								</div>
+							</section>
+						)}
+					</CardContent>
+				</Card>
+			</div>
+		</main>
+	);
+}

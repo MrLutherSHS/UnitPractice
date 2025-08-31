@@ -26,6 +26,7 @@ const blankScoreData = {
 		"Converting Units": { attempts: 0, correct: 0 },
 		"Capacity Calculator": { attempts: 0, correct: 0 },
 		"File Size Calculator": { attempts: 0, correct: 0 },
+		"Multiple Choice": { attempts: 0, correct: 0 },
 	},
 	history: [],
 };
@@ -121,6 +122,8 @@ export class ScoreManager {
 			this.scores = blankScoreData;
 		}
 
+		console.log(this.scores);
+		console.log(questionType);
 		this.scores.attempts++;
 		this.scores.byType[questionType].attempts++;
 		if (isCorrect) {

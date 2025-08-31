@@ -31,7 +31,9 @@ export function Header({ scoreButton, title, subtitle }: HeaderProps) {
 			<h1 className="px-4 mb-2 text-xl font-bold sm:text-2xl lg:text-3xl xl:text-4xl text-shadow">
 				{title}
 			</h1>
-			<p className="px-4 text-sm text-indigo-100 sm:text-base xl:text-lg">{subtitle}</p>
+			<p className="px-4 text-sm text-indigo-100 sm:text-base xl:text-lg">
+				{subtitle}
+			</p>
 		</header>
 	);
 }

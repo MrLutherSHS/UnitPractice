@@ -6,6 +6,7 @@ const MODES = [
 	{ label: "Units", path: "/unitconverter" },
 	{ label: "Capacity", path: "/capacitycalculator" },
 	{ label: "File Size", path: "/filesize" },
+	{ label: "Multiple Choice", path: "/multiplechoice" },
 ];
 
 export const ModeMenu = () => {

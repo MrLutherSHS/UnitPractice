@@ -8,12 +8,11 @@ import { useQuizInteraction } from "@/lib/quizHooks";
 interface Question {
 	category: "File Size Calculator";
 	type: "sound" | "image" | "text" | "options" | "bitsFromOptions";
-	params: {
-		[key: string]: number;
-	};
+	params: QuestionParams;
 	targetUnit: string;
 	answer: number;
 	explanation: ExplanationSection[];
+	questionText: string; // Add this line to store the question text
 }
 
 const convertToUnit = (bits: number, targetUnit: string): number => {
@@ -23,6 +22,44 @@ const convertToUnit = (bits: number, targetUnit: string): number => {
 		kilobytes: 8 * 1000,
 	};
 	return bits / conversions[targetUnit];
+};
+
+// Define parameter types for different question types
+type QuestionParams =
+	| { width: number; height: number; colourDepth: number } // image
+	| { sampleRate: number; duration: number; bitDepth: number } // sound
+	| { charCount: number; bitsPerChar: number } // text
+	| { numOfBits: number } // options
+	| { numberOfOptions: number }; // bitsFromOptions
+
+// Move this function outside the component and make it pure
+const selectQuestionText = (question: {
+	type: "sound" | "image" | "text" | "options" | "bitsFromOptions";
+	params: QuestionParams;
+	targetUnit: string;
+}): string => {
+	const possibleQuestions = {
+		image: [
+			`An image is ${(question.params as { width: number; height: number; colourDepth: number }).width} pixels by ${(question.params as { width: number; height: number; colourDepth: number }).height} pixels using a colour depth of ${(question.params as { width: number; height: number; colourDepth: number }).colourDepth} bits. How large is the file? Give your answer in ${question.targetUnit}.`,
+			`A student creates an image with a colour depth of ${(question.params as { width: number; height: number; colourDepth: number }).colourDepth} bits and a resolution of ${(question.params as { width: number; height: number; colourDepth: number }).width} by ${(question.params as { width: number; height: number; colourDepth: number }).height} pixels. Calculate the file size in ${question.targetUnit}.`,
+		],
+		sound: [
+			`A sound file has a sample rate of ${(question.params as { sampleRate: number; duration: number; bitDepth: number }).sampleRate} Hz, duration of ${(question.params as { sampleRate: number; duration: number; bitDepth: number }).duration} seconds, and bit depth of ${(question.params as { sampleRate: number; duration: number; bitDepth: number }).bitDepth} bits. What is the file size in ${question.targetUnit}?`,
+		],
+		text: [
+			`A text file is stored in ASCII. It has ${(question.params as { charCount: number; bitsPerChar: number }).charCount} characters. How large is the file in ${question.targetUnit}?`,
+		],
+		options: [
+			`A file uses ${(question.params as { numOfBits: number }).numOfBits} bits to store each value. How many different options can it represent?`,
+		],
+		bitsFromOptions: [
+			`An image wants to use ${(question.params as { numberOfOptions: number }).numberOfOptions} different colours. What's the minimum number of bits to store each pixel?`,
+			`State the minimum number of bits that will be needed to represent ${(question.params as { numberOfOptions: number }).numberOfOptions} different colours.`,
+		],
+	};
+	return possibleQuestions[question.type][
+		Math.floor(Math.random() * possibleQuestions[question.type].length)
+	];
 };
 
 // Generator functions moved outside component
@@ -37,12 +74,20 @@ const generateImageQuestion = (): Question => {
 	const sizeInBits = width * height * colourDepth;
 	const answer = convertToUnit(sizeInBits, targetUnit);
 
+	const baseQuestion = {
+		type: "image" as const,
+		params: { width, height, colourDepth },
+		targetUnit,
+	};
+	const questionText = selectQuestionText(baseQuestion);
+
 	return {
 		category: "File Size Calculator",
 		type: "image",
 		params: { width, height, colourDepth },
 		targetUnit,
 		answer,
+		questionText, // Store the selected question text
 		explanation: [
 			{
 				title: "Identify the values",
@@ -83,12 +128,20 @@ const generateSoundQuestion = (): Question => {
 	const bits = sampleRate * duration * bitDepth;
 	const answer = convertToUnit(bits, targetUnit);
 
+	const baseQuestion = {
+		type: "sound" as const,
+		params: { sampleRate, duration, bitDepth },
+		targetUnit,
+	};
+	const questionText = selectQuestionText(baseQuestion);
+
 	return {
 		category: "File Size Calculator",
 		type: "sound",
 		params: { sampleRate, duration, bitDepth },
 		targetUnit,
 		answer,
+		questionText, // Store the selected question text
 		explanation: [
 			{
 				title: "Identify the values",
@@ -122,12 +175,20 @@ const generateTextQuestion = (): Question => {
 	const bits = charCount * bitsPerChar;
 	const answer = convertToUnit(bits, targetUnit);
 
+	const baseQuestion = {
+		type: "text" as const,
+		params: { charCount, bitsPerChar },
+		targetUnit,
+	};
+	const questionText = selectQuestionText(baseQuestion);
+
 	return {
 		category: "File Size Calculator",
 		type: "text",
 		params: { charCount, bitsPerChar },
 		targetUnit,
 		answer,
+		questionText, // Store the selected question text
 		explanation: [
 			{
 				title: "Identify the values",
@@ -154,12 +215,20 @@ const generateOptionsQuestion = (): Question => {
 	const numOfBits = Math.floor(Math.random() * 7) + 1; // 1-8  bits
 	const answer = 2 ** numOfBits;
 
+	const baseQuestion = {
+		type: "options" as const,
+		params: { numOfBits },
+		targetUnit: "bits" as const,
+	};
+	const questionText = selectQuestionText(baseQuestion);
+
 	return {
 		category: "File Size Calculator",
 		type: "options",
 		params: { numOfBits },
 		targetUnit: "bits",
 		answer,
+		questionText, // Store the selected question text
 		explanation: [
 			{
 				title: "Identify the values",
@@ -177,12 +246,20 @@ const generateBitsFromOptionsQuestion = (): Question => {
 	const numberOfOptions = Math.floor(Math.random() * 255) + 1; // 1-256  options
 	const answer = Math.ceil(Math.log(numberOfOptions) / Math.log(2));
 
+	const baseQuestion = {
+		type: "bitsFromOptions" as const,
+		params: { numberOfOptions },
+		targetUnit: "bits" as const,
+	};
+	const questionText = selectQuestionText(baseQuestion);
+
 	return {
 		category: "File Size Calculator",
 		type: "bitsFromOptions",
 		params: { numberOfOptions },
 		targetUnit: "bits",
 		answer,
+		questionText, // Store the selected question text
 		explanation: [
 			{
 				title: "Identify the values",
@@ -300,23 +377,6 @@ export function FileSizeCalculator({ onScoreUpdate }: FileSizeCalculatorProps) {
 		return () => document.removeEventListener("keydown", handleKeyDown);
 	}, [hasSubmitted, currentQuestion]);
 
-	const getQuestionText = (question: Question): string => {
-		switch (question.type) {
-			case "image":
-				return `An image is ${question.params.width} pixels by ${question.params.height} pixels using a colour depth of ${question.params.colourDepth} bits. How large is the file? Give your answer in ${question.targetUnit}.`;
-			case "sound":
-				return `A sound file has a sample rate of ${question.params.sampleRate} Hz, duration of ${question.params.duration} seconds, and bit depth of ${question.params.bitDepth} bits. What is the file size in ${question.targetUnit}?`;
-			case "text":
-				return `A text file is stored in ASCII. It has ${question.params.charCount} characters. How large is the file in ${question.targetUnit}?`;
-			case "options":
-				return `A file uses ${question.params.numOfBits} bits to store each value. How many different options can it represent?`;
-			case "bitsFromOptions":
-				return `An image wants to use ${question.params.numberOfOptions} different colours. What's the minimum number of bits to store each pixel?`;
-			default:
-				return "";
-		}
-	};
-
 	const getCalculationHint = (): string => {
 		if (!currentQuestion) return "Multiply the numbers";
 		switch (currentQuestion.type) {
@@ -354,12 +414,12 @@ export function FileSizeCalculator({ onScoreUpdate }: FileSizeCalculatorProps) {
 									id={currentQuestionId}
 									className="p-6 text-lg font-semibold text-white rounded-lg shadow bg-gradient-to-r from-indigo-600 to-purple-600"
 								>
-									{getQuestionText(currentQuestion)}
+									{currentQuestion.questionText}
 								</h2>
 								<form onSubmit={handleSubmit} className="mt-6">
 									<div className="space-y-2">
 										<label htmlFor={answerInputId} className="sr-only">
-											Your answer for: {getQuestionText(currentQuestion)}
+											Your answer for: {currentQuestion.questionText}
 										</label>
 										<Input
 											id={answerInputId}
