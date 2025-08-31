@@ -1,5 +1,9 @@
 import { describe, expect, it } from "vitest";
-import { formatNumber, unformatNumber, roundToPrecision } from "@/lib/numberUtils";
+import {
+	formatNumber,
+	roundToPrecision,
+	unformatNumber,
+} from "@/lib/numberUtils";
 
 describe("Number Utils", () => {
 	describe("formatNumber", () => {

@@ -21,13 +21,23 @@ const convertValue = (
 };
 
 // Calculate how many files can fit on a drive
-const calculateFileCount = (driveSize: number, driveUnit: string, fileSize: number, fileUnit: string): number => {
+const calculateFileCount = (
+	driveSize: number,
+	driveUnit: string,
+	fileSize: number,
+	fileUnit: string,
+): number => {
 	const driveInFileUnits = convertValue(driveSize, driveUnit, fileUnit);
 	return Math.floor(driveInFileUnits / fileSize);
 };
 
 // Calculate total capacity needed for a number of files
-const calculateTotalCapacity = (fileCount: number, fileSize: number, fileUnit: string, targetUnit: string): number => {
+const calculateTotalCapacity = (
+	fileCount: number,
+	fileSize: number,
+	fileUnit: string,
+	targetUnit: string,
+): number => {
 	const totalInFileUnits = fileCount * fileSize;
 	return convertValue(totalInFileUnits, fileUnit, targetUnit);
 };
@@ -129,8 +139,12 @@ describe("Capacity Calculator Functions", () => {
 
 	describe("calculateTotalCapacity", () => {
 		it("should calculate total capacity for files (same units)", () => {
-			expect(calculateTotalCapacity(10, 100, "megabytes", "megabytes")).toBe(1000);
-			expect(calculateTotalCapacity(5, 200, "gigabytes", "gigabytes")).toBe(1000);
+			expect(calculateTotalCapacity(10, 100, "megabytes", "megabytes")).toBe(
+				1000,
+			);
+			expect(calculateTotalCapacity(5, 200, "gigabytes", "gigabytes")).toBe(
+				1000,
+			);
 		});
 
 		it("should calculate total capacity across different units", () => {
@@ -141,12 +155,18 @@ describe("Capacity Calculator Functions", () => {
 
 		it("should handle converting to smaller units", () => {
 			expect(calculateTotalCapacity(2, 1, "gigabytes", "megabytes")).toBe(2000); // 2 * 1GB = 2GB = 2000MB
-			expect(calculateTotalCapacity(3, 500, "megabytes", "kilobytes")).toBe(1500000); // 3 * 500MB = 1500MB = 1,500,000KB
+			expect(calculateTotalCapacity(3, 500, "megabytes", "kilobytes")).toBe(
+				1500000,
+			); // 3 * 500MB = 1500MB = 1,500,000KB
 		});
 
 		it("should handle decimal results", () => {
-			expect(calculateTotalCapacity(5, 100, "megabytes", "gigabytes")).toBe(0.5); // 5 * 100MB = 500MB = 0.5GB
-			expect(calculateTotalCapacity(3, 250, "gigabytes", "terabytes")).toBe(0.75); // 3 * 250GB = 750GB = 0.75TB
+			expect(calculateTotalCapacity(5, 100, "megabytes", "gigabytes")).toBe(
+				0.5,
+			); // 5 * 100MB = 500MB = 0.5GB
+			expect(calculateTotalCapacity(3, 250, "gigabytes", "terabytes")).toBe(
+				0.75,
+			); // 3 * 250GB = 750GB = 0.75TB
 		});
 
 		it("should handle zero files", () => {
@@ -159,7 +179,9 @@ describe("Capacity Calculator Functions", () => {
 
 		it("should handle large numbers of files", () => {
 			expect(calculateTotalCapacity(1000, 1, "megabytes", "gigabytes")).toBe(1); // 1000 * 1MB = 1000MB = 1GB
-			expect(calculateTotalCapacity(10000, 100, "kilobytes", "gigabytes")).toBe(1); // 10000 * 100KB = 1,000,000KB = 1GB
+			expect(calculateTotalCapacity(10000, 100, "kilobytes", "gigabytes")).toBe(
+				1,
+			); // 10000 * 100KB = 1,000,000KB = 1GB
 		});
 	});
 
@@ -220,7 +242,12 @@ describe("Capacity Calculator Functions", () => {
 
 		it("should handle capacity planning scenario", () => {
 			// Need to store 100 documents of 250KB each, what capacity is needed in MB?
-			const capacity = calculateTotalCapacity(100, 250, "kilobytes", "megabytes");
+			const capacity = calculateTotalCapacity(
+				100,
+				250,
+				"kilobytes",
+				"megabytes",
+			);
 			expect(capacity).toBe(25); // 100 * 250KB = 25,000KB = 25MB
 		});
 

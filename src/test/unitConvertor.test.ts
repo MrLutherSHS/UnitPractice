@@ -25,7 +25,11 @@ const getMultiplier = (unit: string): number => {
 	return multipliers[unit];
 };
 
-const calculateAnswer = (value: number, fromUnit: string, toUnit: string): number => {
+const calculateAnswer = (
+	value: number,
+	fromUnit: string,
+	toUnit: string,
+): number => {
 	let valueInBytes: number;
 	if (fromUnit === "bits") {
 		valueInBytes = value / 8;
@@ -146,11 +150,12 @@ describe("Unit Convertor Functions", () => {
 		});
 
 		describe("multi-step conversions", () => {
-		it("should convert across multiple units", () => {
-			expect(calculateAnswer(1, "megabytes", "bytes")).toBe(1000000);
-			expect(calculateAnswer(1, "gigabytes", "kilobytes")).toBe(1000000);
-			expect(calculateAnswer(1000000, "bytes", "gigabytes")).toBe(0.001); // 1 million bytes = 0.001 GB
-		});			it("should handle decimal results", () => {
+			it("should convert across multiple units", () => {
+				expect(calculateAnswer(1, "megabytes", "bytes")).toBe(1000000);
+				expect(calculateAnswer(1, "gigabytes", "kilobytes")).toBe(1000000);
+				expect(calculateAnswer(1000000, "bytes", "gigabytes")).toBe(0.001); // 1 million bytes = 0.001 GB
+			});
+			it("should handle decimal results", () => {
 				expect(calculateAnswer(500, "megabytes", "gigabytes")).toBe(0.5);
 				expect(calculateAnswer(1500, "kilobytes", "megabytes")).toBe(1.5);
 			});
@@ -197,35 +202,77 @@ describe("Unit Convertor Functions", () => {
 
 	describe("getConversionPath", () => {
 		it("should create correct path for adjacent units", () => {
-			expect(getConversionPath("bytes", "kilobytes")).toEqual(["bytes", "kilobytes"]);
-			expect(getConversionPath("kilobytes", "megabytes")).toEqual(["kilobytes", "megabytes"]);
+			expect(getConversionPath("bytes", "kilobytes")).toEqual([
+				"bytes",
+				"kilobytes",
+			]);
+			expect(getConversionPath("kilobytes", "megabytes")).toEqual([
+				"kilobytes",
+				"megabytes",
+			]);
 		});
 
 		it("should create correct path for multi-step conversions", () => {
-			expect(getConversionPath("bytes", "megabytes")).toEqual(["bytes", "kilobytes", "megabytes"]);
-			expect(getConversionPath("kilobytes", "gigabytes")).toEqual(["kilobytes", "megabytes", "gigabytes"]);
+			expect(getConversionPath("bytes", "megabytes")).toEqual([
+				"bytes",
+				"kilobytes",
+				"megabytes",
+			]);
+			expect(getConversionPath("kilobytes", "gigabytes")).toEqual([
+				"kilobytes",
+				"megabytes",
+				"gigabytes",
+			]);
 		});
 
 		it("should create correct path for reverse conversions", () => {
-			expect(getConversionPath("megabytes", "bytes")).toEqual(["megabytes", "kilobytes", "bytes"]);
-			expect(getConversionPath("gigabytes", "kilobytes")).toEqual(["gigabytes", "megabytes", "kilobytes"]);
+			expect(getConversionPath("megabytes", "bytes")).toEqual([
+				"megabytes",
+				"kilobytes",
+				"bytes",
+			]);
+			expect(getConversionPath("gigabytes", "kilobytes")).toEqual([
+				"gigabytes",
+				"megabytes",
+				"kilobytes",
+			]);
 		});
 
 		it("should handle bits to other units", () => {
 			expect(getConversionPath("bits", "bytes")).toEqual(["bits", "bytes"]);
-			expect(getConversionPath("bits", "kilobytes")).toEqual(["bits", "bytes", "kilobytes"]);
-			expect(getConversionPath("bits", "megabytes")).toEqual(["bits", "bytes", "kilobytes", "megabytes"]);
+			expect(getConversionPath("bits", "kilobytes")).toEqual([
+				"bits",
+				"bytes",
+				"kilobytes",
+			]);
+			expect(getConversionPath("bits", "megabytes")).toEqual([
+				"bits",
+				"bytes",
+				"kilobytes",
+				"megabytes",
+			]);
 		});
 
 		it("should handle other units to bits", () => {
 			expect(getConversionPath("bytes", "bits")).toEqual(["bytes", "bits"]);
-			expect(getConversionPath("kilobytes", "bits")).toEqual(["kilobytes", "bytes", "bits"]);
-			expect(getConversionPath("megabytes", "bits")).toEqual(["megabytes", "kilobytes", "bytes", "bits"]);
+			expect(getConversionPath("kilobytes", "bits")).toEqual([
+				"kilobytes",
+				"bytes",
+				"bits",
+			]);
+			expect(getConversionPath("megabytes", "bits")).toEqual([
+				"megabytes",
+				"kilobytes",
+				"bytes",
+				"bits",
+			]);
 		});
 
 		it("should handle same unit", () => {
 			expect(getConversionPath("bytes", "bytes")).toEqual(["bytes"]);
-			expect(getConversionPath("megabytes", "megabytes")).toEqual(["megabytes"]);
+			expect(getConversionPath("megabytes", "megabytes")).toEqual([
+				"megabytes",
+			]);
 		});
 	});
 });

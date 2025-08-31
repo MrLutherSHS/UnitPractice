@@ -12,17 +12,28 @@ const convertToUnit = (bits: number, targetUnit: string): number => {
 };
 
 // Image file size calculation
-const calculateImageSize = (width: number, height: number, colourDepth: number): number => {
+const calculateImageSize = (
+	width: number,
+	height: number,
+	colourDepth: number,
+): number => {
 	return width * height * colourDepth;
 };
 
 // Sound file size calculation
-const calculateSoundSize = (sampleRate: number, duration: number, bitDepth: number): number => {
+const calculateSoundSize = (
+	sampleRate: number,
+	duration: number,
+	bitDepth: number,
+): number => {
 	return sampleRate * duration * bitDepth;
 };
 
 // Text file size calculation
-const calculateTextSize = (charCount: number, bitsPerChar: number = 8): number => {
+const calculateTextSize = (
+	charCount: number,
+	bitsPerChar: number = 8,
+): number => {
 	return charCount * bitsPerChar;
 };
 
