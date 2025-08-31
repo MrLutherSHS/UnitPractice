@@ -317,9 +317,9 @@ export function CapacityCalculator({ onScoreUpdate }: CapacityCalculatorProps) {
 			<h1 id={calculatorTitleId} className="sr-only">
 				Capacity Calculator
 			</h1>
-			<div className="p-4">
+			<div className="p-2 sm:p-4">
 				<Card className="py-0 mx-auto shadow-xl bg-white/80 backdrop-blur">
-					<CardContent className="p-8 space-y-6">
+					<CardContent className="p-4 space-y-4 sm:p-6 lg:p-8 sm:space-y-6">
 						{/* Live region for screen reader announcements */}
 						<div aria-live="polite" aria-atomic="true" className="sr-only">
 							{feedback?.message}

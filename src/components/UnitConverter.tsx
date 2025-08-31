@@ -340,68 +340,6 @@ export function UnitConverter({ onScoreUpdate }: UnitConverterProps) {
 							{feedback?.message}
 						</div>
 
-						{/* Settings Section */}
-						<div className="mb-6">
-							<div className="p-3 border border-gray-200 rounded-lg sm:p-4 bg-gradient-to-r from-gray-50 to-blue-50">
-								<div className="flex flex-col items-start justify-between gap-3 sm:flex-row sm:items-center sm:gap-4">
-									{/* Units Order Hint */}
-									<div className="flex items-center min-w-0 gap-2">
-										<span className="text-base sm:text-lg">📋</span>
-										<span className="text-xs font-semibold text-gray-800 truncate sm:text-sm">
-											Units Order
-										</span>
-										<Switch
-											checked={showUnitsOrder}
-											onCheckedChange={setShowUnitsOrder}
-											className="data-[state=unchecked]:bg-gray-200 data-[state=checked]:bg-blue-600 flex-shrink-0"
-											aria-label="Toggle units order hint"
-											title="Show/hide the ordered list of units from smallest to largest"
-										/>
-									</div>
-
-									{/* Conversion Path Hint */}
-									<div className="flex items-center min-w-0 gap-2">
-										<span className="text-base sm:text-lg">🗺️</span>
-										<span className="text-xs font-semibold text-gray-800 truncate sm:text-sm">
-											Conversion Path
-										</span>
-										<Switch
-											checked={showConversionPath}
-											onCheckedChange={setShowConversionPath}
-											className="data-[state=unchecked]:bg-gray-200 data-[state=checked]:bg-blue-600 flex-shrink-0"
-											aria-label="Toggle conversion path hint"
-											title="Show/hide the step-by-step conversion path between units"
-										/>
-									</div>
-
-									{/* Advanced Mode */}
-									<div className="flex items-center min-w-0 gap-2">
-										<span className="text-base sm:text-lg">⚙️</span>
-										<span className="text-xs font-semibold text-gray-800 truncate sm:text-sm">
-											Advanced Mode
-										</span>
-										<Switch
-											checked={isAdvancedMode}
-											onCheckedChange={(checked) => {
-												setIsAdvancedMode(checked);
-												// Generate new question with the new mode
-												generateQuestion(
-													setHasSubmitted,
-													setCurrentQuestion,
-													setUserAnswer,
-													setFeedback,
-													checked,
-												);
-											}}
-											className="data-[state=unchecked]:bg-gray-200 data-[state=checked]:bg-blue-600 flex-shrink-0"
-											aria-label="Toggle advanced mode"
-											title="Enable harder questions with decimal values and complex conversions"
-										/>
-									</div>
-								</div>
-							</div>
-						</div>
-
 						{currentQuestion ? (
 							<section aria-labelledby={currentQuestionId}>
 								<h2
@@ -556,6 +494,67 @@ export function UnitConverter({ onScoreUpdate }: UnitConverterProps) {
 									</div>
 								)}
 
+								{/* Settings Section */}
+								<div className="mt-6">
+									<div className="p-3 border border-gray-200 rounded-lg sm:p-4 bg-gradient-to-r from-gray-50 to-blue-50">
+										<div className="flex flex-col items-start justify-between gap-3 sm:flex-row sm:items-center sm:gap-4">
+											{/* Units Order Hint */}
+											<div className="flex items-center min-w-0 gap-2">
+												<span className="text-base sm:text-lg">📋</span>
+												<span className="text-xs font-semibold text-gray-800 truncate sm:text-sm">
+													Units Order
+												</span>
+												<Switch
+													checked={showUnitsOrder}
+													onCheckedChange={setShowUnitsOrder}
+													className="data-[state=unchecked]:bg-gray-200 data-[state=checked]:bg-blue-600 flex-shrink-0"
+													aria-label="Toggle units order hint"
+													title="Show/hide the ordered list of units from smallest to largest"
+												/>
+											</div>
+
+											{/* Conversion Path Hint */}
+											<div className="flex items-center min-w-0 gap-2">
+												<span className="text-base sm:text-lg">🗺️</span>
+												<span className="text-xs font-semibold text-gray-800 truncate sm:text-sm">
+													Conversion Path
+												</span>
+												<Switch
+													checked={showConversionPath}
+													onCheckedChange={setShowConversionPath}
+													className="data-[state=unchecked]:bg-gray-200 data-[state=checked]:bg-blue-600 flex-shrink-0"
+													aria-label="Toggle conversion path hint"
+													title="Show/hide the step-by-step conversion path between units"
+												/>
+											</div>
+
+											{/* Advanced Mode */}
+											<div className="flex items-center min-w-0 gap-2">
+												<span className="text-base sm:text-lg">⚙️</span>
+												<span className="text-xs font-semibold text-gray-800 truncate sm:text-sm">
+													Advanced Mode
+												</span>
+												<Switch
+													checked={isAdvancedMode}
+													onCheckedChange={(checked) => {
+														setIsAdvancedMode(checked);
+														// Generate new question with the new mode
+														generateQuestion(
+															setHasSubmitted,
+															setCurrentQuestion,
+															setUserAnswer,
+															setFeedback,
+															checked,
+														);
+													}}
+													className="data-[state=unchecked]:bg-gray-200 data-[state=checked]:bg-blue-600 flex-shrink-0"
+													aria-label="Toggle advanced mode"
+													title="Enable harder questions with decimal values and complex conversions"
+												/>
+											</div>
+										</div>
+									</div>
+								</div>
 								{/* First Hint Section - Units Order */}
 								{showUnitsOrder && (
 									<section
@@ -615,40 +614,12 @@ export function UnitConverter({ onScoreUpdate }: UnitConverterProps) {
 								)}
 							</section>
 						) : (
-							<section
-								className="py-12 text-center"
-								aria-labelledby={welcomeMessageId}
-							>
-								<div className="p-8 border border-indigo-200 shadow-lg bg-gradient-to-r from-indigo-50 to-purple-50 rounded-xl">
-									<div className="mb-4 text-6xl">🔄</div>
-									<h2
-										id={welcomeMessageId}
-										className="mb-4 text-2xl font-bold text-transparent md:text-3xl bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text"
-									>
-										Unit Converter
-									</h2>
-									<p className="max-w-md mx-auto mb-6 text-lg text-gray-600">
-										Practice converting between different units of digital
-										storage. Master bits, bytes, kilobytes, and beyond!
-									</p>
-									<button
-										type="button"
-										onClick={() => {
-											generateQuestion(
-												setHasSubmitted,
-												setCurrentQuestion,
-												setUserAnswer,
-												setFeedback,
-												isAdvancedMode,
-											);
-										}}
-										className="px-8 py-3 font-semibold text-white transition-all duration-200 transform rounded-lg shadow-lg bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 hover:shadow-xl hover:-translate-y-1"
-									>
-										<span className="mr-2">🚀</span>
-										Start Converting
-									</button>
-								</div>
-							</section>
+							<div className="py-8 text-center">
+								<p className="text-gray-600">
+									Unable to load question. Please reload the page or contact
+									admin if the issue persists.
+								</p>
+							</div>
 						)}
 					</CardContent>
 				</Card>

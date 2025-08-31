@@ -1,21 +1,14 @@
-import { Link, useLocation } from "@tanstack/react-router";
 import { useState } from "react";
-import { QuizButton, ScoreButton, SiteLayout, StatsModal } from "@/components";
+import { ScoreButton, SiteLayout, StatsModal } from "@/components";
 import { ScoreManager } from "@/lib/scoreManager";
 import { SITE_CONFIG } from "@/lib/siteConfig";
+import { ModeMenu } from "./ModeMenu";
 
 interface SharedLayoutProps {
 	children: (
 		recordScoreAndUpdate: (isCorrect: boolean, questionType: string) => void,
 	) => React.ReactNode;
 }
-
-// Mode button data
-const MODES = [
-	{ label: "Converting Units", path: "/unitconverter" },
-	{ label: "Capacity Calculator", path: "/capacitycalculator" },
-	{ label: "File Size Calculator", path: "/filesize" },
-];
 
 export function useSharedLayout() {
 	const [showStatsModal, setShowStatsModal] = useState(false);
@@ -57,7 +50,6 @@ export function SharedLayout({ children }: SharedLayoutProps) {
 		overallStats,
 		recordScoreAndUpdate,
 	} = useSharedLayout();
-	const location = useLocation();
 
 	return (
 		<SiteLayout
@@ -74,29 +66,8 @@ export function SharedLayout({ children }: SharedLayoutProps) {
 			}
 		>
 			{/* Mode Switch Buttons */}
-			<div className="flex flex-col justify-center gap-2 px-4 mt-2 mb-8 sm:flex-row sm:gap-4">
-				{MODES.map((mode) => (
-					<Link key={mode.path} to={mode.path} className="flex-1 sm:flex-none">
-						<QuizButton
-							variant="menu"
-							className={`w-full sm:w-auto text-sm sm:text-base px-3 sm:px-6 py-3 sm:py-6 ${
-								location.pathname === mode.path
-									? "text-white bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 hover:shadow-lg"
-									: ""
-							}`}
-						>
-							{/* Responsive text - abbreviated on mobile */}
-							<span className="hidden sm:inline">{mode.label}</span>
-							<span className="sm:hidden">
-								{mode.label
-									.split(" ")
-									.map((word) => word[0])
-									.join("")}
-							</span>
-						</QuizButton>
-					</Link>
-				))}
-			</div>
+			<ModeMenu />
+
 			{/* Main Body */}
 			<div className="max-w-4xl px-0 mx-auto sm:px-6">
 				{children(recordScoreAndUpdate)}
