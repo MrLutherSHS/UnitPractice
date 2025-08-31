@@ -9,14 +9,14 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as UnitconvertorRouteImport } from './routes/unitconverter'
+import { Route as UnitconverterRouteImport } from './routes/unitconverter'
 import { Route as FilesizeRouteImport } from './routes/filesize'
 import { Route as CapacitycalculatorRouteImport } from './routes/capacitycalculator'
 import { Route as IndexRouteImport } from './routes/index'
 
-const UnitconvertorRoute = UnitconvertorRouteImport.update({
-  id: '/unitconvertor',
-  path: '/unitconvertor',
+const UnitconverterRoute = UnitconverterRouteImport.update({
+  id: '/unitconverter',
+  path: '/unitconverter',
   getParentRoute: () => rootRouteImport,
 } as any)
 const FilesizeRoute = FilesizeRouteImport.update({
@@ -39,43 +39,43 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/capacitycalculator': typeof CapacitycalculatorRoute
   '/filesize': typeof FilesizeRoute
-  '/unitconvertor': typeof UnitconvertorRoute
+  '/unitconverter': typeof UnitconverterRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/capacitycalculator': typeof CapacitycalculatorRoute
   '/filesize': typeof FilesizeRoute
-  '/unitconvertor': typeof UnitconvertorRoute
+  '/unitconverter': typeof UnitconverterRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/capacitycalculator': typeof CapacitycalculatorRoute
   '/filesize': typeof FilesizeRoute
-  '/unitconvertor': typeof UnitconvertorRoute
+  '/unitconverter': typeof UnitconverterRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/capacitycalculator' | '/filesize' | '/unitconvertor'
+  fullPaths: '/' | '/capacitycalculator' | '/filesize' | '/unitconverter'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/capacitycalculator' | '/filesize' | '/unitconvertor'
-  id: '__root__' | '/' | '/capacitycalculator' | '/filesize' | '/unitconvertor'
+  to: '/' | '/capacitycalculator' | '/filesize' | '/unitconverter'
+  id: '__root__' | '/' | '/capacitycalculator' | '/filesize' | '/unitconverter'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   CapacitycalculatorRoute: typeof CapacitycalculatorRoute
   FilesizeRoute: typeof FilesizeRoute
-  UnitconvertorRoute: typeof UnitconvertorRoute
+  UnitconverterRoute: typeof UnitconverterRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/unitconvertor': {
-      id: '/unitconvertor'
-      path: '/unitconvertor'
-      fullPath: '/unitconvertor'
-      preLoaderRoute: typeof UnitconvertorRouteImport
+    '/unitconverter': {
+      id: '/unitconverter'
+      path: '/unitconverter'
+      fullPath: '/unitconverter'
+      preLoaderRoute: typeof UnitconverterRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/filesize': {
@@ -106,7 +106,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   CapacitycalculatorRoute: CapacitycalculatorRoute,
   FilesizeRoute: FilesizeRoute,
-  UnitconvertorRoute: UnitconvertorRoute,
+  UnitconverterRoute: UnitconverterRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
