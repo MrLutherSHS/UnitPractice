@@ -59,7 +59,7 @@ export function StatsModal({
 
 	return (
 		<div
-			className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/30 backdrop-blur-sm"
+			className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/30 backdrop-blur-xs"
 			role="dialog"
 			aria-modal="true"
 			aria-labelledby={titleId}
@@ -72,41 +72,42 @@ export function StatsModal({
 			tabIndex={-1}
 		>
 			<div
-				className="bg-white rounded-lg shadow-xl max-w-xl w-full max-h-[80vh] overflow-hidden"
+				className="bg-indigo-50 rounded-lg shadow-xl max-w-xl w-full max-h-[80vh] overflow-hidden"
 				onClick={(e) => e.stopPropagation()}
 				onKeyDown={(e) => e.stopPropagation()}
 				role="document"
 			>
 				{/* Header */}
-				<div className="flex items-center justify-between px-6 py-4 text-white bg-gradient-to-r from-header/80 to-header">
-					<h2
+				<div className="flex items-center justify-between p-4 text-indigo-50 bg-header/80">
+					<p
 						id={titleId}
-						className="flex items-center text-2xl font-bold gap-2"
+						className="flex items-center gap-3 text-2xl font-bold"
 					>
-						{headerIcon} {title}
-					</h2>
+						<span>{headerIcon}</span>
+						 {title}
+					</p>
 					<button
 						type="button"
 						onClick={onClose}
-						className="flex items-center justify-center w-8 h-8 text-2xl text-white transition-colors hover:text-gray-200"
+						className="flex items-center justify-center w-8 h-8 text-2xl transition-colors text-indigo-50 hover:text-gray-200"
 					>
 						<X className="w-6 h-6" />
 					</button>
 				</div>
 
 				{/* Content */}
-				<div className="p-6 overflow-y-auto max-h-[calc(80vh-140px)]">
+				<div className="p-4 overflow-y-auto max-h-[calc(80vh-140px)]">
 					{overallStats.totalAttempts > 0 ? (
-						<div className="space-y-6 ">
+						<div className="space-y-4 ">
 							{/* Level Info Card */}
-							<Card className="text-white bg-gradient-to-r from-indigo-500 to-purple-600">
+							<Card className="text-white bg-indigo-600">
 								<CardHeader className="text-white ">
 									<div className="flex items-center gap-4">
 										<div className="text-5xl animate-gentle-bounce">
 											{overallStats.level.emoji}
 										</div>
 										<div className="flex-1 text-left">
-											<CardTitle className="text-2xl">
+											<CardTitle className="text-2xl text-indigo-50">
 												{overallStats.level.title}
 											</CardTitle>
 											<p className="mt-1 text-indigo-100">
@@ -116,7 +117,7 @@ export function StatsModal({
 									</div>
 								</CardHeader>
 								{overallStats.nextLevel && (
-									<CardContent className="pt-4 mx-4 rounded-md bg-white/20 backdrop-blur-sm">
+									<CardContent className="p-4 mx-4 rounded-md bg-white/20">
 										<div className="flex items-center justify-between mb-2 text-sm font-semibold">
 											<span>
 												Progress to {overallStats.nextLevel.emoji}{" "}
@@ -136,7 +137,7 @@ export function StatsModal({
 											className="h-2 mb-3 [&>div]:bg-green-600 "
 										/>
 										{/* Detailed requirements */}
-										<div className="text-sm text-white space-y-1">
+										<div className="space-y-1 text-sm text-white">
 											{overallStats.accuracy <
 												overallStats.nextLevel.minAccuracy && (
 												<div>
@@ -165,13 +166,13 @@ export function StatsModal({
 							</Card>
 
 							{/* Overall Statistics */}
-							<Card>
-								<CardHeader>
-									<CardTitle className="flex items-center gap-2">
+							<Card className='gap-4 p-4'>
+								<CardHeader className='px-2 mb-0'>
+									<CardTitle className="flex items-center">
 										📈 Overall Statistics
 									</CardTitle>
 								</CardHeader>
-								<CardContent>
+								<CardContent className='px-2'>
 									<div className="grid grid-cols-1 gap-4 md:grid-cols-3">
 										<div className="p-4 text-center border-l-4 border-green-500 rounded-lg bg-green-50">
 											<div className="text-2xl font-bold text-green-600">
@@ -198,20 +199,20 @@ export function StatsModal({
 							</Card>
 
 							{/* Breakdown by Category */}
-							<Card>
-								<CardHeader>
-									<CardTitle className="flex items-center gap-2">
+							<Card className='gap-4 p-4'>
+								<CardHeader className='px-2 mb-0'>
+									<CardTitle className="flex items-center">
 										📋 Breakdown by Category
 									</CardTitle>
 								</CardHeader>
-								<CardContent>
-									<div className="space-y-3">
+								<CardContent className='px-2'>
+									<div className="space-y-4">
 										{Object.entries(typeStats).map(
 											([type, stats]) =>
 												stats.attempts > 0 && (
 													<div
 														key={type}
-														className="flex items-center justify-between p-4 rounded-lg bg-gray-50"
+														className="flex items-center justify-between p-4 bg-gray-100 rounded-lg"
 													>
 														<div>
 															<div className="text-lg font-semibold">
@@ -260,7 +261,7 @@ export function StatsModal({
 				</div>
 
 				{/* Footer */}
-				<div className="flex items-center justify-between px-6 py-4 gap-4 bg-gray-50">
+				<div className="flex items-center justify-between p-4 bg-indigo-50">
 					<Button variant="destructive" onClick={handleResetScores}>
 						Reset All Scores
 					</Button>

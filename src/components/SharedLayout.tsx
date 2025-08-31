@@ -69,7 +69,7 @@ export function SharedLayout({ children }: SharedLayoutProps) {
 			<ModeMenu />
 
 			{/* Main Body */}
-			<div className="max-w-4xl px-0 mx-auto sm:px-6">
+			<div className="max-w-4xl px-0 mx-auto sm:px-0">
 				{children(recordScoreAndUpdate)}
 			</div>
 			<StatsModal

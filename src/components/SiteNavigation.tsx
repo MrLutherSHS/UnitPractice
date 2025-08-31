@@ -91,21 +91,21 @@ export function SiteNavigation({
 					sideOffset={8}
 				>
 					{/* Header */}
-					<div className="px-3 py-2 text-xs font-semibold text-center text-white uppercase sm:px-4 sm:py-3 sm:text-sm bg-gradient-to-r from-header/80 to-header">
+					<div className="p-3 text-xs font-semibold text-center text-white uppercase sm:p-4 sm:text-sm bg-header/90 ">
 						Computer Science Practice
 					</div>
 
 					{/* Menu Items */}
-					<div className="overflow-y-auto max-h-[70vh]">
+					<div className="overflow-y-auto">
 						{menuItems.map((item) => (
 							<DropdownMenuItem key={item.id} asChild className="p-0 m-0">
 								<a
 									href={item.url}
 									className={cn(
-										"block px-3 sm:px-4 py-2 sm:py-3 border-b border-gray-100 hover:bg-gray-50 transition-colors",
+										"block p-2 sm:p-3 border-b border-indigo-200 transition-colors",
 										"group text-gray-800 cursor-pointer",
 										currentSiteId === item.id &&
-											"bg-indigo-50 border-l-4 border-l-indigo-500",
+											"bg-indigo-100 border-l-4 border-l-indigo-500",
 									)}
 									target="_blank"
 									rel="noopener noreferrer"
