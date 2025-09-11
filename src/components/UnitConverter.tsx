@@ -227,7 +227,7 @@ const generateQuestion = (
 	const stepCount = getStepsBetweenUnits(fromUnit, toUnit);
 	const maxValue = Math.max(10, Math.floor(ceiling / stepCount));
 	const initValue = Math.floor(Math.random() * maxValue) + 1;
-	
+
 	// Make values easier for mental math
 	let finalValue: number;
 	if (fromUnit === "bits") {
@@ -235,8 +235,13 @@ const generateQuestion = (
 		finalValue = Math.ceil(initValue / 8) * 8;
 	} else if (fromUnit === "bytes" && toUnit === "bits") {
 		// For bytes to bits conversion, use friendlier numbers for ×8
-		const friendlyByteValues = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 20, 24, 25, 30, 32, 40, 48, 50, 60, 64, 75, 80, 96, 100, 120, 125, 128, 150, 160, 180, 200, 220, 240, 250, 256];
-		finalValue = friendlyByteValues[Math.floor(Math.random() * friendlyByteValues.length)];
+		const friendlyByteValues = [
+			1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 20, 24, 25, 30, 32,
+			40, 48, 50, 60, 64, 75, 80, 96, 100, 120, 125, 128, 150, 160, 180, 200,
+			220, 240, 250, 256,
+		];
+		finalValue =
+			friendlyByteValues[Math.floor(Math.random() * friendlyByteValues.length)];
 	} else {
 		finalValue = initValue;
 	}
