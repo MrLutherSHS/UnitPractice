@@ -42,9 +42,9 @@ export const GCSE_NAVIGATION_MENU: NavMenuItem[] = [
 	{
 		title: "2.1 - Trace Tables",
 		description: "Visualize trace tables for algorithms",
-		url: "https://ocrtracetables.netlify.app/",
+		url: "https://tracetablepractice.netlify.app/",
 		id: "trace-tables",
-		keywords: ["ocrtracetables", "trace", "table"],
+		keywords: ["tracetablepractice", "trace", "table"],
 	},
 	{
 		title: "2.2 - Programming Practice",
