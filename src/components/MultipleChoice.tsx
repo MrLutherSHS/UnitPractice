@@ -556,7 +556,7 @@ const generateComparisonQuestion = (): Question => {
 		[
 			{ value: 0.0035, unit: "TB" },
 			{ value: 3200, unit: "MB" },
-			{ value: 3500000, unit: "KB" },
+			{ value: 3400000, unit: "KB" },
 			{ value: 3000000000, unit: "bytes" },
 		],
 		// Set 17: Close competition
@@ -658,15 +658,24 @@ const generateQuestion = (
 			explanation: ExplanationSection[];
 		} | null,
 	) => void,
+	enableConversion: boolean,
+	enableComparison: boolean,
 ): void => {
 	setHasSubmitted(false);
-	const questionTypes = [
-		generateConversionQuestion,
-		generateComparisonQuestion,
-	];
+	
+	// Build question types array based on enabled options
+	const questionTypes = [];
+	if (enableConversion) questionTypes.push(generateConversionQuestion);
+	if (enableComparison) questionTypes.push(generateComparisonQuestion);
+	
+	// Ensure at least one question type is enabled - Should never be possible due to UI constraints
+	if (questionTypes.length === 0) {
+		console.warn("No question types enabled, defaulting to both");
+		questionTypes.push(generateConversionQuestion, generateComparisonQuestion);
+	}
+	
 	const newQuestion =
 		questionTypes[Math.floor(Math.random() * questionTypes.length)]();
-	console.log(newQuestion);
 	setCurrentQuestion(newQuestion);
 	setSelectedAnswer(null);
 	setFeedback(null);
@@ -686,6 +695,8 @@ export function MultipleChoice({ onScoreUpdate }: UnitConverterProps) {
 	} | null>(null);
 	const [hasSubmitted, setHasSubmitted] = useState<boolean>(false);
 	const [showUnitsOrder, setShowUnitsOrder] = useState<boolean>(false);
+	const [enableConversion, setEnableConversion] = useState<boolean>(true);
+	const [enableComparison, setEnableComparison] = useState<boolean>(true);
 
 	// Generate unique IDs for accessibility
 	const converterTitleId = useId();
@@ -700,8 +711,10 @@ export function MultipleChoice({ onScoreUpdate }: UnitConverterProps) {
 			setCurrentQuestion,
 			setSelectedAnswer,
 			setFeedback,
+			enableConversion,
+			enableComparison,
 		);
-	}, []);
+	}, [enableConversion, enableComparison]);
 
 	// Handle option selection and submission
 	const handleOptionClick = (optionIndex: number) => {
@@ -747,13 +760,15 @@ export function MultipleChoice({ onScoreUpdate }: UnitConverterProps) {
 					setCurrentQuestion,
 					setSelectedAnswer,
 					setFeedback,
+					enableConversion,
+					enableComparison,
 				);
 			}
 		};
 
 		document.addEventListener("keydown", handleKeyDown);
 		return () => document.removeEventListener("keydown", handleKeyDown);
-	}, [hasSubmitted, currentQuestion]);
+	}, [hasSubmitted, currentQuestion, enableConversion, enableComparison]);
 
 	const getButtonClassName = (optionIndex: number): string => {
 		// MODIFICATION: Added 'relative' and changed 'text-left' to 'text-center'
@@ -895,6 +910,8 @@ export function MultipleChoice({ onScoreUpdate }: UnitConverterProps) {
 																	setCurrentQuestion,
 																	setSelectedAnswer,
 																	setFeedback,
+																	enableConversion,
+																	enableComparison,
 																);
 															}}
 															aria-label="Generate next question"
@@ -949,9 +966,65 @@ export function MultipleChoice({ onScoreUpdate }: UnitConverterProps) {
 								{/* Settings Section */}
 								<div className="mt-6">
 									<div className="p-3 border border-gray-200 rounded-lg sm:p-4 bg-gradient-to-r from-gray-50 to-blue-50">
-										<div className="flex items-center justify-start gap-2">
+										<div className="grid grid-cols-1 gap-3 sm:grid-cols-3 sm:gap-4">
+											{/* Question Type Settings */}
+											<div className="col-span-2 space-y-2 sm:space-y-3">
+												<h4 className="text-sm font-semibold text-gray-700 sm:text-base">
+													Question Types
+												</h4>
+												<div className="flex flex-col gap-2 sm:flex-row sm:gap-4">
+													{/* Conversion Questions */}
+													<div className="flex items-center min-w-0 gap-2">
+														<span className="text-base sm:text-lg">🔄</span>
+														<span className="text-xs font-semibold text-gray-800 truncate sm:text-sm">
+															Conversion
+														</span>
+														<Switch
+															checked={enableConversion}
+															onCheckedChange={(checked) => {
+																if (!checked && !enableComparison) {
+																	// If trying to disable conversion when comparison is off,
+																	// disable conversion and enable comparison
+																	setEnableConversion(false);
+																	setEnableComparison(true);
+																} else {
+																	setEnableConversion(checked);
+																}
+															}}
+															className="data-[state=unchecked]:bg-gray-200 data-[state=checked]:bg-blue-600 flex-shrink-0"
+															aria-label="Toggle conversion questions"
+															title="Enable/disable unit conversion questions"
+														/>
+													</div>
+
+													{/* Comparison Questions */}
+													<div className="flex items-center min-w-0 gap-2">
+														<span className="text-base sm:text-lg">📊</span>
+														<span className="text-xs font-semibold text-gray-800 truncate sm:text-sm">
+															Comparison
+														</span>
+														<Switch
+															checked={enableComparison}
+															onCheckedChange={(checked) => {
+																if (!checked && !enableConversion) {
+																	// If trying to disable comparison when conversion is off,
+																	// disable comparison and enable conversion
+																	setEnableComparison(false);
+																	setEnableConversion(true);
+																} else {
+																	setEnableComparison(checked);
+																}
+															}}
+															className="data-[state=unchecked]:bg-gray-200 data-[state=checked]:bg-blue-600 flex-shrink-0"
+															aria-label="Toggle comparison questions"
+															title="Enable/disable size comparison questions"
+														/>
+													</div>
+												</div>
+											</div>
+
 											{/* Units Order Hint */}
-											<div className="flex items-center min-w-0 gap-2">
+											<div className="flex items-center justify-start min-w-0 gap-2 sm:justify-end">
 												<span className="text-base sm:text-lg">📋</span>
 												<span className="text-xs font-semibold text-gray-800 truncate sm:text-sm">
 													Units Order
@@ -1048,6 +1121,8 @@ export function MultipleChoice({ onScoreUpdate }: UnitConverterProps) {
 												setCurrentQuestion,
 												setSelectedAnswer,
 												setFeedback,
+												enableConversion,
+												enableComparison,
 											);
 										}}
 										className="px-8 py-3 font-semibold text-white transition-all duration-200 transform rounded-lg shadow-lg bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 hover:shadow-xl hover:-translate-y-1"

@@ -72,7 +72,7 @@ export const SITE_CONFIG: SiteConfig = {
 			},
 			{
 				emoji: "🪿👑",
-				title: "Petabyte Pond Emperor",
+				title: "Petabyte Phoenix",
 				description:
 					"The legendary storage sage - no file size can ruffle your feathers!",
 				minPoints: 75,
