@@ -1,6 +1,8 @@
+import { ArrowRight } from "lucide-react";
 import { useEffect, useId, useState } from "react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Card, CardContent } from "@/components/ui/card";
+import { Switch } from "@/components/ui/switch";
 import { type ExplanationSection, formatNumber } from "@/lib/numberUtils";
 import { Button } from "./ui/button";
 
@@ -39,6 +41,26 @@ const expandUnit = (unit: string): string => {
 		default:
 			return unit;
 	}
+};
+
+// Units array for the order hint
+const units = [
+	"bytes",
+	"KB",
+	"MB",
+	"GB",
+	"TB",
+];
+
+const getUnitColor = (unit: string): string => {
+	const colors: Record<string, string> = {
+		bytes: "bg-blue-100 text-blue-900",
+		KB: "bg-cyan-100 text-cyan-900",
+		MB: "bg-teal-100 text-teal-900",
+		GB: "bg-green-100 text-green-900",
+		TB: "bg-amber-100 text-amber-900",
+	};
+	return colors[unit] || "bg-gray-100";
 };
 
 // Unit conversion utilities
@@ -663,12 +685,14 @@ export function MultipleChoice({ onScoreUpdate }: UnitConverterProps) {
 		explanation: ExplanationSection[];
 	} | null>(null);
 	const [hasSubmitted, setHasSubmitted] = useState<boolean>(false);
+	const [showUnitsOrder, setShowUnitsOrder] = useState<boolean>(false);
 
 	// Generate unique IDs for accessibility
 	const converterTitleId = useId();
 	const currentQuestionId = useId();
 	const feedbackMessageId = useId();
 	const welcomeMessageId = useId();
+	const hintTitleId = useId();
 
 	useEffect(() => {
 		generateQuestion(
@@ -776,7 +800,7 @@ export function MultipleChoice({ onScoreUpdate }: UnitConverterProps) {
 								<div className="mt-6">
 									<fieldset>
 										<legend className="sr-only">Choose your answer</legend>
-										<div className="flex flex-col mb-2 gap-4 sm:grid sm:grid-cols-2">
+										<div className="flex flex-col gap-4 mb-2 sm:grid sm:grid-cols-2">
 											{/* MODIFICATION: Updated button structure */}
 											{currentQuestion.options.map((option, index) => (
 												<Button
@@ -874,7 +898,7 @@ export function MultipleChoice({ onScoreUpdate }: UnitConverterProps) {
 																);
 															}}
 															aria-label="Generate next question"
-															className="px-8 py-3 font-semibold text-white rounded-lg shadow-lg transition-all duration-200 transform bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 hover:shadow-xl hover:-translate-y-1"
+															className="px-8 py-3 font-semibold text-white transition-all duration-200 transform rounded-lg shadow-lg bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 hover:shadow-xl hover:-translate-y-1"
 														>
 															<span className="mr-2">🎯</span>
 															Next Question
@@ -891,7 +915,7 @@ export function MultipleChoice({ onScoreUpdate }: UnitConverterProps) {
 															(section, sectionIndex) => (
 																<div
 																	key={section.title}
-																	className="p-4 bg-white border border-gray-200 rounded-lg bg-opacity-50"
+																	className="p-4 bg-white bg-opacity-50 border border-gray-200 rounded-lg"
 																>
 																	<h4 className="flex items-center mb-2 text-base font-bold text-indigo-900">
 																		<span className="flex items-center justify-center flex-shrink-0 w-6 h-6 mr-3 text-sm font-semibold text-indigo-800 bg-indigo-100 rounded-full">
@@ -920,6 +944,62 @@ export function MultipleChoice({ onScoreUpdate }: UnitConverterProps) {
 											</AlertDescription>
 										</Alert>
 									</div>
+								)}
+
+								{/* Settings Section */}
+								<div className="mt-6">
+									<div className="p-3 border border-gray-200 rounded-lg sm:p-4 bg-gradient-to-r from-gray-50 to-blue-50">
+										<div className="flex items-center justify-start gap-2">
+											{/* Units Order Hint */}
+											<div className="flex items-center min-w-0 gap-2">
+												<span className="text-base sm:text-lg">📋</span>
+												<span className="text-xs font-semibold text-gray-800 truncate sm:text-sm">
+													Units Order
+												</span>
+												<Switch
+													checked={showUnitsOrder}
+													onCheckedChange={setShowUnitsOrder}
+													className="data-[state=unchecked]:bg-gray-200 data-[state=checked]:bg-blue-600 flex-shrink-0"
+													aria-label="Toggle units order hint"
+													title="Show/hide the ordered list of units from smallest to largest"
+												/>
+											</div>
+										</div>
+									</div>
+								</div>
+
+								{/* Units Order Hint Section */}
+								{showUnitsOrder && (
+									<section
+										aria-labelledby={hintTitleId}
+										className="mt-6"
+									>
+										<h3
+											id={hintTitleId}
+											className="flex items-center mb-3 font-semibold text-blue-800"
+										>
+											<span className="mr-2 text-lg">📋</span>
+											Units in order (smallest to largest)
+										</h3>
+										<div className="p-4 border-l-4 border-purple-400 rounded-r-lg shadow-inner bg-gradient-to-r from-blue-50 to-indigo-50">
+											<div className="flex flex-wrap items-center gap-2">
+												{units.map((unit, index) => [
+													<span
+														key={unit}
+														className={`px-2 py-1 rounded text-sm ${getUnitColor(unit)}`}
+													>
+														{unit}
+													</span>,
+													index < units.length - 1 && (
+														<ArrowRight
+															key={`arrow-from-${unit}-to-${units[index + 1]}`}
+															className="w-4 h-4 text-purple-400"
+														/>
+													),
+												])}
+											</div>
+										</div>
+									</section>
 								)}
 
 								<details className="mt-6 group">
@@ -970,7 +1050,7 @@ export function MultipleChoice({ onScoreUpdate }: UnitConverterProps) {
 												setFeedback,
 											);
 										}}
-										className="px-8 py-3 font-semibold text-white rounded-lg shadow-lg transition-all duration-200 transform bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 hover:shadow-xl hover:-translate-y-1"
+										className="px-8 py-3 font-semibold text-white transition-all duration-200 transform rounded-lg shadow-lg bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 hover:shadow-xl hover:-translate-y-1"
 									>
 										<span className="mr-2">🚀</span>
 										Start Practicing
