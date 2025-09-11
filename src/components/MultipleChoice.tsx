@@ -306,288 +306,289 @@ const generateComparisonQuestion = (): Question => {
 		types[Math.floor(Math.random() * types.length)];
 
 	// Predefined sets of values that are calculator-friendly and create good distractors
-	const comparisonSets = [
-		// Set 1: Mix of units with clear ordering
-		[
-			{ value: 300, unit: "MB" },
-			{ value: 2.1, unit: "GB" },
-			{ value: 200000, unit: "KB" },
-			{ value: 0.0021, unit: "TB" },
-		],
-		// Set 2: Different scale mix
-		[
-			{ value: 2000000, unit: "bytes" },
-			{ value: 2300, unit: "KB" },
-			{ value: 200, unit: "MB" },
-			{ value: 0.1, unit: "GB" },
-		],
-		// Set 3: Close values requiring careful conversion
-		[
-			{ value: 1500, unit: "MB" },
-			{ value: 1.6, unit: "GB" },
-			{ value: 1300000, unit: "KB" },
-			{ value: 0.0014, unit: "TB" },
-		],
-		// Set 4: Another mix
-		[
-			{ value: 5000000, unit: "bytes" },
-			{ value: 4800, unit: "KB" },
-			{ value: 5.2, unit: "MB" },
-			{ value: 0.004, unit: "GB" },
-		],
-		// Set 5: Larger numbers
-		[
-			{ value: 800, unit: "MB" },
-			{ value: 0.9, unit: "GB" },
-			{ value: 750000, unit: "KB" },
-			{ value: 0.0008, unit: "TB" },
-		],
-		// Set 6: Small file sizes
-		[
-			{ value: 50000, unit: "bytes" },
-			{ value: 45, unit: "KB" },
-			{ value: 0.06, unit: "MB" },
-			{ value: 0.000055, unit: "GB" },
-		],
-		// Set 7: Medium range mix
-		[
-			{ value: 750, unit: "MB" },
-			{ value: 0.8, unit: "GB" },
-			{ value: 700000, unit: "KB" },
-			{ value: 800000000, unit: "bytes" },
-		],
-		// Set 8: Close decimals
-		[
-			{ value: 2.5, unit: "GB" },
-			{ value: 2400, unit: "MB" },
-			{ value: 2600000, unit: "KB" },
-			{ value: 0.0023, unit: "TB" },
-		],
-		// Set 9: Round numbers
-		[
-			{ value: 3000, unit: "MB" },
-			{ value: 3.2, unit: "GB" },
-			{ value: 2800000, unit: "KB" },
-			{ value: 0.003, unit: "TB" },
-		],
-		// Set 10: Smaller scale
-		[
-			{ value: 120, unit: "MB" },
-			{ value: 0.15, unit: "GB" },
-			{ value: 100000, unit: "KB" },
-			{ value: 140000000, unit: "bytes" },
-		],
-		// Set 11: Mixed decimals
-		[
-			{ value: 4.5, unit: "GB" },
-			{ value: 4200, unit: "MB" },
-			{ value: 4800000, unit: "KB" },
-			{ value: 0.004, unit: "TB" },
-		],
-		// Set 12: Large range
-		[
-			{ value: 6000, unit: "MB" },
-			{ value: 5.8, unit: "GB" },
-			{ value: 6200000, unit: "KB" },
-			{ value: 0.0059, unit: "TB" },
-		],
-		// Set 13: Very small files
-		[
-			{ value: 15000, unit: "bytes" },
-			{ value: 12, unit: "KB" },
-			{ value: 0.018, unit: "MB" },
-			{ value: 0.000014, unit: "GB" },
-		],
-		// Set 14: Tricky decimals
-		[
-			{ value: 1.2, unit: "GB" },
-			{ value: 1300, unit: "MB" },
-			{ value: 1100000, unit: "KB" },
-			{ value: 0.0012, unit: "TB" },
-		],
-		// Set 15: Mid-range variety
-		[
-			{ value: 900, unit: "MB" },
-			{ value: 0.85, unit: "GB" },
-			{ value: 950000, unit: "KB" },
-			{ value: 880000000, unit: "bytes" },
-		],
-		// Set 16: Large files
-		[
-			{ value: 7500, unit: "MB" },
-			{ value: 7.2, unit: "GB" },
-			{ value: 7800000, unit: "KB" },
-			{ value: 0.007, unit: "TB" },
-		],
-		// Set 17: Close comparison
-		[
-			{ value: 2.8, unit: "GB" },
-			{ value: 2700, unit: "MB" },
-			{ value: 2900000, unit: "KB" },
-			{ value: 0.0028, unit: "TB" },
-		],
-		// Set 18: Mixed small/large
-		[
-			{ value: 350, unit: "MB" },
-			{ value: 0.4, unit: "GB" },
-			{ value: 320000, unit: "KB" },
-			{ value: 380000000, unit: "bytes" },
-		],
-		// Set 19: Even distribution
-		[
-			{ value: 1800, unit: "MB" },
-			{ value: 1.7, unit: "GB" },
-			{ value: 1900000, unit: "KB" },
-			{ value: 0.0018, unit: "TB" },
-		],
-		// Set 20: Final variety set
-		[
-			{ value: 650, unit: "MB" },
-			{ value: 0.7, unit: "GB" },
-			{ value: 600000, unit: "KB" },
-			{ value: 680000000, unit: "bytes" },
-		],
-		// Set 1: Mix of units with clear ordering
-		[
-			{ value: 300, unit: "MB" },
-			{ value: 2.1, unit: "GB" },
-			{ value: 200000, unit: "KB" },
-			{ value: 0.0021, unit: "TB" },
-		],
-		// Set 2: Different scale mix
-		[
-			{ value: 2000000, unit: "bytes" },
-			{ value: 2300, unit: "KB" },
-			{ value: 200, unit: "MB" },
-			{ value: 0.1, unit: "GB" },
-		],
-		// Set 3: Close values requiring careful conversion
-		[
-			{ value: 1500, unit: "MB" },
-			{ value: 1.6, unit: "GB" },
-			{ value: 1300000, unit: "KB" },
-			{ value: 0.0014, unit: "TB" },
-		],
-		// Set 4: Bytes looks biggest but isn't
-		[
-			{ value: 8000000, unit: "bytes" },
-			{ value: 12, unit: "MB" },
-			{ value: 9500, unit: "KB" },
-			{ value: 0.01, unit: "GB" },
-		],
-		// Set 5: TB looks smallest but is largest
-		[
-			{ value: 450, unit: "MB" },
-			{ value: 520000, unit: "KB" },
-			{ value: 600000000, unit: "bytes" },
-			{ value: 0.8, unit: "GB" },
-		],
-		// Set 6: KB number is huge but actually small
-		[
-			{ value: 750000, unit: "KB" },
-			{ value: 0.9, unit: "GB" },
-			{ value: 800, unit: "MB" },
-			{ value: 700000000, unit: "bytes" },
-		],
-		// Set 7: Decimal GB is actually largest
-		[
-			{ value: 1200000, unit: "KB" },
-			{ value: 1500000000, unit: "bytes" },
-			{ value: 1100, unit: "MB" },
-			{ value: 1.8, unit: "GB" },
-		],
-		// Set 8: Small TB beats everything
-		[
-			{ value: 2500, unit: "MB" },
-			{ value: 2800000, unit: "KB" },
-			{ value: 2200000000, unit: "bytes" },
-			{ value: 0.003, unit: "TB" },
-		],
-		// Set 9: Bytes looks massive but is tiny
-		[
-			{ value: 95000000, unit: "bytes" },
-			{ value: 120, unit: "MB" },
-			{ value: 110000, unit: "KB" },
-			{ value: 0.08, unit: "GB" },
-		],
-		// Set 10: Close race between units
-		[
-			{ value: 0.65, unit: "GB" },
-			{ value: 680, unit: "MB" },
-			{ value: 620000, unit: "KB" },
-			{ value: 700000000, unit: "bytes" },
-		],
-		// Set 11: TB decimal wins despite small number
-		[
-			{ value: 1800, unit: "MB" },
-			{ value: 1950000, unit: "KB" },
-			{ value: 1700000000, unit: "bytes" },
-			{ value: 0.002, unit: "TB" },
-		],
-		// Set 12: GB decimal vs large KB
-		[
-			{ value: 1.4, unit: "GB" },
-			{ value: 1500000, unit: "KB" },
-			{ value: 1350, unit: "MB" },
-			{ value: 1600000000, unit: "bytes" },
-		],
-		// Set 13: Mixed small/medium values
-		[
-			{ value: 85000000, unit: "bytes" },
-			{ value: 92, unit: "MB" },
-			{ value: 88000, unit: "KB" },
-			{ value: 0.09, unit: "GB" },
-		],
-		// Set 14: Large KB vs small GB
-		[
-			{ value: 950000, unit: "KB" },
-			{ value: 0.85, unit: "GB" },
-			{ value: 1000, unit: "MB" },
-			{ value: 900000000, unit: "bytes" },
-		],
-		// Set 15: Tricky ordering
-		[
-			{ value: 1.25, unit: "GB" },
-			{ value: 1350000, unit: "KB" },
-			{ value: 1200, unit: "MB" },
-			{ value: 1400000000, unit: "bytes" },
-		],
-		// Set 16: Small decimals vs large numbers
-		[
-			{ value: 0.0035, unit: "TB" },
-			{ value: 3200, unit: "MB" },
-			{ value: 3400000, unit: "KB" },
-			{ value: 3000000000, unit: "bytes" },
-		],
-		// Set 17: Close competition
-		[
-			{ value: 2.3, unit: "GB" },
-			{ value: 2400000, unit: "KB" },
-			{ value: 2200, unit: "MB" },
-			{ value: 2500000000, unit: "bytes" },
-		],
-		// Set 18: Misleading large numbers
-		[
-			{ value: 750000000, unit: "bytes" },
-			{ value: 0.82, unit: "GB" },
-			{ value: 800000, unit: "KB" },
-			{ value: 720, unit: "MB" },
-		],
-		// Set 19: Very close values
-		[
-			{ value: 1.15, unit: "GB" },
-			{ value: 1180, unit: "MB" },
-			{ value: 1120000, unit: "KB" },
-			{ value: 1200000000, unit: "bytes" },
-		],
-		// Set 20: Final challenging set
-		[
-			{ value: 0.0028, unit: "TB" },
-			{ value: 2650, unit: "MB" },
-			{ value: 2900000, unit: "KB" },
-			{ value: 2400000000, unit: "bytes" },
-		],
-	];
+const comparisonSets = [
+	// Set 1: Mix of units with clear ordering
+	[
+		{ value: 300, unit: "MB" },
+		{ value: 2.1, unit: "GB" },
+		{ value: 200000, unit: "KB" },
+		{ value: 0.0025, unit: "TB" },
+	],
+	// Set 2: Different scale mix
+	[
+		{ value: 2000000, unit: "bytes" },
+		{ value: 2300, unit: "KB" },
+		{ value: 200, unit: "MB" },
+		{ value: 0.1, unit: "GB" },
+	],
+	// Set 3: Close values requiring careful conversion
+	[
+		{ value: 1500, unit: "MB" },
+		{ value: 1.6, unit: "GB" },
+		{ value: 1300000, unit: "KB" },
+		{ value: 0.0014, unit: "TB" },
+	],
+	// Set 4: Another mix
+	[
+		{ value: 5000000, unit: "bytes" },
+		{ value: 4800, unit: "KB" },
+		{ value: 5.2, unit: "MB" },
+		{ value: 0.004, unit: "GB" },
+	],
+	// Set 5: Larger numbers
+	[
+		{ value: 800, unit: "MB" },
+		{ value: 0.9, unit: "GB" },
+		{ value: 750000, unit: "KB" },
+		{ value: 0.00085, unit: "TB" },
+	],
+	// Set 6: Small file sizes
+	[
+		{ value: 50000, unit: "bytes" },
+		{ value: 45, unit: "KB" },
+		{ value: 0.06, unit: "MB" },
+		{ value: 0.000055, unit: "GB" },
+	],
+	// Set 7: Medium range mix
+	[
+		{ value: 750, unit: "MB" },
+		{ value: 0.8, unit: "GB" },
+		{ value: 700000, unit: "KB" },
+		{ value: 850000000, unit: "bytes" },
+	],
+	// Set 8: Close decimals
+	[
+		{ value: 2.5, unit: "GB" },
+		{ value: 2400, unit: "MB" },
+		{ value: 2600000, unit: "KB" },
+		{ value: 0.0023, unit: "TB" },
+	],
+	// Set 9: Round numbers
+	[
+		{ value: 3000, unit: "MB" },
+		{ value: 3.2, unit: "GB" },
+		{ value: 2800000, unit: "KB" },
+		{ value: 0.032, unit: "TB" },
+	],
+	// Set 10: Smaller scale
+	[
+		{ value: 120, unit: "MB" },
+		{ value: 0.15, unit: "GB" },
+		{ value: 100000, unit: "KB" },
+		{ value: 140000000, unit: "bytes" },
+	],
+	// Set 11: Mixed decimals
+	[
+		{ value: 4.5, unit: "GB" },
+		{ value: 4200, unit: "MB" },
+		{ value: 4800000, unit: "KB" },
+		{ value: 0.004, unit: "TB" },
+	],
+	// Set 12: Large range
+	[
+		{ value: 6000, unit: "MB" },
+		{ value: 5.8, unit: "GB" },
+		{ value: 6200000, unit: "KB" },
+		{ value: 0.0059, unit: "TB" },
+	],
+	// Set 13: Very small files
+	[
+		{ value: 15000, unit: "bytes" },
+		{ value: 12, unit: "KB" },
+		{ value: 0.018, unit: "MB" },
+		{ value: 0.000014, unit: "GB" },
+	],
+	// Set 14: Tricky decimals
+	[
+		{ value: 12, unit: "GB" },
+		{ value: 1300, unit: "MB" },
+		{ value: 1100000, unit: "KB" },
+		{ value: 0.0012, unit: "TB" },
+	],
+	// Set 15: Mid-range variety
+	[
+		{ value: 900, unit: "MB" },
+		{ value: 0.85, unit: "GB" },
+		{ value: 950000, unit: "KB" },
+		{ value: 880000000, unit: "bytes" },
+	],
+	// Set 16: Large files
+	[
+		{ value: 7500, unit: "MB" },
+		{ value: 7.2, unit: "GB" },
+		{ value: 7800000, unit: "KB" },
+		{ value: 0.007, unit: "TB" },
+	],
+	// Set 17: Close comparison
+	[
+		{ value: 2.8, unit: "GB" },
+		{ value: 2700, unit: "MB" },
+		{ value: 2900000, unit: "KB" },
+		{ value: 0.0026, unit: "TB" },
+	],
+	// Set 18: Mixed small/large
+	[
+		{ value: 350, unit: "MB" },
+		{ value: 0.4, unit: "GB" },
+		{ value: 320000, unit: "KB" },
+		{ value: 380000000, unit: "bytes" },
+	],
+	// Set 19: Even distribution
+	[
+		{ value: 180, unit: "MB" },
+		{ value: 1.7, unit: "GB" },
+		{ value: 1900000, unit: "KB" },
+		{ value: 0.0018, unit: "TB" },
+	],
+	// Set 20: Final variety set
+	[
+		{ value: 650, unit: "MB" },
+		{ value: 0.7, unit: "GB" },
+		{ value: 600000, unit: "KB" },
+		{ value: 680000000, unit: "bytes" },
+	],
+	// Set 21: Mix of units with clear ordering
+	[
+		{ value: 300, unit: "MB" },
+		{ value: 2.1, unit: "GB" },
+		{ value: 200000, unit: "KB" },
+		{ value: 0.025, unit: "TB" },
+	],
+	// Set 22: Different scale mix
+	[
+		{ value: 2000000, unit: "bytes" },
+		{ value: 2300, unit: "KB" },
+		{ value: 200, unit: "MB" },
+		{ value: 0.1, unit: "GB" },
+	],
+	// Set 23: Close values requiring careful conversion
+	[
+		{ value: 1500, unit: "MB" },
+		{ value: 1.6, unit: "GB" },
+		{ value: 1300000, unit: "KB" },
+		{ value: 0.0014, unit: "TB" },
+	],
+	// Set 24: Bytes looks biggest but isn't
+	[
+		{ value: 8000000, unit: "bytes" },
+		{ value: 12, unit: "MB" },
+		{ value: 9500, unit: "KB" },
+		{ value: 0.01, unit: "GB" },
+	],
+	// Set 25: TB looks smallest but is largest
+	[
+		{ value: 450, unit: "MB" },
+		{ value: 520000, unit: "KB" },
+		{ value: 600000000, unit: "bytes" },
+		{ value: 0.8, unit: "GB" },
+	],
+	// Set 26: KB number is huge but actually small
+	[
+		{ value: 750000, unit: "KB" },
+		{ value: 0.9, unit: "GB" },
+		{ value: 800, unit: "MB" },
+		{ value: 700000000, unit: "bytes" },
+	],
+	// Set 27: Decimal GB is actually largest
+	[
+		{ value: 1200000, unit: "KB" },
+		{ value: 1500000000, unit: "bytes" },
+		{ value: 1100, unit: "MB" },
+		{ value: 1.8, unit: "GB" },
+	],
+	// Set 28: Small TB beats everything
+	[
+		{ value: 2500, unit: "MB" },
+		{ value: 2800000, unit: "KB" },
+		{ value: 2200000000, unit: "bytes" },
+		{ value: 0.003, unit: "TB" },
+	],
+	// Set 29: Bytes looks massive but is tiny
+	[
+		{ value: 95000000, unit: "bytes" },
+		{ value: 120, unit: "MB" },
+		{ value: 110000, unit: "KB" },
+		{ value: 0.08, unit: "GB" },
+	],
+	// Set 30: Close race between units
+	[
+		{ value: 0.65, unit: "GB" },
+		{ value: 680, unit: "MB" },
+		{ value: 620000, unit: "KB" },
+		{ value: 700000000, unit: "bytes" },
+	],
+	// Set 31: TB decimal wins despite small number
+	[
+		{ value: 1800, unit: "MB" },
+		{ value: 1950000, unit: "KB" },
+		{ value: 1700000000, unit: "bytes" },
+		{ value: 0.002, unit: "TB" },
+	],
+	// Set 32: GB decimal vs large KB
+	[
+		{ value: 1.4, unit: "GB" },
+		{ value: 1500000, unit: "KB" },
+		{ value: 1350, unit: "MB" },
+		{ value: 1600000000, unit: "bytes" },
+	],
+	// Set 33: Mixed small/medium values
+	[
+		{ value: 85000000, unit: "bytes" },
+		{ value: 92, unit: "MB" },
+		{ value: 88000, unit: "KB" },
+		{ value: 0.09, unit: "GB" },
+	],
+	// Set 34: Large KB vs small GB
+	[
+		{ value: 950000, unit: "KB" },
+		{ value: 0.85, unit: "GB" },
+		{ value: 1000, unit: "MB" },
+		{ value: 900000000, unit: "bytes" },
+	],
+	// Set 35: Tricky ordering
+	[
+		{ value: 1.25, unit: "GB" },
+		{ value: 1350000, unit: "KB" },
+		{ value: 1200, unit: "MB" },
+		{ value: 1400000000, unit: "bytes" },
+	],
+	// Set 36: Small decimals vs large numbers
+	[
+		{ value: 0.0035, unit: "TB" },
+		{ value: 3200, unit: "MB" },
+		{ value: 3400000, unit: "KB" },
+		{ value: 3000000000, unit: "bytes" },
+	],
+	// Set 37: Close competition
+	[
+		{ value: 2.3, unit: "GB" },
+		{ value: 2400000, unit: "KB" },
+		{ value: 2200, unit: "MB" },
+		{ value: 2500000000, unit: "bytes" },
+	],
+	// Set 38: Misleading large numbers
+	[
+		{ value: 750000000, unit: "bytes" },
+		{ value: 0.82, unit: "GB" },
+		{ value: 800000, unit: "KB" },
+		{ value: 720, unit: "MB" },
+	],
+	// Set 39: Very close values
+	[
+		{ value: 1.15, unit: "GB" },
+		{ value: 1180, unit: "MB" },
+		{ value: 1120000, unit: "KB" },
+		{ value: 1200000000, unit: "bytes" },
+	],
+	// Set 40: Final challenging set
+	[
+		{ value: 0.0028, unit: "TB" },
+		{ value: 2650, unit: "MB" },
+		{ value: 2900000, unit: "KB" },
+		{ value: 2400000000, unit: "bytes" },
+	],
+];
+
 	const selectedSet =
 		comparisonSets[Math.floor(Math.random() * comparisonSets.length)];
 
