@@ -30,7 +30,7 @@ const ConversionPathVisual = ({
 	const path = getConversionPath(fromUnit, toUnit);
 
 	return (
-		<div className="flex flex-wrap items-center p-3 rounded-lg shadow-inner gap-1 sm:gap-2 sm:p-4 bg-gradient-to-r from-blue-50 to-purple-50">
+		<div className="flex flex-wrap items-center gap-1 p-3 rounded-lg shadow-inner sm:gap-2 sm:p-4 bg-gradient-to-r from-blue-50 to-purple-50">
 			{path.map((unit, index) => [
 				<div
 					key={unit}
@@ -227,9 +227,19 @@ const generateQuestion = (
 	const stepCount = getStepsBetweenUnits(fromUnit, toUnit);
 	const maxValue = Math.max(10, Math.floor(ceiling / stepCount));
 	const initValue = Math.floor(Math.random() * maxValue) + 1;
-	// I want to make sure the value is a multiple of 8 if converting from bits
-	const finalValue =
-		fromUnit === "bits" ? Math.ceil(initValue / 8) * 8 : initValue;
+	
+	// Make values easier for mental math
+	let finalValue: number;
+	if (fromUnit === "bits") {
+		// Make sure the value is a multiple of 8 if converting from bits
+		finalValue = Math.ceil(initValue / 8) * 8;
+	} else if (fromUnit === "bytes" && toUnit === "bits") {
+		// For bytes to bits conversion, use friendlier numbers for ×8
+		const friendlyByteValues = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 20, 24, 25, 30, 32, 40, 48, 50, 60, 64, 75, 80, 96, 100, 120, 125, 128, 150, 160, 180, 200, 220, 240, 250, 256];
+		finalValue = friendlyByteValues[Math.floor(Math.random() * friendlyByteValues.length)];
+	} else {
+		finalValue = initValue;
+	}
 
 	const answer = calculateAnswer(finalValue, fromUnit, toUnit);
 
@@ -373,7 +383,7 @@ export function UnitConverter({ onScoreUpdate }: UnitConverterProps) {
 											aria-invalid={
 												feedback && !feedback.isCorrect ? "true" : "false"
 											}
-											className="p-6 text-lg font-bold text-center border-2 border-indigo-200 shadow-lg transition-all duration-200 sm:text-2xl focus:border-indigo-500 focus:ring-4 focus:ring-indigo-200 rounded-xl bg-gradient-to-r from-white to-indigo-50"
+											className="p-6 text-lg font-bold text-center transition-all duration-200 border-2 border-indigo-200 shadow-lg sm:text-2xl focus:border-indigo-500 focus:ring-4 focus:ring-indigo-200 rounded-xl bg-gradient-to-r from-white to-indigo-50"
 										/>
 									</div>
 								</form>
@@ -445,7 +455,7 @@ export function UnitConverter({ onScoreUpdate }: UnitConverterProps) {
 																}, 100);
 															}}
 															aria-label="Generate next question"
-															className="px-8 py-3 font-semibold text-white rounded-lg shadow-lg transition-all duration-200 transform bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 hover:shadow-xl hover:-translate-y-1"
+															className="px-8 py-3 font-semibold text-white transition-all duration-200 transform rounded-lg shadow-lg bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 hover:shadow-xl hover:-translate-y-1"
 														>
 															<span className="mr-2">🎯</span>
 															Next Question
@@ -462,7 +472,7 @@ export function UnitConverter({ onScoreUpdate }: UnitConverterProps) {
 															(section, sectionIndex) => (
 																<div
 																	key={section.title}
-																	className="p-4 bg-white border border-gray-200 rounded-lg bg-opacity-50"
+																	className="p-4 bg-white bg-opacity-50 border border-gray-200 rounded-lg"
 																>
 																	<h4 className="flex items-center mb-2 text-base font-bold text-indigo-900">
 																		<span className="flex items-center justify-center flex-shrink-0 w-6 h-6 mr-3 text-sm font-semibold text-indigo-800 bg-indigo-100 rounded-full">
