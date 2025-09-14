@@ -5,6 +5,40 @@ import { Input } from "@/components/ui/input";
 import { type ExplanationSection, formatNumber } from "@/lib/numberUtils";
 import { useQuizInteraction } from "@/lib/quizHooks";
 
+// Define parameter types for different question types
+interface ImageParams {
+	width: number;
+	height: number;
+	colourDepth: number;
+	numberOfFiles: number;
+}
+
+interface SoundParams {
+	sampleRate: number;
+	duration: number;
+	bitDepth: number;
+}
+
+interface TextParams {
+	charCount: number;
+	bitsPerChar: number;
+}
+
+interface OptionsParams {
+	numOfBits: number;
+}
+
+interface BitsFromOptionsParams {
+	numberOfOptions: number;
+}
+
+type QuestionParams =
+	| ImageParams
+	| SoundParams
+	| TextParams
+	| OptionsParams
+	| BitsFromOptionsParams;
+
 interface Question {
 	category: "File Size Calculator";
 	type: "sound" | "image" | "text" | "options" | "bitsFromOptions";
@@ -12,7 +46,7 @@ interface Question {
 	targetUnit: string;
 	answer: number;
 	explanation: ExplanationSection[];
-	questionText: string; // Add this line to store the question text
+	questionText: string;
 }
 
 const convertToUnit = (bits: number, targetUnit: string): number => {
@@ -24,42 +58,58 @@ const convertToUnit = (bits: number, targetUnit: string): number => {
 	return bits / conversions[targetUnit];
 };
 
-// Define parameter types for different question types
-type QuestionParams =
-	| { width: number; height: number; colourDepth: number } // image
-	| { sampleRate: number; duration: number; bitDepth: number } // sound
-	| { charCount: number; bitsPerChar: number } // text
-	| { numOfBits: number } // options
-	| { numberOfOptions: number }; // bitsFromOptions
-
 // Move this function outside the component and make it pure
 const selectQuestionText = (question: {
 	type: "sound" | "image" | "text" | "options" | "bitsFromOptions";
 	params: QuestionParams;
 	targetUnit: string;
 }): string => {
-	const possibleQuestions = {
-		image: [
-			`An image is ${(question.params as { width: number; height: number; colourDepth: number }).width} pixels by ${(question.params as { width: number; height: number; colourDepth: number }).height} pixels using a colour depth of ${(question.params as { width: number; height: number; colourDepth: number }).colourDepth} bits. How large is the file? Give your answer in ${question.targetUnit}.`,
-			`A student creates an image with a colour depth of ${(question.params as { width: number; height: number; colourDepth: number }).colourDepth} bits and a resolution of ${(question.params as { width: number; height: number; colourDepth: number }).width} by ${(question.params as { width: number; height: number; colourDepth: number }).height} pixels. Calculate the file size in ${question.targetUnit}.`,
-		],
-		sound: [
-			`A sound file has a sample rate of ${(question.params as { sampleRate: number; duration: number; bitDepth: number }).sampleRate} Hz, duration of ${(question.params as { sampleRate: number; duration: number; bitDepth: number }).duration} seconds, and bit depth of ${(question.params as { sampleRate: number; duration: number; bitDepth: number }).bitDepth} bits. What is the file size in ${question.targetUnit}?`,
-		],
-		text: [
-			`A text file is stored in ASCII. It has ${(question.params as { charCount: number; bitsPerChar: number }).charCount} characters. How large is the file in ${question.targetUnit}?`,
-		],
-		options: [
-			`A file uses ${(question.params as { numOfBits: number }).numOfBits} bits to store each value. How many different options can it represent?`,
-		],
-		bitsFromOptions: [
-			`An image wants to use ${(question.params as { numberOfOptions: number }).numberOfOptions} different colours. What's the minimum number of bits to store each pixel?`,
-			`State the minimum number of bits that will be needed to represent ${(question.params as { numberOfOptions: number }).numberOfOptions} different colours.`,
-		],
-	};
-	return possibleQuestions[question.type][
-		Math.floor(Math.random() * possibleQuestions[question.type].length)
-	];
+	// Extract params based on question type using the specific interfaces
+	switch (question.type) {
+		case "image": {
+			const { width, height, colourDepth, numberOfFiles } = question.params as ImageParams;
+			
+			const singleImageQuestions = [
+				`An image is ${width} pixels by ${height} pixels using a colour depth of ${colourDepth} bits. How large is the file? Give your answer in ${question.targetUnit}.`,
+				`A student creates an image with a colour depth of ${colourDepth} bits and a resolution of ${width} by ${height} pixels. Calculate the file size in ${question.targetUnit}.`,
+			];
+			
+			const multipleImageQuestions = [
+				`A user creates ${numberOfFiles} images on their computer. Each image has a colour depth of ${colourDepth} bits and a resolution of ${width} by ${height} pixels. Calculate the total file size of the ${numberOfFiles} images in ${question.targetUnit}.`,
+				`A photographer takes ${numberOfFiles} digital photos. Each photo is ${width} × ${height} pixels with ${colourDepth} bits per pixel. What is the total storage required in ${question.targetUnit}?`,
+			];
+			
+			const questions = numberOfFiles === 1 ? singleImageQuestions : multipleImageQuestions;
+			return questions[Math.floor(Math.random() * questions.length)];
+		}
+		
+		case "sound": {
+			const { sampleRate, duration, bitDepth } = question.params as SoundParams;
+			return `A sound file has a sample rate of ${sampleRate} Hz, duration of ${duration} seconds, and bit depth of ${bitDepth} bits. What is the file size in ${question.targetUnit}?`;
+		}
+		
+		case "text": {
+			const { charCount } = question.params as TextParams;
+			return `A text file is stored in ASCII. It has ${charCount} characters. How large is the file in ${question.targetUnit}?`;
+		}
+		
+		case "options": {
+			const { numOfBits } = question.params as OptionsParams;
+			return `A file uses ${numOfBits} bits to store each value. How many different options can it represent?`;
+		}
+		
+		case "bitsFromOptions": {
+			const { numberOfOptions } = question.params as BitsFromOptionsParams;
+			const questions = [
+				`An image wants to use ${numberOfOptions} different colours. What's the minimum number of bits to store each pixel?`,
+				`State the minimum number of bits that will be needed to represent ${numberOfOptions} different colours.`,
+			];
+			return questions[Math.floor(Math.random() * questions.length)];
+		}
+		
+		default:
+			return "";
+	}
 };
 
 // Generator functions moved outside component
@@ -70,13 +120,17 @@ const generateImageQuestion = (): Question => {
 	const colourDepth =
 		colourDepthOptions[Math.floor(Math.random() * colourDepthOptions.length)];
 	const targetUnit = ["bits", "bytes"][Math.floor(Math.random() * 2)];
+	
+	// Randomly select number of files: 1, 2, or 10
+	const numberOfFilesOptions = [1, 2, 10];
+	const numberOfFiles = numberOfFilesOptions[Math.floor(Math.random() * numberOfFilesOptions.length)];
 
-	const sizeInBits = width * height * colourDepth;
+	const sizeInBits = width * height * colourDepth * numberOfFiles;
 	const answer = convertToUnit(sizeInBits, targetUnit);
 
 	const baseQuestion = {
 		type: "image" as const,
-		params: { width, height, colourDepth },
+		params: { width, height, colourDepth, numberOfFiles },
 		targetUnit,
 	};
 	const questionText = selectQuestionText(baseQuestion);
@@ -84,7 +138,7 @@ const generateImageQuestion = (): Question => {
 	return {
 		category: "File Size Calculator",
 		type: "image",
-		params: { width, height, colourDepth },
+		params: { width, height, colourDepth, numberOfFiles },
 		targetUnit,
 		answer,
 		questionText, // Store the selected question text
@@ -95,14 +149,21 @@ const generateImageQuestion = (): Question => {
 					`Width: ${width} pixels`,
 					`Height: ${height} pixels`,
 					`Color depth: ${colourDepth} bits`,
+					...(numberOfFiles > 1 ? [`Number of files: ${numberOfFiles}`] : []),
 				],
 			},
 			{
-				title: "Multiply width × height × color depth",
+				title: numberOfFiles > 1 ? "Calculate size for one image" : "Multiply width × height × color depth",
 				details: [
-					`${width} × ${height} × ${colourDepth} = ${formatNumber(sizeInBits)} bits`,
+					`${width} × ${height} × ${colourDepth} = ${formatNumber(width * height * colourDepth)} bits`,
 				],
 			},
+			...(numberOfFiles > 1 ? [{
+				title: "Multiply by number of files",
+				details: [
+					`${formatNumber(width * height * colourDepth)} bits × ${numberOfFiles} files = ${formatNumber(sizeInBits)} bits`,
+				],
+			}] : []),
 			...(targetUnit !== "bits"
 				? [
 						{
@@ -442,7 +503,7 @@ export function FileSizeCalculator({ onScoreUpdate }: FileSizeCalculatorProps) {
 											aria-invalid={
 												feedback && !feedback.isCorrect ? "true" : "false"
 											}
-											className="p-6 text-lg font-bold text-center border-2 border-indigo-200 shadow-lg transition-all duration-200 sm:text-2xl focus:border-indigo-500 focus:ring-4 focus:ring-indigo-200 rounded-xl bg-gradient-to-r from-white to-indigo-50"
+											className="p-6 text-lg font-bold text-center transition-all duration-200 border-2 border-indigo-200 shadow-lg sm:text-2xl focus:border-indigo-500 focus:ring-4 focus:ring-indigo-200 rounded-xl bg-gradient-to-r from-white to-indigo-50"
 										/>
 									</div>
 								</form>
@@ -513,7 +574,7 @@ export function FileSizeCalculator({ onScoreUpdate }: FileSizeCalculatorProps) {
 																}, 100);
 															}}
 															aria-label="Generate next question"
-															className="px-8 py-3 font-semibold text-white rounded-lg shadow-lg transition-all duration-200 transform bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 hover:shadow-xl hover:-translate-y-1"
+															className="px-8 py-3 font-semibold text-white transition-all duration-200 transform rounded-lg shadow-lg bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 hover:shadow-xl hover:-translate-y-1"
 														>
 															<span className="mr-2">🎯</span>
 															Next Question
@@ -530,7 +591,7 @@ export function FileSizeCalculator({ onScoreUpdate }: FileSizeCalculatorProps) {
 															(section, sectionIndex) => (
 																<div
 																	key={section.title}
-																	className="p-4 bg-white border border-gray-200 rounded-lg bg-opacity-50"
+																	className="p-4 bg-white bg-opacity-50 border border-gray-200 rounded-lg"
 																>
 																	<h4 className="flex items-center mb-2 text-base font-bold text-indigo-900">
 																		<span className="flex items-center justify-center flex-shrink-0 w-6 h-6 mr-3 text-sm font-semibold text-indigo-800 bg-indigo-100 rounded-full">
@@ -610,7 +671,7 @@ export function FileSizeCalculator({ onScoreUpdate }: FileSizeCalculatorProps) {
 												setFeedback,
 											);
 										}}
-										className="px-8 py-3 font-semibold text-white rounded-lg shadow-lg transition-all duration-200 transform bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 hover:shadow-xl hover:-translate-y-1"
+										className="px-8 py-3 font-semibold text-white transition-all duration-200 transform rounded-lg shadow-lg bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 hover:shadow-xl hover:-translate-y-1"
 									>
 										<span className="mr-2">🚀</span>
 										Start Practicing
