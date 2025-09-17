@@ -358,7 +358,7 @@ export function CapacityCalculator({ onScoreUpdate }: CapacityCalculatorProps) {
 											aria-invalid={
 												feedback && !feedback.isCorrect ? "true" : "false"
 											}
-											className="p-6 text-lg font-bold text-center border-2 border-indigo-200 shadow-lg transition-all duration-200 sm:text-2xl focus:border-indigo-500 focus:ring-4 focus:ring-indigo-200 rounded-xl bg-gradient-to-r from-white to-indigo-50"
+											className="p-6 text-lg font-bold text-center text-foreground border-2 border-indigo-200 shadow-lg transition-all duration-200 sm:text-2xl focus:border-indigo-500 focus:ring-4 focus:ring-indigo-200 rounded-xl bg-gradient-to-r from-white to-indigo-50"
 										/>
 									</div>
 								</form>
