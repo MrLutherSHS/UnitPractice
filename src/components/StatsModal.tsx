@@ -81,7 +81,7 @@ export function StatsModal({
 				<div className="flex items-center justify-between p-4 text-indigo-50 bg-header/80">
 					<p
 						id={titleId}
-						className="flex items-center gap-3 text-2xl font-bold"
+						className="flex items-center text-2xl font-bold gap-3"
 					>
 						<span>{headerIcon}</span>
 						{title}
@@ -137,7 +137,7 @@ export function StatsModal({
 											className="h-2 mb-3 [&>div]:bg-green-600 "
 										/>
 										{/* Detailed requirements */}
-										<div className="space-y-1 text-sm text-white">
+										<div className="text-sm text-white space-y-1">
 											{overallStats.accuracy <
 												overallStats.nextLevel.minAccuracy && (
 												<div>
@@ -166,7 +166,7 @@ export function StatsModal({
 							</Card>
 
 							{/* Overall Statistics */}
-							<Card className="gap-4 p-4">
+							<Card className="p-4 gap-4">
 								<CardHeader className="px-2 mb-0">
 									<CardTitle className="flex items-center">
 										📈 Overall Statistics
@@ -199,7 +199,7 @@ export function StatsModal({
 							</Card>
 
 							{/* Breakdown by Category */}
-							<Card className="gap-4 p-4">
+							<Card className="p-4 gap-4">
 								<CardHeader className="px-2 mb-0">
 									<CardTitle className="flex items-center">
 										📋 Breakdown by Category

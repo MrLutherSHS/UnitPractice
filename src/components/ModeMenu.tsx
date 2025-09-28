@@ -13,7 +13,7 @@ export const ModeMenu = () => {
 	const location = useLocation();
 
 	return (
-		<div className="flex flex-row justify-center gap-2 px-4 mt-2 mb-4 sm:gap-4">
+		<div className="flex flex-row justify-center px-4 mt-2 mb-4 gap-2 sm:gap-4">
 			{MODES.map((mode) => (
 				<Link key={mode.path} to={mode.path} className="flex-1 sm:flex-none">
 					<QuizButton
