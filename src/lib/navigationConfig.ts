@@ -47,6 +47,13 @@ export const GCSE_NAVIGATION_MENU: NavMenuItem[] = [
 		keywords: ["tracetablepractice", "trace", "table"],
 	},
 	{
+		title: "2.2 - Programming Fundamentals",
+		description: "Data types, constructs & operators",
+		url: "https://ocr-fundamentals.netlify.app/",
+		id: "programming-fundamentals",
+		keywords: ["ocr-fundamentals", "programming"],
+	},
+	{
 		title: "2.2 - Programming Practice",
 		description: "Input/output and basic programming concepts",
 		url: "https://input-output-practice.netlify.app/",
@@ -78,5 +85,5 @@ export function detectCurrentSite(): string {
 		}
 	}
 
-	return "network-addresses"; // Default fallback
+	return "data-units"; // Default fallback
 }
