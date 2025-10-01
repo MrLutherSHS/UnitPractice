@@ -48,7 +48,7 @@ Understand storage capacity relationships:
 ## 🏁 Getting Started
 
 ### Prerequisites
-- Node.js 18+ and npm
+- Node.js 18+ and pnpm
 
 ### Installation
 
@@ -58,10 +58,10 @@ git clone https://github.com/domluther/GCSEUnits.git
 cd GCSEUnits
 
 # Install dependencies
-npm install
+pnpm install
 
 # Start development server
-npm run dev
+pnpm run dev
 ```
 
 ### Available Scripts
@@ -70,23 +70,23 @@ npm run dev
 
 ```bash
 # Development server
-npm run dev
+pnpm run dev
 
 # Production build
-npm run build
+pnpm run build
 
 # Preview production build
-npm run preview
+pnpm run preview
 
 # Run tests
-npm run test
-npm run test:run  # Run once
-npm run test:ui   # Test UI
+pnpm run test
+pnpm run test:run  # Run once
+pnpm run test:ui   # Test UI
 
 # Code quality
-npm run lint      # Check linting
-npm run format    # Format code
-npm run type-check # TypeScript checking
+pnpm run lint      # Check linting
+pnpm run format    # Format code
+pnpm run type-check # TypeScript checking
 ```
 
 ## 📚 Educational Value
@@ -114,9 +114,9 @@ The application includes comprehensive test coverage for:
 
 Run tests with:
 ```bash
-npm run test        # Watch mode
-npm run test:run    # Single run
-npm run test:ui     # Interactive UI
+pnpm run test        # Watch mode
+pnpm run test:run    # Single run
+pnpm run test:ui     # Interactive UI
 ```
 
 ## 🏗️ Architecture
