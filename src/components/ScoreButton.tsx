@@ -19,7 +19,7 @@ export function ScoreButton({
 	return (
 		<button
 			onClick={onClick}
-			className="px-4 py-3 bg-indigo-600 hover:bg-indigo-700 text-indigo-50 font-semibold rounded-lg transition-all duration-200 shadow-lg hover:shadow-xl hover:-translate-y-0.5 text-sm whitespace-nowrap"
+			className="px-4 py-3 bg-button-primary hover:bg-button-primary-hover text-button-primary-text font-semibold rounded-lg transition-all duration-200 shadow-lg hover:shadow-xl hover:-translate-y-0.5 text-sm whitespace-nowrap"
 			type="button"
 		>
 			{/* Full text on larger screens */}

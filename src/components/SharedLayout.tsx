@@ -58,8 +58,8 @@ export function SharedLayout({ children }: SharedLayoutProps) {
 			titleIcon={siteConfig.icon}
 			scoreButton={
 				<ScoreButton
-					levelEmoji={overallStats.level.emoji}
-					levelTitle={overallStats.level.title}
+					levelEmoji={overallStats.currentLevel.emoji}
+					levelTitle={overallStats.currentLevel.title}
 					points={overallStats.totalPoints}
 					onClick={() => setShowStatsModal(true)}
 				/>
