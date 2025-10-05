@@ -94,7 +94,6 @@ export function StatsModal({
 					</button>
 				</div>
 
-
 				{/* Content */}
 				{/* Content */}
 				<div className="p-4 overflow-y-auto max-h-[calc(80vh-140px)]">
@@ -165,7 +164,7 @@ export function StatsModal({
 									</CardContent>
 								)}
 							</Card>
-							
+
 							{/* Overall Statistics */}
 							<Card className="gap-4 p-4">
 								<CardHeader className="px-2 mb-0">
@@ -179,7 +178,9 @@ export function StatsModal({
 											<div className="text-2xl font-bold text-stats-accuracy-high">
 												{overallStats.totalCorrect}
 											</div>
-											<div className="text-sm text-muted-foreground">Correct</div>
+											<div className="text-sm text-muted-foreground">
+												Correct
+											</div>
 										</div>
 										<div className="p-4 text-center border-l-4 rounded-lg bg-stats-card-bg border-stats-points">
 											<div className="text-2xl font-bold text-stats-points">
@@ -193,7 +194,9 @@ export function StatsModal({
 											<div className="text-2xl font-bold text-stats-record">
 												{Math.floor(overallStats.accuracy)}%
 											</div>
-											<div className="text-sm text-muted-foreground">Accuracy</div>
+											<div className="text-sm text-muted-foreground">
+												Accuracy
+											</div>
 										</div>
 									</div>
 								</CardContent>

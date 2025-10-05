@@ -318,7 +318,7 @@ export function CapacityCalculator({ onScoreUpdate }: CapacityCalculatorProps) {
 				Capacity Calculator
 			</h1>
 			<div className="p-2 sm:p-4">
-				<Card className="py-0 mx-auto shadow-xl bg-white/80 backdrop-blur">
+				<Card className="py-0 mx-auto shadow-xl bg-card/80 backdrop-blur">
 					<CardContent className="p-4 space-y-4 sm:p-6 lg:p-8 sm:space-y-6">
 						{/* Live region for screen reader announcements */}
 						<div aria-live="polite" aria-atomic="true" className="sr-only">
@@ -329,7 +329,7 @@ export function CapacityCalculator({ onScoreUpdate }: CapacityCalculatorProps) {
 							<section aria-labelledby={currentQuestionId}>
 								<h2
 									id={currentQuestionId}
-									className="p-6 text-lg font-semibold text-white bg-indigo-600 rounded-lg shadow"
+									className="p-6 text-lg font-semibold rounded-lg shadow text-question-prompt-text bg-question-prompt-bg"
 								>
 									{getQuestionText(currentQuestion)}
 								</h2>
@@ -358,7 +358,7 @@ export function CapacityCalculator({ onScoreUpdate }: CapacityCalculatorProps) {
 											aria-invalid={
 												feedback && !feedback.isCorrect ? "true" : "false"
 											}
-											className="p-6 text-lg font-bold text-center border-2 border-indigo-200 shadow-lg text-foreground transition-all duration-200 sm:text-2xl focus:border-indigo-500 focus:ring-4 focus:ring-indigo-200 rounded-xl bg-gradient-to-r from-white to-indigo-50"
+											className="p-6 text-lg font-bold text-center transition-all duration-200 border-2 shadow-lg border-checkbox-label-border text-foreground sm:text-2xl focus:border-checkbox-label-border-hover focus:ring-4 focus:ring-checkbox-label-border rounded-xl bg-card"
 										/>
 									</div>
 								</form>
@@ -370,8 +370,8 @@ export function CapacityCalculator({ onScoreUpdate }: CapacityCalculatorProps) {
 											aria-live="polite"
 											className={`border-2 shadow-lg ${
 												feedback.isCorrect
-													? "bg-gradient-to-r from-green-50 to-emerald-50 border-green-300 shadow-green-100"
-													: "bg-gradient-to-r from-red-50 to-pink-50 border-red-300 shadow-red-100"
+													? "bg-feedback-success-bg border-stats-accuracy-high"
+													: "bg-feedback-error-bg border-feedback-error-bg"
 											}`}
 										>
 											<AlertDescription>
@@ -380,15 +380,15 @@ export function CapacityCalculator({ onScoreUpdate }: CapacityCalculatorProps) {
 													<div
 														className={`p-4 rounded-lg ${
 															feedback.isCorrect
-																? "bg-gradient-to-r from-green-100 to-emerald-100"
-																: "bg-gradient-to-r from-red-100 to-pink-100"
+																? "bg-feedback-success-bg"
+																: "bg-feedback-error-bg"
 														}`}
 													>
 														<div
 															className={`flex items-center text-xl font-bold ${
 																feedback.isCorrect
-																	? "text-green-800"
-																	: "text-red-800"
+																	? "text-feedback-success-text"
+																	: "text-feedback-error-text"
 															}`}
 														>
 															<span className="mr-3 text-2xl">
@@ -401,9 +401,9 @@ export function CapacityCalculator({ onScoreUpdate }: CapacityCalculatorProps) {
 															</span>
 														</div>
 														{!feedback.isCorrect && (
-															<div className="mt-2 font-semibold text-red-700">
+															<div className="mt-2 font-semibold text-feedback-error-text">
 																The correct answer is{" "}
-																<span className="px-2 py-1 text-red-900 bg-red-200 rounded">
+																<span className="px-2 py-1 border rounded text-feedback-error-text bg-feedback-error-bg border-stats-accuracy-low">
 																	{formatNumber(currentQuestion.answer)}
 																</span>
 															</div>
@@ -429,7 +429,7 @@ export function CapacityCalculator({ onScoreUpdate }: CapacityCalculatorProps) {
 																}, 100);
 															}}
 															aria-label="Generate next question"
-															className="px-8 py-3 font-semibold text-white rounded-lg shadow-lg transition-all duration-200 transform bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 hover:shadow-xl hover:-translate-y-1"
+															className="px-8 py-3 font-semibold transition-all duration-200 transform rounded-lg shadow-lg text-action-button-text bg-action-button-bg hover:bg-action-button-bg-hover hover:shadow-xl hover:-translate-y-1"
 														>
 															<span className="mr-2">🎯</span>
 															Next Question
@@ -438,7 +438,7 @@ export function CapacityCalculator({ onScoreUpdate }: CapacityCalculatorProps) {
 
 													{/* Explanation Section */}
 													<div className="space-y-4">
-														<h3 className="flex items-center mb-3 text-lg font-bold text-indigo-900">
+														<h3 className="flex items-center mb-3 text-lg font-bold text-hint-card-title">
 															<span className="mr-2">📚</span>
 															Step-by-step explanation:
 														</h3>
@@ -446,10 +446,10 @@ export function CapacityCalculator({ onScoreUpdate }: CapacityCalculatorProps) {
 															(section, sectionIndex) => (
 																<div
 																	key={section.title}
-																	className="p-4 bg-white border border-gray-200 rounded-lg bg-opacity-50"
+																	className="p-4 border rounded-lg bg-hint-card-bg border-hint-card-border"
 																>
-																	<h4 className="flex items-center mb-2 text-base font-bold text-indigo-900">
-																		<span className="flex items-center justify-center flex-shrink-0 w-6 h-6 mr-3 text-sm font-semibold text-indigo-800 bg-indigo-100 rounded-full">
+																	<h4 className="flex items-center mb-2 text-base font-bold text-hint-card-title">
+																		<span className="flex items-center justify-center flex-shrink-0 w-6 h-6 mr-3 text-sm font-semibold rounded-full text-hint-card-title bg-hint-card-bg">
 																			{sectionIndex + 1}
 																		</span>
 																		{section.title}
@@ -458,9 +458,9 @@ export function CapacityCalculator({ onScoreUpdate }: CapacityCalculatorProps) {
 																		{section.details.map((detail) => (
 																			<li
 																				key={detail}
-																				className="text-gray-800"
+																				className="text-hint-card-text"
 																			>
-																				<span className="mr-2 text-indigo-600">
+																				<span className="mr-2 text-hint-card-title">
 																					•
 																				</span>
 																				{detail}
@@ -482,15 +482,15 @@ export function CapacityCalculator({ onScoreUpdate }: CapacityCalculatorProps) {
 								className="py-12 text-center"
 								aria-labelledby={welcomeMessageId}
 							>
-								<div className="p-8 border border-indigo-200 shadow-lg bg-gradient-to-r from-indigo-50 to-purple-50 rounded-xl">
+								<div className="p-8 border shadow-lg border-hint-card-border bg-hint-content-bg rounded-xl">
 									<div className="mb-4 text-6xl">💾</div>
 									<h2
 										id={welcomeMessageId}
-										className="mb-4 text-2xl font-bold text-transparent md:text-3xl bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text"
+										className="mb-4 text-2xl font-bold text-hint-card-title md:text-3xl"
 									>
 										Capacity Calculator
 									</h2>
-									<p className="max-w-md mx-auto mb-6 text-lg text-gray-600">
+									<p className="max-w-md mx-auto mb-6 text-lg text-hint-card-text">
 										Practice calculating storage capacity and file counts.
 										Master digital storage concepts!
 									</p>
@@ -504,7 +504,7 @@ export function CapacityCalculator({ onScoreUpdate }: CapacityCalculatorProps) {
 												setFeedback,
 											);
 										}}
-										className="px-8 py-3 font-semibold text-white rounded-lg shadow-lg transition-all duration-200 transform bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 hover:shadow-xl hover:-translate-y-1"
+										className="px-8 py-3 font-semibold transition-all duration-200 transform rounded-lg shadow-lg text-action-button-text bg-action-button-bg hover:bg-action-button-bg-hover hover:shadow-xl hover:-translate-y-1"
 									>
 										<span className="mr-2">🚀</span>
 										Start Practicing

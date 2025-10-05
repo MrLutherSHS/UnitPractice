@@ -811,18 +811,18 @@ export function MultipleChoice({ onScoreUpdate }: UnitConverterProps) {
 			"relative w-full p-6 text-center text-lg font-semibold transition-all duration-200 rounded-lg border-2 shadow-md hover:shadow-lg";
 
 		if (!hasSubmitted) {
-			return `${baseClasses} bg-gradient-to-r from-gray-50 to-gray-100 border-gray-200 hover:from-indigo-50 hover:to-purple-50 hover:border-indigo-300 text-gray-800 hover:text-indigo-800`;
+			return `${baseClasses} border-checkbox-label-border bg-card hover:bg-checkbox-label-bg-hover hover:border-checkbox-label-border-hover text-foreground hover:text-hint-card-title`;
 		}
 
 		if (optionIndex === currentQuestion?.correctAnswer) {
-			return `${baseClasses} bg-gradient-to-r from-green-100 to-emerald-100 border-green-400 text-green-800`;
+			return `${baseClasses} bg-feedback-success-bg border-stats-accuracy-high text-feedback-success-text`;
 		}
 
 		if (optionIndex === selectedAnswer) {
-			return `${baseClasses} bg-gradient-to-r from-red-100 to-pink-100 border-red-400 text-red-800`;
+			return `${baseClasses} bg-feedback-error-bg border-stats-accuracy-low text-feedback-error-text`;
 		}
 
-		return `${baseClasses} bg-gradient-to-r from-gray-100 to-gray-200 border-gray-300 text-gray-600`;
+		return `${baseClasses} bg-muted border-border text-muted-foreground`;
 	};
 
 	return (
@@ -831,7 +831,7 @@ export function MultipleChoice({ onScoreUpdate }: UnitConverterProps) {
 				Unit Converter Quiz
 			</h1>
 			<div className="p-2 sm:p-4">
-				<Card className="py-0 mx-auto shadow-xl bg-white/80 backdrop-blur">
+				<Card className="py-0 mx-auto shadow-xl bg-card/80 backdrop-blur">
 					<CardContent className="p-4 space-y-4 sm:p-6 lg:p-8 sm:space-y-6">
 						{/* Live region for screen reader announcements */}
 						<div aria-live="polite" aria-atomic="true" className="sr-only">
@@ -842,7 +842,7 @@ export function MultipleChoice({ onScoreUpdate }: UnitConverterProps) {
 							<section aria-labelledby={currentQuestionId}>
 								<h2
 									id={currentQuestionId}
-									className="p-6 text-lg font-semibold text-white bg-indigo-600 rounded-lg shadow"
+									className="p-6 text-lg font-semibold rounded-lg shadow text-question-prompt-text bg-question-prompt-bg"
 								>
 									{currentQuestion.questionText}
 								</h2>
@@ -850,7 +850,7 @@ export function MultipleChoice({ onScoreUpdate }: UnitConverterProps) {
 								<div className="mt-6">
 									<fieldset>
 										<legend className="sr-only">Choose your answer</legend>
-										<div className="flex flex-col mb-2 gap-4 sm:grid sm:grid-cols-2">
+										<div className="flex flex-col gap-4 mb-2 sm:grid sm:grid-cols-2">
 											{/* MODIFICATION: Updated button structure */}
 											{currentQuestion.options.map((option, index) => (
 												<Button
@@ -863,7 +863,7 @@ export function MultipleChoice({ onScoreUpdate }: UnitConverterProps) {
 														hasSubmitted ? feedbackMessageId : undefined
 													}
 												>
-													<span className="absolute flex items-center justify-center text-sm font-bold text-white bg-indigo-500 rounded-full shadow-sm top-2 left-2 w-7 h-7">
+													<span className="absolute flex items-center justify-center text-sm font-bold rounded-full shadow-sm text-level-card-text bg-level-card-bg top-2 left-2 w-7 h-7">
 														{index + 1}
 													</span>
 
@@ -891,8 +891,8 @@ export function MultipleChoice({ onScoreUpdate }: UnitConverterProps) {
 											aria-live="polite"
 											className={`border-2 shadow-lg ${
 												feedback.isCorrect
-													? "bg-gradient-to-r from-green-50 to-emerald-50 border-green-300 shadow-green-100"
-													: "bg-gradient-to-r from-red-50 to-pink-50 border-red-300 shadow-red-100"
+													? "bg-feedback-success-bg border-stats-accuracy-high"
+													: "bg-feedback-error-bg border-stats-accuracy-low"
 											}`}
 										>
 											<AlertDescription>
@@ -901,15 +901,15 @@ export function MultipleChoice({ onScoreUpdate }: UnitConverterProps) {
 													<div
 														className={`p-4 rounded-lg ${
 															feedback.isCorrect
-																? "bg-gradient-to-r from-green-100 to-emerald-100"
-																: "bg-gradient-to-r from-red-100 to-pink-100"
+																? "bg-feedback-success-bg"
+																: "bg-feedback-error-bg"
 														}`}
 													>
 														<div
 															className={`flex items-center text-xl font-bold ${
 																feedback.isCorrect
-																	? "text-green-800"
-																	: "text-red-800"
+																	? "text-feedback-success-text"
+																	: "text-feedback-error-text"
 															}`}
 														>
 															<span className="mr-3 text-2xl">
@@ -922,9 +922,9 @@ export function MultipleChoice({ onScoreUpdate }: UnitConverterProps) {
 															</span>
 														</div>
 														{!feedback.isCorrect && (
-															<div className="mt-2 font-semibold text-red-700">
+															<div className="mt-2 font-semibold text-feedback-error-text">
 																The correct answer is{" "}
-																<span className="px-2 py-1 text-red-900 bg-red-200 rounded">
+																<span className="px-2 py-1 border rounded text-feedback-error-text bg-feedback-error-bg border-stats-accuracy-low">
 																	{
 																		currentQuestion.options[
 																			currentQuestion.correctAnswer
@@ -950,7 +950,7 @@ export function MultipleChoice({ onScoreUpdate }: UnitConverterProps) {
 																);
 															}}
 															aria-label="Generate next question"
-															className="px-8 py-3 font-semibold text-white rounded-lg shadow-lg transition-all duration-200 transform bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 hover:shadow-xl hover:-translate-y-1"
+															className="px-8 py-3 font-semibold transition-all duration-200 transform rounded-lg shadow-lg text-action-button-text bg-action-button-bg hover:bg-action-button-bg-hover hover:shadow-xl hover:-translate-y-1"
 														>
 															<span className="mr-2">🎯</span>
 															Next Question
@@ -959,7 +959,7 @@ export function MultipleChoice({ onScoreUpdate }: UnitConverterProps) {
 
 													{/* Explanation Section */}
 													<div className="space-y-4">
-														<h3 className="flex items-center mb-3 text-lg font-bold text-indigo-900">
+														<h3 className="flex items-center mb-3 text-lg font-bold text-hint-card-title">
 															<span className="mr-2">📚</span>
 															Step-by-step explanation:
 														</h3>
@@ -967,10 +967,10 @@ export function MultipleChoice({ onScoreUpdate }: UnitConverterProps) {
 															(section, sectionIndex) => (
 																<div
 																	key={section.title}
-																	className="p-4 bg-white border border-gray-200 rounded-lg bg-opacity-50"
+																	className="p-4 bg-opacity-50 border rounded-lg bg-card border-border"
 																>
-																	<h4 className="flex items-center mb-2 text-base font-bold text-indigo-900">
-																		<span className="flex items-center justify-center flex-shrink-0 w-6 h-6 mr-3 text-sm font-semibold text-indigo-800 bg-indigo-100 rounded-full">
+																	<h4 className="flex items-center mb-2 text-base font-bold text-hint-card-title">
+																		<span className="flex items-center justify-center flex-shrink-0 w-6 h-6 mr-3 text-sm font-semibold border rounded-full text-hint-card-title bg-hint-card-bg border-hint-card-border">
 																			{sectionIndex + 1}
 																		</span>
 																		{section.title}
@@ -997,7 +997,7 @@ export function MultipleChoice({ onScoreUpdate }: UnitConverterProps) {
 																							return (
 																								<span
 																									key={`bold-${boldText}`}
-																									className="font-bold text-indigo-800"
+																									className="font-bold text-hint-card-title"
 																								>
 																									{boldText}
 																								</span>
@@ -1009,9 +1009,9 @@ export function MultipleChoice({ onScoreUpdate }: UnitConverterProps) {
 																				return (
 																					<li
 																						key={`detail-${detail.slice(0, 50)}-${detailIndex}`}
-																						className="text-gray-800"
+																						className="text-hint-card-text"
 																					>
-																						<span className="mr-2 text-indigo-600">
+																						<span className="mr-2 text-hint-card-border">
 																							•
 																						</span>
 																						{renderDetailWithBold(detail)}
@@ -1032,18 +1032,18 @@ export function MultipleChoice({ onScoreUpdate }: UnitConverterProps) {
 
 								{/* Settings Section */}
 								<div className="mt-6">
-									<div className="p-3 border border-gray-200 rounded-lg sm:p-4 bg-gradient-to-r from-gray-50 to-blue-50">
+									<div className="p-3 border rounded-lg border-border sm:p-4 bg-card">
 										<div className="grid grid-cols-1 gap-3 sm:grid-cols-3 sm:gap-4">
 											{/* Question Type Settings */}
 											<div className="col-span-2 space-y-2 sm:space-y-3">
-												<h4 className="text-sm font-semibold text-gray-700 sm:text-base">
+												<h4 className="text-sm font-semibold text-foreground sm:text-base">
 													Question Types
 												</h4>
 												<div className="flex flex-col gap-2 sm:flex-row sm:gap-4">
 													{/* Conversion Questions */}
 													<div className="flex items-center min-w-0 gap-2">
 														<span className="text-base sm:text-lg">🔄</span>
-														<span className="text-xs font-semibold text-gray-800 truncate sm:text-sm">
+														<span className="text-xs font-semibold truncate text-foreground sm:text-sm">
 															Conversion
 														</span>
 														<Switch
@@ -1058,7 +1058,7 @@ export function MultipleChoice({ onScoreUpdate }: UnitConverterProps) {
 																	setEnableConversion(checked);
 																}
 															}}
-															className="data-[state=unchecked]:bg-gray-200 data-[state=checked]:bg-blue-600 flex-shrink-0"
+															className="data-[state=unchecked]:bg-input data-[state=unchecked]:border-2 data-[state=unchecked]:border-input data-[state=checked]:bg-button-primary data-[state=checked]:border-primary flex-shrink-0"
 															aria-label="Toggle conversion questions"
 															title="Enable/disable unit conversion questions"
 														/>
@@ -1067,7 +1067,7 @@ export function MultipleChoice({ onScoreUpdate }: UnitConverterProps) {
 													{/* Comparison Questions */}
 													<div className="flex items-center min-w-0 gap-2">
 														<span className="text-base sm:text-lg">📊</span>
-														<span className="text-xs font-semibold text-gray-800 truncate sm:text-sm">
+														<span className="text-xs font-semibold truncate text-foreground sm:text-sm">
 															Comparison
 														</span>
 														<Switch
@@ -1082,7 +1082,7 @@ export function MultipleChoice({ onScoreUpdate }: UnitConverterProps) {
 																	setEnableComparison(checked);
 																}
 															}}
-															className="data-[state=unchecked]:bg-gray-200 data-[state=checked]:bg-blue-600 flex-shrink-0"
+															className="data-[state=unchecked]:bg-input data-[state=unchecked]:border-2 data-[state=unchecked]:border-input data-[state=checked]:bg-button-primary data-[state=checked]:border-primary flex-shrink-0"
 															aria-label="Toggle comparison questions"
 															title="Enable/disable size comparison questions"
 														/>
@@ -1093,13 +1093,13 @@ export function MultipleChoice({ onScoreUpdate }: UnitConverterProps) {
 											{/* Units Order Hint */}
 											<div className="flex items-center justify-start min-w-0 gap-2 sm:justify-end">
 												<span className="text-base sm:text-lg">📋</span>
-												<span className="text-xs font-semibold text-gray-800 truncate sm:text-sm">
+												<span className="text-xs font-semibold truncate text-foreground sm:text-sm">
 													Units Order
 												</span>
 												<Switch
 													checked={showUnitsOrder}
 													onCheckedChange={setShowUnitsOrder}
-													className="data-[state=unchecked]:bg-gray-200 data-[state=checked]:bg-blue-600 flex-shrink-0"
+													className="data-[state=unchecked]:bg-input data-[state=unchecked]:border-2 data-[state=unchecked]:border-input data-[state=checked]:bg-button-primary data-[state=checked]:border-primary flex-shrink-0"
 													aria-label="Toggle units order hint"
 													title="Show/hide the ordered list of units from smallest to largest"
 												/>
@@ -1113,12 +1113,12 @@ export function MultipleChoice({ onScoreUpdate }: UnitConverterProps) {
 									<section aria-labelledby={hintTitleId} className="mt-6">
 										<h3
 											id={hintTitleId}
-											className="flex items-center mb-3 font-semibold text-blue-800"
+											className="flex items-center mb-3 font-semibold text-hint-summary-text"
 										>
 											<span className="mr-2 text-lg">📋</span>
 											Units in order (smallest to largest)
 										</h3>
-										<div className="p-4 border-l-4 border-purple-400 rounded-r-lg shadow-inner bg-gradient-to-r from-blue-50 to-indigo-50">
+										<div className="p-4 border-l-4 rounded-r-lg shadow-inner border-hint-card-border bg-hint-content-bg">
 											<div className="flex flex-wrap items-center gap-2">
 												{units.map((unit, index) => [
 													<span
@@ -1130,7 +1130,7 @@ export function MultipleChoice({ onScoreUpdate }: UnitConverterProps) {
 													index < units.length - 1 && (
 														<ArrowRight
 															key={`arrow-from-${unit}-to-${units[index + 1]}`}
-															className="w-4 h-4 text-purple-400"
+															className="w-4 h-4 text-hint-card-border"
 														/>
 													),
 												])}
@@ -1140,8 +1140,8 @@ export function MultipleChoice({ onScoreUpdate }: UnitConverterProps) {
 								)}
 
 								<details className="mt-6 group">
-									<summary className="cursor-pointer focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 rounded-lg px-4 py-3 bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 hover:from-blue-100 hover:to-indigo-100 transition-all duration-200 shadow-sm hover:shadow-md list-none [&::-webkit-details-marker]:hidden">
-										<span className="flex items-center font-semibold text-blue-800">
+									<summary className="cursor-pointer focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 rounded-lg px-4 py-3 bg-hint-summary-bg border border-hint-summary-border hover:bg-hint-summary-bg-hover transition-all duration-200 shadow-sm hover:shadow-md list-none [&::-webkit-details-marker]:hidden">
+										<span className="flex items-center font-semibold text-hint-summary-text">
 											<span className="mr-2 text-lg">💡</span>
 											Get conversion help
 											<span className="ml-auto transition-transform duration-200 group-open:rotate-180">
@@ -1150,8 +1150,8 @@ export function MultipleChoice({ onScoreUpdate }: UnitConverterProps) {
 										</span>
 									</summary>
 									<section>
-										<div className="p-4 mt-3 border-l-4 border-blue-400 rounded-r-lg shadow-inner bg-gradient-to-r from-blue-50 to-indigo-50">
-											<div className="text-sm font-light text-blue-800">
+										<div className="p-4 mt-3 border-l-4 rounded-r-lg shadow-inner border-hint-card-border bg-hint-content-bg">
+											<div className="text-sm font-light text-hint-summary-text">
 												{currentQuestion.type === "conversion"
 													? "💾 - Remember: 1 KB = 1,000 bytes, 1 MB = 1,000 KB, 1 GB = 1,000 MB, 1 TB = 1,000 GB"
 													: "📊 - Convert all values to the same unit (like bytes) to compare them easily"}
@@ -1165,15 +1165,15 @@ export function MultipleChoice({ onScoreUpdate }: UnitConverterProps) {
 								className="py-12 text-center"
 								aria-labelledby={welcomeMessageId}
 							>
-								<div className="p-8 border border-indigo-200 shadow-lg bg-gradient-to-r from-indigo-50 to-purple-50 rounded-xl">
+								<div className="p-8 border shadow-lg border-hint-card-border bg-hint-content-bg rounded-xl">
 									<div className="mb-4 text-6xl">📏</div>
 									<h2
 										id={welcomeMessageId}
-										className="mb-4 text-2xl font-bold text-transparent md:text-3xl bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text"
+										className="mb-4 text-2xl font-bold text-hint-card-title md:text-3xl"
 									>
 										Unit Converter Quiz
 									</h2>
-									<p className="max-w-md mx-auto mb-6 text-lg text-gray-600">
+									<p className="max-w-md mx-auto mb-6 text-lg text-hint-card-text">
 										Practice converting between storage units and comparing file
 										sizes. Master bytes, KB, MB, GB, and TB!
 									</p>
@@ -1189,7 +1189,7 @@ export function MultipleChoice({ onScoreUpdate }: UnitConverterProps) {
 												enableComparison,
 											);
 										}}
-										className="px-8 py-3 font-semibold text-white rounded-lg shadow-lg transition-all duration-200 transform bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 hover:shadow-xl hover:-translate-y-1"
+										className="px-8 py-3 font-semibold transition-all duration-200 transform rounded-lg shadow-lg text-button-primary-text bg-button-primary hover:bg-button-primary-hover hover:shadow-xl hover:-translate-y-1"
 									>
 										<span className="mr-2">🚀</span>
 										Start Practicing

@@ -12,8 +12,8 @@ export const Route = createRootRoute({
 				<div className="fixed z-50 top-2 right-2 sm:top-4 sm:right-4">
 					<SimpleThemeToggle />
 				</div>
-				<div className="w-full max-w-6xl overflow-hidden bg-white shadow-2xl rounded-xl">
-					<main className="p-0">
+				<div className="w-full max-w-6xl overflow-hidden shadow-2xl bg-background rounded-xl">
+					<main className="p-0 ">
 						<Outlet />
 					</main>
 					<Footer />

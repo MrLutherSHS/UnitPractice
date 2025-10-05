@@ -2,9 +2,9 @@ import { Link, useLocation } from "@tanstack/react-router";
 import { QuizButton } from "./QuizButton";
 
 type QuizMode = {
-  label: string;
-  path: string;
-  emoji: string;
+	label: string;
+	path: string;
+	emoji: string;
 };
 
 // Mode button data
@@ -14,7 +14,6 @@ const QUIZ_MODES: QuizMode[] = [
 	{ label: "File Size", path: "/filesize", emoji: "" },
 	{ label: "Multiple Choice", path: "/multiplechoice", emoji: "" },
 ];
-
 
 export const ModeMenu = () => {
 	const location = useLocation();

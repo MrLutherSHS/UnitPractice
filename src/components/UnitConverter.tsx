@@ -30,7 +30,7 @@ const ConversionPathVisual = ({
 	const path = getConversionPath(fromUnit, toUnit);
 
 	return (
-		<div className="flex flex-wrap items-center p-3 rounded-lg shadow-inner gap-1 sm:gap-2 sm:p-4 bg-gradient-to-r from-blue-50 to-purple-50">
+		<div className="flex flex-wrap items-center gap-1 p-3 rounded-lg shadow-inner sm:gap-2 sm:p-4 bg-hint-content-bg">
 			{path.map((unit, index) => [
 				<div
 					key={unit}
@@ -41,7 +41,7 @@ const ConversionPathVisual = ({
 				index < path.length - 1 && (
 					<ArrowRight
 						key={`path-arrow-from-${unit}-to-${path[index + 1]}`}
-						className="flex-shrink-0 w-3 h-3 text-indigo-400 sm:w-4 sm:h-4"
+						className="flex-shrink-0 w-3 h-3 text-hint-card-border sm:w-4 sm:h-4"
 					/>
 				),
 			])}
@@ -347,7 +347,7 @@ export function UnitConverter({ onScoreUpdate }: UnitConverterProps) {
 				Unit Converter
 			</h1>
 			<div className="p-2 sm:p-4">
-				<Card className="py-0 mx-auto shadow-xl bg-white/80 backdrop-blur">
+				<Card className="py-0 mx-auto shadow-xl bg-card/80 backdrop-blur">
 					<CardContent className="p-4 space-y-4 sm:p-6 lg:p-8 sm:space-y-6">
 						{/* Live region for screen reader announcements */}
 						<div aria-live="polite" aria-atomic="true" className="sr-only">
@@ -358,7 +358,7 @@ export function UnitConverter({ onScoreUpdate }: UnitConverterProps) {
 							<section aria-labelledby={currentQuestionId}>
 								<h2
 									id={currentQuestionId}
-									className="p-6 text-lg font-semibold text-white bg-indigo-600 rounded-lg shadow"
+									className="p-6 text-lg font-semibold rounded-lg shadow text-question-prompt-text bg-question-prompt-bg"
 								>
 									{getQuestionText(currentQuestion)}
 								</h2>
@@ -388,7 +388,7 @@ export function UnitConverter({ onScoreUpdate }: UnitConverterProps) {
 											aria-invalid={
 												feedback && !feedback.isCorrect ? "true" : "false"
 											}
-											className="p-6 text-lg font-bold text-center border-2 border-indigo-200 shadow-lg transition-all duration-200 text-foreground sm:text-2xl focus:border-indigo-500 focus:ring-4 focus:ring-indigo-200 rounded-xl bg-gradient-to-r from-white to-indigo-50"
+											className="p-6 text-lg font-bold text-center transition-all duration-200 border-2 border-indigo-200 shadow-lg text-foreground sm:text-2xl focus:border-indigo-500 focus:ring-4 focus:ring-indigo-200 rounded-xl bg-gradient-to-r from-white to-indigo-50"
 										/>
 									</div>
 								</form>
@@ -400,8 +400,8 @@ export function UnitConverter({ onScoreUpdate }: UnitConverterProps) {
 											aria-live="polite"
 											className={`border-2 shadow-lg ${
 												feedback.isCorrect
-													? "bg-gradient-to-r from-green-50 to-emerald-50 border-green-300 shadow-green-100"
-													: "bg-gradient-to-r from-red-50 to-pink-50 border-red-300 shadow-red-100"
+													? "bg-feedback-success-bg border-stats-accuracy-high"
+													: "bg-feedback-error-bg border-stats-accuracy-low"
 											}`}
 										>
 											<AlertDescription>
@@ -410,15 +410,15 @@ export function UnitConverter({ onScoreUpdate }: UnitConverterProps) {
 													<div
 														className={`p-4 rounded-lg ${
 															feedback.isCorrect
-																? "bg-gradient-to-r from-green-100 to-emerald-100"
-																: "bg-gradient-to-r from-red-100 to-pink-100"
+																? "bg-feedback-success-bg"
+																: "bg-feedback-error-bg"
 														}`}
 													>
 														<div
 															className={`flex items-center text-xl font-bold ${
 																feedback.isCorrect
-																	? "text-green-800"
-																	: "text-red-800"
+																	? "text-feedback-success-text"
+																	: "text-feedback-error-text"
 															}`}
 														>
 															<span className="mr-3 text-2xl">
@@ -431,9 +431,9 @@ export function UnitConverter({ onScoreUpdate }: UnitConverterProps) {
 															</span>
 														</div>
 														{!feedback.isCorrect && (
-															<div className="mt-2 font-semibold text-red-700">
+															<div className="mt-2 font-semibold text-feedback-error-text">
 																The correct answer is{" "}
-																<span className="px-2 py-1 text-red-900 bg-red-200 rounded">
+																<span className="px-2 py-1 border rounded text-feedback-error-text bg-feedback-error-bg border-stats-accuracy-low">
 																	{formatNumber(currentQuestion.answer)}
 																</span>
 															</div>
@@ -460,7 +460,7 @@ export function UnitConverter({ onScoreUpdate }: UnitConverterProps) {
 																}, 100);
 															}}
 															aria-label="Generate next question"
-															className="px-8 py-3 font-semibold text-white rounded-lg shadow-lg transition-all duration-200 transform bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 hover:shadow-xl hover:-translate-y-1"
+															className="px-8 py-3 font-semibold transition-all duration-200 transform rounded-lg shadow-lg text-action-button-text bg-action-button-bg hover:bg-action-button-bg-hover hover:shadow-xl hover:-translate-y-1"
 														>
 															<span className="mr-2">🎯</span>
 															Next Question
@@ -469,7 +469,7 @@ export function UnitConverter({ onScoreUpdate }: UnitConverterProps) {
 
 													{/* Explanation Section */}
 													<div className="space-y-4">
-														<h3 className="flex items-center mb-3 text-lg font-bold text-indigo-900">
+														<h3 className="flex items-center mb-3 text-lg font-bold text-hint-card-title">
 															<span className="mr-2">📚</span>
 															Step-by-step explanation:
 														</h3>
@@ -477,10 +477,10 @@ export function UnitConverter({ onScoreUpdate }: UnitConverterProps) {
 															(section, sectionIndex) => (
 																<div
 																	key={section.title}
-																	className="p-4 bg-white border border-gray-200 rounded-lg bg-opacity-50"
+																	className="p-4 bg-opacity-50 border rounded-lg bg-card border-border"
 																>
-																	<h4 className="flex items-center mb-2 text-base font-bold text-indigo-900">
-																		<span className="flex items-center justify-center flex-shrink-0 w-6 h-6 mr-3 text-sm font-semibold text-indigo-800 bg-indigo-100 rounded-full">
+																	<h4 className="flex items-center mb-2 text-base font-bold text-hint-card-title">
+																		<span className="flex items-center justify-center flex-shrink-0 w-6 h-6 mr-3 text-sm font-semibold border rounded-full text-hint-card-title bg-hint-card-bg border-hint-card-border">
 																			{sectionIndex + 1}
 																		</span>
 																		{section.title}
@@ -489,9 +489,9 @@ export function UnitConverter({ onScoreUpdate }: UnitConverterProps) {
 																		{section.details.map((detail) => (
 																			<li
 																				key={detail}
-																				className="text-gray-800"
+																				className="text-hint-card-text"
 																			>
-																				<span className="mr-2 text-indigo-600">
+																				<span className="mr-2 text-hint-card-border">
 																					•
 																				</span>
 																				{detail}
@@ -510,18 +510,18 @@ export function UnitConverter({ onScoreUpdate }: UnitConverterProps) {
 
 								{/* Settings Section */}
 								<div className="mt-6">
-									<div className="p-3 border border-gray-200 rounded-lg sm:p-4 bg-gradient-to-r from-gray-50 to-blue-50">
+									<div className="p-3 border rounded-lg sm:p-4 border-border bg-card">
 										<div className="flex flex-col items-start justify-between gap-3 sm:flex-row sm:items-center sm:gap-4">
 											{/* Units Order Hint */}
 											<div className="flex items-center min-w-0 gap-2">
 												<span className="text-base sm:text-lg">📋</span>
-												<span className="text-xs font-semibold text-gray-800 truncate sm:text-sm">
+												<span className="text-xs font-semibold truncate text-foreground sm:text-sm">
 													Units Order
 												</span>
 												<Switch
 													checked={showUnitsOrder}
 													onCheckedChange={setShowUnitsOrder}
-													className="data-[state=unchecked]:bg-gray-200 data-[state=checked]:bg-blue-600 flex-shrink-0"
+													className="data-[state=unchecked]:bg-input data-[state=unchecked]:border-2 data-[state=unchecked]:border-input data-[state=checked]:bg-button-primary data-[state=checked]:border-primary flex-shrink-0"
 													aria-label="Toggle units order hint"
 													title="Show/hide the ordered list of units from smallest to largest"
 												/>
@@ -530,13 +530,13 @@ export function UnitConverter({ onScoreUpdate }: UnitConverterProps) {
 											{/* Conversion Path Hint */}
 											<div className="flex items-center min-w-0 gap-2">
 												<span className="text-base sm:text-lg">🗺️</span>
-												<span className="text-xs font-semibold text-gray-800 truncate sm:text-sm">
+												<span className="text-xs font-semibold truncate text-foreground sm:text-sm">
 													Conversion Path
 												</span>
 												<Switch
 													checked={showConversionPath}
 													onCheckedChange={setShowConversionPath}
-													className="data-[state=unchecked]:bg-gray-200 data-[state=checked]:bg-blue-600 flex-shrink-0"
+													className="data-[state=unchecked]:bg-input data-[state=unchecked]:border-2 data-[state=unchecked]:border-input data-[state=checked]:bg-button-primary data-[state=checked]:border-primary flex-shrink-0"
 													aria-label="Toggle conversion path hint"
 													title="Show/hide the step-by-step conversion path between units"
 												/>
@@ -545,7 +545,7 @@ export function UnitConverter({ onScoreUpdate }: UnitConverterProps) {
 											{/* Advanced Mode */}
 											<div className="flex items-center min-w-0 gap-2">
 												<span className="text-base sm:text-lg">⚙️</span>
-												<span className="text-xs font-semibold text-gray-800 truncate sm:text-sm">
+												<span className="text-xs font-semibold truncate text-foreground sm:text-sm">
 													Advanced Mode
 												</span>
 												<Switch
@@ -561,7 +561,7 @@ export function UnitConverter({ onScoreUpdate }: UnitConverterProps) {
 															checked,
 														);
 													}}
-													className="data-[state=unchecked]:bg-gray-200 data-[state=checked]:bg-blue-600 flex-shrink-0"
+													className="data-[state=unchecked]:bg-input data-[state=unchecked]:border-2 data-[state=unchecked]:border-input data-[state=checked]:bg-button-primary data-[state=checked]:border-primary flex-shrink-0"
 													aria-label="Toggle advanced mode"
 													title="Enable harder questions with decimal values and complex conversions"
 												/>
@@ -578,12 +578,12 @@ export function UnitConverter({ onScoreUpdate }: UnitConverterProps) {
 									>
 										<h3
 											id={hintTitleId}
-											className="flex items-center mb-3 font-semibold text-blue-800"
+											className="flex items-center mb-3 font-semibold text-hint-summary-text"
 										>
-											<span className="mr-2 text-lg">�</span>
+											<span className="mr-2 text-lg">📋</span>
 											Units in order (smallest to largest)
 										</h3>
-										<div className="p-4 border-l-4 border-purple-400 rounded-r-lg shadow-inner bg-gradient-to-r from-blue-50 to-indigo-50">
+										<div className="p-4 border-l-4 rounded-r-lg shadow-inner border-hint-card-border bg-hint-content-bg">
 											<div className="flex flex-wrap items-center gap-2">
 												{units.map((unit, index) => [
 													<span
@@ -595,7 +595,7 @@ export function UnitConverter({ onScoreUpdate }: UnitConverterProps) {
 													index < units.length - 1 && (
 														<ArrowRight
 															key={`arrow-from-${unit}-to-${units[index + 1]}`}
-															className="w-4 h-4 text-purple-400"
+															className="w-4 h-4 text-hint-card-border"
 														/>
 													),
 												])}
@@ -613,12 +613,12 @@ export function UnitConverter({ onScoreUpdate }: UnitConverterProps) {
 									>
 										<h3
 											id={conversionHintTitleId}
-											className="flex items-center mb-3 font-semibold text-purple-800"
+											className="flex items-center mb-3 font-semibold text-hint-summary-text"
 										>
 											<span className="mr-2 text-lg">🗺️</span>
 											Path for this conversion
 										</h3>
-										<div className="border-l-4 border-purple-400 rounded-r-lg shadow-inner bg-gradient-to-r from-purple-50 to-pink-50">
+										<div className="border-l-4 rounded-r-lg shadow-inner border-hint-card-border bg-hint-content-bg">
 											<ConversionPathVisual
 												fromUnit={currentQuestion.fromUnit}
 												toUnit={currentQuestion.toUnit}
@@ -629,7 +629,7 @@ export function UnitConverter({ onScoreUpdate }: UnitConverterProps) {
 							</section>
 						) : (
 							<div className="py-8 text-center">
-								<p className="text-gray-600">
+								<p className="text-muted-foreground">
 									Unable to load question. Please reload the page or contact
 									admin if the issue persists.
 								</p>
