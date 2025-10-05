@@ -140,7 +140,9 @@
 	/* Semantic color variables for light mode */
 	--header-text: oklch(0.96 0.02 235); /* deep blue-50 */
 	--header-subtitle: oklch(0.85 0.08 235); /* deep blue-200 */
-	--link: oklch(0.72 0.12 235); /* deep blue-300 */
+	--link: oklch(
+		0.82 0.12 235
+	); /* deep blue-200 - lighter for better contrast on dark backgrounds */
 	--link-hover: var(--primary-foreground); /* white */
 	--button-primary: oklch(0.45 0.15 235); /* deep blue-600 */
 	--button-primary-hover: oklch(0.38 0.14 235); /* deep blue-700 */
@@ -179,7 +181,9 @@
 	--stats-accuracy-high: var(--progress-bar); /* green-600 */
 	--stats-accuracy-medium: oklch(0.706 0.188 84.429); /* yellow-600 */
 	--stats-accuracy-low: oklch(0.627 0.257 27.325); /* red-600 */
-	--stats-label: oklch(0.40 0.015 235); /* gray-700 with blue tint - darker for better contrast */
+	--stats-label: oklch(
+		0.4 0.015 235
+	); /* gray-700 with blue tint - darker for better contrast */
 	--question-prompt-bg: var(--button-primary); /* deep blue-600 */
 	--question-prompt-text: var(--primary-foreground); /* white */
 	--code-display-bg: oklch(0.971 0.002 235); /* gray-100 with blue tint */
@@ -189,8 +193,12 @@
 	--checkbox-label-border-hover: var(--link); /* deep blue-300 */
 	--checkbox-label-bg-hover: var(--stats-card-bg); /* deep blue-50 */
 	--checkbox-kbd-bg: var(--code-display-bg); /* gray-100 with blue tint */
-	--action-button-bg: oklch(0.489 0.141 154.449); /* green-700 - darker for better contrast */
-	--action-button-bg-hover: oklch(0.422 0.121 154.449); /* green-800 - even darker on hover */
+	--action-button-bg: oklch(
+		0.489 0.141 154.449
+	); /* green-700 - darker for better contrast */
+	--action-button-bg-hover: oklch(
+		0.422 0.121 154.449
+	); /* green-800 - even darker on hover */
 	--action-button-text: var(--primary-foreground); /* white */
 	--action-button-disabled: oklch(
 		0.608 0.013 235
@@ -245,7 +253,7 @@
 	--link: oklch(0.82 0.15 235); /* brighter deep blue */
 	--link-hover: var(--foreground); /* near white */
 	--button-primary: oklch(0.35 0.14 235); /* darker deep blue */
-	--button-primary-hover: oklch(0.30 0.12 235); /* darker on hover */
+	--button-primary-hover: oklch(0.3 0.12 235); /* darker on hover */
 	--button-primary-text: oklch(0.96 0.02 235); /* light text */
 	--nav-button-bg: oklch(1 0 0 / 0.1); /* white/10 */
 	--nav-button-bg-hover: oklch(1 0 0 / 0.2); /* white/20 */
