@@ -6,6 +6,17 @@ export interface LevelInfo {
 	minAccuracy: number;
 }
 
+export interface OverallStats {
+	accuracy: number;
+	totalPoints: number;
+	totalAttempts: number;
+	totalCorrect: number;
+	currentLevel: LevelInfo;
+	progress: number;
+	nextLevel: LevelInfo | null;
+	streak: number;
+}
+
 export interface ScoreData {
 	attempts: number;
 	correct: number;
@@ -122,8 +133,6 @@ export class ScoreManager {
 			this.scores = blankScoreData;
 		}
 
-		console.log(this.scores);
-		console.log(questionType);
 		this.scores.attempts++;
 		this.scores.byType[questionType].attempts++;
 		if (isCorrect) {
@@ -148,16 +157,7 @@ export class ScoreManager {
 		this.saveScores();
 	}
 
-	getOverallStats(): {
-		totalAttempts: number;
-		totalCorrect: number;
-		accuracy: number;
-		totalPoints: number;
-		currentLevel: LevelInfo;
-		progress: number;
-		nextLevel: LevelInfo | null;
-		streak: number;
-	} {
+	getOverallStats(): OverallStats {
 		const totalAttempts = this.scores.attempts;
 		const totalCorrect = this.scores.correct;
 		const streak = this.scores.streak;
