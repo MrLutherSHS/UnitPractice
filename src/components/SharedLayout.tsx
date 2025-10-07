@@ -38,6 +38,7 @@ export function useSharedLayout() {
 		scoreManager,
 		overallStats,
 		recordScoreAndUpdate,
+		setScoreUpdateTrigger,
 	};
 }
 
@@ -49,6 +50,7 @@ export function SharedLayout({ children }: SharedLayoutProps) {
 		scoreManager,
 		overallStats,
 		recordScoreAndUpdate,
+		setScoreUpdateTrigger,
 	} = useSharedLayout();
 
 	return (
@@ -77,6 +79,7 @@ export function SharedLayout({ children }: SharedLayoutProps) {
 				onClose={() => setShowStatsModal(false)}
 				scoreManager={scoreManager}
 				title="Your Network Mastery"
+				onStatsUpdate={() => setScoreUpdateTrigger((prev) => prev + 1)}
 			/>
 		</SiteLayout>
 	);
